@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreMath.Core", "src\MoreMath.Core\MoreMath.Core.csproj", "{39624E2D-2DF4-45D0-8D9F-096880EE478A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreMath.Core", "src\MoreMath.Core\MoreMath.Core.csproj", "{39624E2D-2DF4-45D0-8D9F-096880EE478A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreMath.Shared", "MoreMath.Shared\MoreMath.Shared.csproj", "{A57A516E-66A8-418C-877E-3D2592D52F59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreMath.Application", "MoreMath.Application\MoreMath.Application.csproj", "{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{39624E2D-2DF4-45D0-8D9F-096880EE478A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39624E2D-2DF4-45D0-8D9F-096880EE478A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39624E2D-2DF4-45D0-8D9F-096880EE478A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57A516E-66A8-418C-877E-3D2592D52F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57A516E-66A8-418C-877E-3D2592D52F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57A516E-66A8-418C-877E-3D2592D52F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57A516E-66A8-418C-877E-3D2592D52F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
