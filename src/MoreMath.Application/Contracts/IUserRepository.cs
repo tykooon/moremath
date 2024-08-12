@@ -2,6 +2,6 @@
 
 namespace MoreMath.Application.Contracts;
 
-public interface IUserRepository : IRepository<User, int>
+public interface IUserRepository : IRepositoryWithDate<User, int>
 {
 }

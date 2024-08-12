@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\MoreMath.Core\MoreMath.Core.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MoreMath.Application\MoreMath.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,9 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreMath.Core", "src\MoreMath.Core\MoreMath.Core.csproj", "{39624E2D-2DF4-45D0-8D9F-096880EE478A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreMath.Shared", "MoreMath.Shared\MoreMath.Shared.csproj", "{A57A516E-66A8-418C-877E-3D2592D52F59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreMath.Application", "src\MoreMath.Application\MoreMath.Application.csproj", "{A53FEAAF-CC0E-4E64-8E67-7CD50EBBFF28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreMath.Application", "MoreMath.Application\MoreMath.Application.csproj", "{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoreMath.Infrastructure", "src\MoreMath.Infrastructure\MoreMath.Infrastructure.csproj", "{D3D6A804-A99F-4AA7-9799-441C2499E73A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreMath.Api", "src\MoreMath.Api\MoreMath.Api.csproj", "{0403DDA2-93F7-4882-AA95-3993408E2BEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +21,18 @@ Global
 		{39624E2D-2DF4-45D0-8D9F-096880EE478A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39624E2D-2DF4-45D0-8D9F-096880EE478A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39624E2D-2DF4-45D0-8D9F-096880EE478A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A57A516E-66A8-418C-877E-3D2592D52F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A57A516E-66A8-418C-877E-3D2592D52F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A57A516E-66A8-418C-877E-3D2592D52F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A57A516E-66A8-418C-877E-3D2592D52F59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DAC401DC-9D94-4E43-8C4C-D2317BB59A2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A53FEAAF-CC0E-4E64-8E67-7CD50EBBFF28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A53FEAAF-CC0E-4E64-8E67-7CD50EBBFF28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A53FEAAF-CC0E-4E64-8E67-7CD50EBBFF28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A53FEAAF-CC0E-4E64-8E67-7CD50EBBFF28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3D6A804-A99F-4AA7-9799-441C2499E73A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3D6A804-A99F-4AA7-9799-441C2499E73A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3D6A804-A99F-4AA7-9799-441C2499E73A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3D6A804-A99F-4AA7-9799-441C2499E73A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0403DDA2-93F7-4882-AA95-3993408E2BEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0403DDA2-93F7-4882-AA95-3993408E2BEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0403DDA2-93F7-4882-AA95-3993408E2BEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0403DDA2-93F7-4882-AA95-3993408E2BEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
