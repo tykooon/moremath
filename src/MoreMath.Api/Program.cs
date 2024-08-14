@@ -1,6 +1,7 @@
 using MoreMath.Api.Exceptions;
 using MoreMath.Api.Extensions;
 using MoreMath.Infrastructure;
+using MoreMath.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddSwaggerService();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddInfrastucture(builder.Configuration);
+builder.Services.AddAppServices(builder.Configuration);
 
 var app = builder.Build();
 

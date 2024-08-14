@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MoreMath.Application\MoreMath.Application.csproj" />
     <ProjectReference Include="..\MoreMath.Infrastructure\MoreMath.Infrastructure.csproj" />
   </ItemGroup>
 

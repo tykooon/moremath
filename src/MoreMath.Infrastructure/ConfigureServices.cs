@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MoreMath.Infrastructure;
 
-public static class ConfigurationExtensions
+public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastucture(this IServiceCollection services, IConfiguration configuration)
     {
