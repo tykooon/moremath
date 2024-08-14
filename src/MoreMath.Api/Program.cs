@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using MoreMath.Api.Exceptions;
 using MoreMath.Api.Extensions;
 using MoreMath.Infrastructure;
@@ -11,10 +10,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerService();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration["Database:Development:ConnectionString"]));
+builder.Services.AddInfrastucture(builder.Configuration);
 
 var app = builder.Build();
+
+app.ApplyMigrations();
 
 app.UseSwaggerForDevelopment();
 app.UseExceptionHandler(opt => { });
