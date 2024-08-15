@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MoreMath.Application.Contracts;
 
 namespace MoreMath.Infrastructure;
 
@@ -10,6 +11,7 @@ public static class ConfigureServices
     {
         services.AddDbContext<AppDbContext>(opt =>
             opt.UseSqlServer(configuration["Database:Development:ConnectionString"]));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 }

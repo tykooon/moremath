@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MoreMath.Core\MoreMath.Core.csproj" />
+    <ProjectReference Include="..\MoreMath.Shared\MoreMath.Shared.csproj" />
   </ItemGroup>
 
 </Project>
