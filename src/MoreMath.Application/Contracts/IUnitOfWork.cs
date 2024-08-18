@@ -1,4 +1,6 @@
-﻿namespace MoreMath.Application.Contracts;
+﻿using MoreMath.Application.Contracts.Repositories;
+
+namespace MoreMath.Application.Contracts;
 
 public interface IUnitOfWork : IDisposable
 {

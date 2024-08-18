@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MoreMath.Application.Contracts;
+using MoreMath.Application.Contracts.Repositories;
 using MoreMath.Core.Abstracts;
 using System.Linq.Expressions;
 

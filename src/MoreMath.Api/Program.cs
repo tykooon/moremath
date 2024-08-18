@@ -4,8 +4,8 @@ using MoreMath.Infrastructure;
 using MoreMath.Application;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MoreMath.Application.Requests;
 using MoreMath.Application.UseCases.Authors.Commands;
+using MoreMath.Api.Requests.Authors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,9 +30,19 @@ app.AddInfoEndpoint();
 
 app.MapPost("/author", async (IMediator mediator, [FromBody] CreateAuthorRequest request) =>
 {
-    var res = await mediator.Send(new CreateAuthorCommand(request));
+    var res = await mediator.Send(new CreateAuthorCommand(
+        request.FirstName, request.LastName, request.AvatarUri, request.Info, request.ShortBio));
     return res.IsSuccessfull 
         ? Results.Created($"/author/{res.Value}", res.Value)
+        : Results.BadRequest(res.Errors);
+});
+
+app.MapPut("/author", async (IMediator mediator, [FromBody] UpdateAuthorRequest request) =>
+{
+    var res = await mediator.Send(new UpdateAuthorCommand(
+        request.Id, request.FirstName, request.LastName, request.AvatarUri, request.Info, request.ShortBio));
+    return res.IsSuccessfull
+        ? Results.Ok()
         : Results.BadRequest(res.Errors);
 });
 

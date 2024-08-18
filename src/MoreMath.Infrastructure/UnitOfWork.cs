@@ -1,4 +1,5 @@
 ﻿using MoreMath.Application.Contracts;
+using MoreMath.Application.Contracts.Repositories;
 using MoreMath.Infrastructure.Repositories;
 
 namespace MoreMath.Infrastructure;

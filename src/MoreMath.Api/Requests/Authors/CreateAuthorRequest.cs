@@ -1,4 +1,4 @@
-﻿namespace MoreMath.Application.Requests;
+﻿namespace MoreMath.Api.Requests.Authors;
 
 public record CreateAuthorRequest(
     string FirstName,
