@@ -1,6 +1,6 @@
 ﻿namespace MoreMath.Shared.Result;
 
-public class Result<TResult>
+public class Result<TResult> : IResult
 {
     protected readonly List<Error> _errors = [];
     protected TResult? _resultValue;
@@ -10,28 +10,40 @@ public class Result<TResult>
     public bool IsSuccessfull { get; }
     public IEnumerable<Error> Errors => _errors;
 
-    protected Result(bool isSuccessfull, params Error[] errors)
+    public Type ResultType => typeof(TResult);
+
+    protected Result(TResult value)
     {
-        if (isSuccessfull && errors.Length != 0)
+        IsSuccessfull = true;
+        _resultValue = value;
+    }
+
+    protected Result(Error[] errors)
+    {
+        IsSuccessfull = false;
+        _errors = [..errors];
+    }
+
+    protected Result(bool isSuccessfull, Error[] errors)
+    {
+        if (isSuccessfull & errors.Length != 0)
         {
-            throw new ArgumentException("Successfull result cannot contain errors.");
+            throw new ArgumentException("Successfull result should not contain errors");
         }
 
-        if (!isSuccessfull && errors.Length == 0)
+        if (!isSuccessfull & errors.Length == 0)
         {
-            throw new ArgumentException("Failure result should contain errors info.");
+            throw new ArgumentException("Failure result should contain at least one error");
         }
 
         IsSuccessfull = isSuccessfull;
+        _resultValue = default;
         _errors = [.. errors];
     }
 
-    protected Result(bool isSuccessfull, TResult value, params Error[] errors) :
-        this(isSuccessfull, errors) => _resultValue = value;
-
-    public static Result<TResult> Success(TResult value) => new (true, value);
-    public static Result<TResult> Failure(Error error) => new(false, error);
-    public static Result<TResult> Failure(string errorCode, string message) => new (false, new Error(errorCode,message));
+    public static Result<TResult> Success(TResult value) => new (value);
+    public static Result<TResult> Failure(Error[] errors) => new(errors);
+    //public static Result<TResult> Failure(string errorCode, string message) => new (new Error(errorCode,message));
 
     public void AppendError(Error error)
     {
@@ -42,6 +54,6 @@ public class Result<TResult>
         _errors.Add(error);
     }
 
-    public static implicit operator Result<TResult>(Result result) => new(result.IsSuccessfull, [.. result._errors]);
+    public static implicit operator Result<TResult>(Result result) => new (result.IsSuccessfull, result.Errors.ToArray());
 
 }

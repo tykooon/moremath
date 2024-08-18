@@ -1,6 +1,6 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using MoreMath.Application.Contracts;
+using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
 
 namespace MoreMath.Application.UseCases.Authors.Commands;
@@ -13,35 +13,18 @@ public record UpdateAuthorCommand(
     string? Info,
     string? ShortBio) : IRequest<Result>;
 
-public class  UpdateAuthorHandler: IRequestHandler<UpdateAuthorCommand, Result>
+
+
+public class  UpdateAuthorHandler(IUnitOfWork unitOfWork):
+    AbstractHandler<UpdateAuthorCommand, Result>(unitOfWork)
 {
-    private readonly IUnitOfWork _unitOfWork;
-    IValidator<UpdateAuthorCommand> _validator;
-
-    public UpdateAuthorHandler(IUnitOfWork unitOfWork, IValidator<UpdateAuthorCommand> validator)
+    public override async Task<Result> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
     {
-        _unitOfWork = unitOfWork;
-        _validator = validator;
-    }
-
-    public async Task<Result> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
-    {
-        //var res = await _validator.ValidateAsync(command, cancellationToken);
-        //if (!res.IsValid)
-        //{
-        //    var result = Result.Failure(new Error("Author.Create.Validation"));
-        //    foreach (var err in res.Errors)
-        //    {
-        //        result.AppendError(new Error(err.ErrorCode, err.ErrorMessage));
-        //    }
-        //    return result;
-        //}
-
         var author = await _unitOfWork.AuthorRepo.FindAsync(command.Id);
 
         if (author == null)
         {
-            return Result.Failure(new("Author.NotFound", "Failed to update author with given Id. Author wasn't found."));
+            return Result.Failure([new Error("Author.NotFound", "Failed to update author with given Id. Author wasn't found.")]);
         }
 
         author.FirstName = command.FirstName ?? author.FirstName;

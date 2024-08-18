@@ -1,6 +1,6 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using MoreMath.Application.Contracts;
+using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Core.Entities;
 using MoreMath.Shared.Result;
 
@@ -13,35 +13,18 @@ public record CreateAuthorCommand(
     string Info,
     string ShortBio) : IRequest<Result<int>>;
 
-public class  CreateAuthorHandler: IRequestHandler<CreateAuthorCommand, Result<int>>
+
+
+public class CreateAuthorHandler(IUnitOfWork unitOfWork):
+    AbstractHandler<CreateAuthorCommand, Result<int>>(unitOfWork)
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<CreateAuthorCommand> _validator;
-
-    public CreateAuthorHandler(IUnitOfWork unitOfWork, IValidator<CreateAuthorCommand> validator)
+    public override async Task<Result<int>> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
     {
-        _unitOfWork = unitOfWork;
-        _validator = validator;
-    }
-
-    public async Task<Result<int>> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
-    {
-        //var res = await _validator.ValidateAsync(command, cancellationToken);
-        //if(!res.IsValid)
-        //{
-        //    var result = Result.Failure(new Error("Author.Create.Validation"));
-        //    foreach(var err in res.Errors)
-        //    {
-        //        result.AppendError(new Error(err.ErrorCode, err.ErrorMessage));
-        //    }
-        //    return result;
-        //}
-         
         Author author = new()
         {
             FirstName = command.FirstName,
             LastName = command.LastName,
-            Avatar = new Uri(command.AvatarUri),
+            Avatar = new Uri(command.AvatarUri, UriKind.RelativeOrAbsolute),
             Info = command.Info,
             ShortBio = command.ShortBio
         };
@@ -49,7 +32,7 @@ public class  CreateAuthorHandler: IRequestHandler<CreateAuthorCommand, Result<i
         await _unitOfWork.AuthorRepo.AddAsync(author);
         await _unitOfWork.CommitAsync();
         return author.Id == 0
-            ? Result.Failure(new("Author.Create", "Author was not created"))
+            ? Result.Failure([new Error("Author.Create", "Author was not created")])
             : Result<int>.Success(author.Id);
     }
 }

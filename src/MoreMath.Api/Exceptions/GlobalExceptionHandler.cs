@@ -13,7 +13,7 @@ public class GlobalExceptionHandler(ILoggerFactory logger) : IExceptionHandler
         httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         httpContext.Response.ContentType = "application/json";
 
-        _logger.LogError($"Something went wrong: {exception.Message}");
+        _logger.LogError("Something went wrong: {Message}", exception.Message);
 
         var message = exception switch
         {
