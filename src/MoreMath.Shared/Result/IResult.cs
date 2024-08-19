@@ -2,5 +2,5 @@
 
 public interface IResult
 {
-    Type ResultType { get; }
+    //Type ResultType { get; }
 }

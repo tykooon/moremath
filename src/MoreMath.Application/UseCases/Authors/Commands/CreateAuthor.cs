@@ -24,7 +24,7 @@ public class CreateAuthorHandler(IUnitOfWork unitOfWork):
         {
             FirstName = command.FirstName,
             LastName = command.LastName,
-            Avatar = new Uri(command.AvatarUri, UriKind.RelativeOrAbsolute),
+            Avatar = command.AvatarUri == null ? null : new Uri(command.AvatarUri, UriKind.RelativeOrAbsolute),
             Info = command.Info,
             ShortBio = command.ShortBio
         };
@@ -32,7 +32,7 @@ public class CreateAuthorHandler(IUnitOfWork unitOfWork):
         await _unitOfWork.AuthorRepo.AddAsync(author);
         await _unitOfWork.CommitAsync();
         return author.Id == 0
-            ? Result.Failure([new Error("Author.Create", "Author was not created")])
+            ? Result.Failure(new Error("Author.Create", "Author was not created"))
             : Result<int>.Success(author.Id);
     }
 }

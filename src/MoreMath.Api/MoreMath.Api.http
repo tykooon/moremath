@@ -1,6 +1,19 @@
 @MoreMath.Api_HostAddress = http://localhost:5027
 
-GET {{MoreMath.Api_HostAddress}}/weatherforecast/
+GET {{MoreMath.Api_HostAddress}}/authors
 Accept: application/json
+
+###
+
+POST {{MoreMath.Api_HostAddress}}/authors
+Content-Type: application/json
+
+{
+  "firstName":"Hello",
+  "lastName":"Hello",
+  "info":"Hello",
+  "shortBio":"Hello"
+}
+
 
 ###

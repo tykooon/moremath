@@ -37,8 +37,9 @@ public class ValidationBehavior<TRequest, TResponse> :
         var errors = validationFailures
             .Where(validationResult => !validationResult.IsValid)
             .SelectMany(validationResult => validationResult.Errors)
-            .Select(validationFailure => new Error(
-                $"Validation.{validationFailure.PropertyName}.{validationFailure.ErrorCode}",
+            .Select(validationFailure => Error.Validation(
+                typeof(TRequest).Name,
+                validationFailure.PropertyName,
                 validationFailure.ErrorMessage))
             .ToArray();
 
@@ -48,7 +49,9 @@ public class ValidationBehavior<TRequest, TResponse> :
             {
                 var failedResponse = typeof(Result)
                 .GetMethod(nameof(Result.Failure))!
-                .Invoke(null, new object[] { errors })!;
+                .Invoke(null, new object[] { errors })!; // creating object[] is essential to avoid wrong array interpretation
+
+                _logger.LogInformation("Validation of {Type} instance failed", typeof(TRequest).Name);
                 return (TResponse)failedResponse;
             }
 
@@ -58,9 +61,11 @@ public class ValidationBehavior<TRequest, TResponse> :
                 .GetMethod(nameof(Result.Failure))!
                 .Invoke(null, new object[] { errors })!;
 
+            _logger.LogInformation("Validation of {Type} instance failed", typeof(TRequest).Name);
             return (TResponse)validationFailedResponse;
         }
 
+        _logger.LogInformation("Validation of {Type} instance succeeded", typeof(TRequest).Name);
         var response = await next();
 
         return response;

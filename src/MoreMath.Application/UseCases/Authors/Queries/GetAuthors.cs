@@ -15,7 +15,7 @@ public class GetAuthorsHandler(IUnitOfWork unitOfWork):
     public override async Task<Result<IEnumerable<AuthorDto>>> Handle(GetAuthorsQuery request, CancellationToken cancellationToken)
     {
         var authors = await _unitOfWork.AuthorRepo.GetAllAsync();
-        var response = authors.Select(a => new AuthorDto(a.Id, a.FirstName, a.LastName, a.Avatar?.ToString() ?? "", a.Info, a.ShortBio, a.Created, a.Modified));
+        var response = authors.Select(a => new AuthorDto(a.Id, a.FirstName, a.LastName, a.Avatar?.ToString(), a.Info, a.ShortBio, a.Created, a.Modified));
         return Result<IEnumerable<AuthorDto>>.Success(response);
     }
 }

@@ -39,7 +39,7 @@ app.MapPost("/authors", async (IMediator mediator, [FromBody] CreateAuthorReques
 {
     var res = await mediator.Send(new CreateAuthorCommand(
         request.FirstName, request.LastName, request.AvatarUri, request.Info, request.ShortBio));
-    return res.ToHttpResult();
+    return res.ToHttpCreated($"/authors/{res.Value}");
 });
 
 app.MapPut("/authors", async (IMediator mediator, [FromBody] UpdateAuthorRequest request) =>

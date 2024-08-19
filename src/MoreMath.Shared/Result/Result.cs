@@ -24,7 +24,7 @@ public class Result<TResult> : IResult
         _errors = [..errors];
     }
 
-    protected Result(bool isSuccessfull, Error[] errors)
+    protected Result(bool isSuccessfull, params Error[] errors)
     {
         if (isSuccessfull & errors.Length != 0)
         {
@@ -42,8 +42,7 @@ public class Result<TResult> : IResult
     }
 
     public static Result<TResult> Success(TResult value) => new (value);
-    public static Result<TResult> Failure(Error[] errors) => new(errors);
-    //public static Result<TResult> Failure(string errorCode, string message) => new (new Error(errorCode,message));
+    public static Result<TResult> Failure(params Error[] errors) => new(errors);
 
     public void AppendError(Error error)
     {

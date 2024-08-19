@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace MoreMath.Shared.Result;
+﻿namespace MoreMath.Shared.Result;
 
 public class Result: Result<Result>, IResult
 {
@@ -11,5 +9,5 @@ public class Result: Result<Result>, IResult
     }
 
     public static Result Success() => new(true, []);
-    public new static Result Failure(Error[] errors) => new(false, errors);
+    public new static Result Failure(params Error[] errors) => new(false, errors);
 }
