@@ -32,27 +32,21 @@ app.AddInfoEndpoint();
 app.MapGet("/authors", async (IMediator mediator) =>
 {
     var res = await mediator.Send(new GetAuthorsQuery());
-    return res.IsSuccessfull
-        ? Results.Ok(res.Value)
-        : Results.BadRequest(res.Errors);
+    return res.ToHttpResult();
 });
 
 app.MapPost("/authors", async (IMediator mediator, [FromBody] CreateAuthorRequest request) =>
 {
     var res = await mediator.Send(new CreateAuthorCommand(
         request.FirstName, request.LastName, request.AvatarUri, request.Info, request.ShortBio));
-    return res.IsSuccessfull 
-        ? Results.Created($"/authors/{res.Value}", res.Value)
-        : Results.BadRequest(res.Errors);
+    return res.ToHttpResult();
 });
 
 app.MapPut("/authors", async (IMediator mediator, [FromBody] UpdateAuthorRequest request) =>
 {
     var res = await mediator.Send(new UpdateAuthorCommand(
         request.Id, request.FirstName, request.LastName, request.AvatarUri, request.Info, request.ShortBio));
-    return res.IsSuccessfull
-        ? Results.Ok()
-        : Results.BadRequest(res.Errors);
+    return res.ToHttpResult();
 });
 
 app.Run();
