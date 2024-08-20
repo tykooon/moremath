@@ -1,6 +1,6 @@
 ﻿namespace MoreMath.Shared.Result;
 
-public interface IResult
+public interface IResultWrap
 {
     //Type ResultType { get; }
 }

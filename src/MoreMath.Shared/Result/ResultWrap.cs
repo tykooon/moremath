@@ -1,6 +1,6 @@
 ﻿namespace MoreMath.Shared.Result;
 
-public class Result<TResult> : IResult
+public class ResultWrap<TResult> : IResultWrap
 {
     protected readonly List<Error> _errors = [];
     protected TResult? _resultValue;
@@ -12,19 +12,19 @@ public class Result<TResult> : IResult
 
     public Type ResultType => typeof(TResult);
 
-    protected Result(TResult value)
+    protected ResultWrap(TResult value)
     {
         IsSuccessfull = true;
         _resultValue = value;
     }
 
-    protected Result(Error[] errors)
+    protected ResultWrap(Error[] errors)
     {
         IsSuccessfull = false;
         _errors = [..errors];
     }
 
-    protected Result(bool isSuccessfull, params Error[] errors)
+    protected ResultWrap(bool isSuccessfull, params Error[] errors)
     {
         if (isSuccessfull & errors.Length != 0)
         {
@@ -41,8 +41,8 @@ public class Result<TResult> : IResult
         _errors = [.. errors];
     }
 
-    public static Result<TResult> Success(TResult value) => new (value);
-    public static Result<TResult> Failure(params Error[] errors) => new(errors);
+    public static ResultWrap<TResult> Success(TResult value) => new (value);
+    public static ResultWrap<TResult> Failure(params Error[] errors) => new(errors);
 
     public void AppendError(Error error)
     {
@@ -53,6 +53,6 @@ public class Result<TResult> : IResult
         _errors.Add(error);
     }
 
-    public static implicit operator Result<TResult>(Result result) => new (result.IsSuccessfull, result.Errors.ToArray());
+    public static implicit operator ResultWrap<TResult>(ResultWrap result) => new (result.IsSuccessfull, result.Errors.ToArray());
 
 }

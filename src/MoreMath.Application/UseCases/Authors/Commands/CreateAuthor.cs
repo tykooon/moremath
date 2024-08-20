@@ -11,14 +11,14 @@ public record CreateAuthorCommand(
     string LastName,
     string AvatarUri,
     string Info,
-    string ShortBio) : IRequest<Result<int>>;
+    string ShortBio) : IRequest<ResultWrap<int>>;
 
 
 
 public class CreateAuthorHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<CreateAuthorCommand, Result<int>>(unitOfWork)
+    AbstractHandler<CreateAuthorCommand, ResultWrap<int>>(unitOfWork)
 {
-    public override async Task<Result<int>> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
+    public override async Task<ResultWrap<int>> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
     {
         Author author = new()
         {
@@ -32,7 +32,7 @@ public class CreateAuthorHandler(IUnitOfWork unitOfWork):
         await _unitOfWork.AuthorRepo.AddAsync(author);
         await _unitOfWork.CommitAsync();
         return author.Id == 0
-            ? Result.Failure(new Error("Author.Create", "Author was not created"))
-            : Result<int>.Success(author.Id);
+            ? ResultWrap.Failure(new Error("Author.Create", "Author was not created"))
+            : ResultWrap<int>.Success(author.Id);
     }
 }

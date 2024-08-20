@@ -11,20 +11,20 @@ public record UpdateAuthorCommand(
     string? LastName,
     string? AvatarUri,
     string? Info,
-    string? ShortBio) : IRequest<Result>;
+    string? ShortBio) : IRequest<ResultWrap>;
 
 
 
 public class  UpdateAuthorHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<UpdateAuthorCommand, Result>(unitOfWork)
+    AbstractHandler<UpdateAuthorCommand, ResultWrap>(unitOfWork)
 {
-    public override async Task<Result> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
+    public override async Task<ResultWrap> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
     {
         var author = await _unitOfWork.AuthorRepo.FindAsync(command.Id);
 
         if (author == null)
         {
-            return Result.Failure([new Error("Author.NotFound", "Failed to update author with given Id. Author wasn't found.")]);
+            return ResultWrap.Failure([new Error("Author.NotFound", "Failed to update author with given Id. Author wasn't found.")]);
         }
 
         author.FirstName = command.FirstName ?? author.FirstName;
@@ -36,6 +36,6 @@ public class  UpdateAuthorHandler(IUnitOfWork unitOfWork):
         _unitOfWork.AuthorRepo.Update(author);
 
         await _unitOfWork.CommitAsync();
-        return Result.Success();
+        return ResultWrap.Success();
     }
 }

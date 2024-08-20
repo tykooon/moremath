@@ -6,7 +6,7 @@ using MoreMath.Shared.Result;
 namespace MoreMath.Application.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse> : 
-    IPipelineBehavior<TRequest, TResponse> where TRequest: IBaseRequest where TResponse: IResult
+    IPipelineBehavior<TRequest, TResponse> where TRequest: IBaseRequest where TResponse: IResultWrap
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators = [];
     private readonly ILogger _logger;
@@ -45,10 +45,10 @@ public class ValidationBehavior<TRequest, TResponse> :
 
         if (errors.Any())
         {
-            if (typeof(TResponse) == typeof(Result))
+            if (typeof(TResponse) == typeof(ResultWrap))
             {
-                var failedResponse = typeof(Result)
-                .GetMethod(nameof(Result.Failure))!
+                var failedResponse = typeof(ResultWrap)
+                .GetMethod(nameof(ResultWrap.Failure))!
                 .Invoke(null, new object[] { errors })!; // creating object[] is essential to avoid wrong array interpretation
 
                 _logger.LogInformation("Validation of {Type} instance failed", typeof(TRequest).Name);
@@ -56,9 +56,9 @@ public class ValidationBehavior<TRequest, TResponse> :
             }
 
             var resultType = typeof(TResponse).GenericTypeArguments[0];
-            var validationFailedResponse = typeof(Result<>)
+            var validationFailedResponse = typeof(ResultWrap<>)
                 .MakeGenericType(resultType)
-                .GetMethod(nameof(Result.Failure))!
+                .GetMethod(nameof(ResultWrap.Failure))!
                 .Invoke(null, new object[] { errors })!;
 
             _logger.LogInformation("Validation of {Type} instance failed", typeof(TRequest).Name);
