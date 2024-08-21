@@ -9,13 +9,11 @@ public class ValidationBehavior<TRequest, TResponse> :
     IPipelineBehavior<TRequest, TResponse> where TRequest: IBaseRequest where TResponse: IResultWrap
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators = [];
-    private readonly ILogger _logger;
 
     public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators, ILoggerFactory logger)
     {
         _validators = validators;
-        _logger = logger.CreateLogger("ValidationLog");
-}
+    }
 
     public async Task<TResponse> Handle(
         TRequest request,
@@ -26,8 +24,6 @@ public class ValidationBehavior<TRequest, TResponse> :
         {
             return await next();
         }
-
-        _logger.LogInformation("Validation of {Type} instance started", typeof(TRequest).Name);
 
         var context = new ValidationContext<TRequest>(request);
 
@@ -50,8 +46,6 @@ public class ValidationBehavior<TRequest, TResponse> :
                 var failedResponse = typeof(ResultWrap)
                 .GetMethod(nameof(ResultWrap.Failure))!
                 .Invoke(null, new object[] { errors })!; // creating object[] is essential to avoid wrong array interpretation
-
-                _logger.LogInformation("Validation of {Type} instance failed", typeof(TRequest).Name);
                 return (TResponse)failedResponse;
             }
 
@@ -61,11 +55,9 @@ public class ValidationBehavior<TRequest, TResponse> :
                 .GetMethod(nameof(ResultWrap.Failure))!
                 .Invoke(null, new object[] { errors })!;
 
-            _logger.LogInformation("Validation of {Type} instance failed", typeof(TRequest).Name);
             return (TResponse)validationFailedResponse;
         }
 
-        _logger.LogInformation("Validation of {Type} instance succeeded", typeof(TRequest).Name);
         var response = await next();
 
         return response;

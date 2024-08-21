@@ -18,6 +18,7 @@ public static class ConfigureServices
         });
 
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         services.AddValidatorsFromAssemblyContaining<IApplicationAssemblyMarker>(includeInternalTypes: true);
 
