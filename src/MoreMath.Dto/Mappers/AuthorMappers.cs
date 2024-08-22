@@ -1,7 +1,7 @@
-﻿using MoreMath.Application.Dtos;
+﻿using MoreMath.Dto.Dtos;
 using MoreMath.Core.Entities;
 
-namespace MoreMath.Application.Mappers;
+namespace MoreMath.Dto.Mappers;
 
 public static class AuthorMappers
 {

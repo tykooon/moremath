@@ -1,3 +1,3 @@
-﻿namespace MoreMath.Application.Dtos;
+﻿namespace MoreMath.Dto.Dtos;
 
 public record CategoryDto(int Id, string CategoryName);

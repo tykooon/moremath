@@ -1,4 +1,4 @@
-﻿namespace MoreMath.Application.Dtos;
+﻿namespace MoreMath.Dto.Dtos;
 
 public record ArticleDto(
     int Id,
@@ -6,5 +6,7 @@ public record ArticleDto(
     string Abstract,
     string BodyUri,
     int[] AuthorsId,
+    int CategoryId,
+    string[] Tags,
     DateTime Created,
     DateTime Modified);

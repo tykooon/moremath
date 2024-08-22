@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MoreMath.Application.Contracts;
-using MoreMath.Application.Dtos;
-using MoreMath.Application.Mappers;
+using MoreMath.Dto.Dtos;
+using MoreMath.Dto.Mappers;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
 

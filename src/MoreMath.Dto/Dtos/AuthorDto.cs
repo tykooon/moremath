@@ -1,4 +1,4 @@
-﻿namespace MoreMath.Application.Dtos;
+﻿namespace MoreMath.Dto.Dtos;
 
 public record AuthorDto(
     int Id,

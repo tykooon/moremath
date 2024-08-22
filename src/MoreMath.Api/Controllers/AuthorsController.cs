@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoreMath.Api.Extensions;
 using MoreMath.Api.Requests.Authors;
-using MoreMath.Application.Dtos;
+using MoreMath.Dto.Dtos;
 using MoreMath.Application.UseCases.Authors.Commands;
 using MoreMath.Application.UseCases.Authors.Queries;
 using MoreMath.Shared.Result;
