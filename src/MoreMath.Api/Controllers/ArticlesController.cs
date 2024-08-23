@@ -6,6 +6,7 @@ using MoreMath.Shared.Result;
 using MoreMath.Application.UseCases.Articles.Queries;
 using MoreMath.Api.Requests.Articles;
 using MoreMath.Application.UseCases.Articles.Commands;
+using System.Net;
 
 namespace MoreMath.Api.Controllers;
 
@@ -71,11 +72,12 @@ public class ArticlesController : BaseApiController
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
     public async Task<IResult> DeleteArticle(int id)
     {
         var res = await _mediator.Send(new DeleteArticleCommand(id));
-        return res.ToHttpNotFound();
+        
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
     }
 }

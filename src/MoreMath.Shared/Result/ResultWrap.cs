@@ -1,16 +1,17 @@
-﻿namespace MoreMath.Shared.Result;
+﻿using System.Text.Json.Serialization;
+
+namespace MoreMath.Shared.Result;
 
 public class ResultWrap<TResult> : IResultWrap
 {
     protected readonly List<Error> _errors = [];
     protected TResult? _resultValue;
 
+    [JsonIgnore]
     public TResult? Value => _resultValue;
 
     public bool IsSuccessfull { get; }
     public IEnumerable<Error> Errors => _errors;
-
-    public Type ResultType => typeof(TResult);
 
     protected ResultWrap(TResult value)
     {

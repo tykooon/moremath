@@ -6,6 +6,7 @@ using MoreMath.Dto.Dtos;
 using MoreMath.Application.UseCases.Authors.Commands;
 using MoreMath.Application.UseCases.Authors.Queries;
 using MoreMath.Shared.Result;
+using System.Net;
 
 namespace MoreMath.Api.Controllers;
 
@@ -63,12 +64,13 @@ public class AuthorsController : BaseApiController
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
     public async Task<IResult> DeleteAuthor(int id)
     {
         var res = await _mediator.Send(new DeleteAuthorCommand(id));
-        return res.ToHttpNotFound();
+
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
     }
 
 }

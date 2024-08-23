@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using MoreMath.Api.Common;
 
 namespace MoreMath.Api.Extensions;
 
@@ -12,6 +13,14 @@ public static class SwaggerExtensions
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "MoreMath.Api", Version = "v1" });
                 options.CustomSchemaIds(type => type.FullName);
+                options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+                {
+                    Name = ApiConstants.APIKEY_HEADERNAME,
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Description = "Authorization by x-api-key inside request's header",
+                    Scheme = "ApiKeyScheme"
+                });
             });
         return services;
     }

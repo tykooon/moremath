@@ -1,6 +1,6 @@
 ﻿namespace MoreMath.Dto.Dtos;
 
-public record Comment(
+public record CommentDto(
     int Id,
     int UserId,
     int ArticleId,
