@@ -18,7 +18,7 @@ public class GetArticleByIdHandler(IUnitOfWork unitOfWork):
         var article = await _unitOfWork.ArticleRepo.FindAsync(request.id);
 
         return article == null
-            ? ResultWrap<ArticleDto?>.Failure(new Error("Author.NotFound", "Failed to get author with given Id."))
+            ? ResultWrap<ArticleDto?>.Failure(new Error("Article.NotFound", "Failed to get article with given Id."))
             : ResultWrap<ArticleDto?>.Success(article.ToDto());
     }
 }

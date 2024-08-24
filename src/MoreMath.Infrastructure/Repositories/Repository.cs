@@ -28,7 +28,7 @@ public abstract class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
 
     public async Task<TEntity?> FindAsync(TKey key)
     {
-        return await _dbSet.FindAsync(key);
+        return await MakeInclusions().Where(x => x.Id.Equals(key)).SingleOrDefaultAsync();
     }
 
     public async Task<IEnumerable<TEntity>> GetAllAsync()

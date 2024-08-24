@@ -24,15 +24,6 @@ public class AuthorsController : BaseApiController
         return res.ToHttpResult();
     }
 
-    [HttpGet("{id}")]
-    [ProducesResponseType<AuthorDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
-    public async Task<IResult> GetAuthorById(int id)
-    {
-        var res = await _mediator.Send(new GetAuthorByIdQuery(id));
-        return res.ToHttpNotFound();
-    }
-
     [HttpPost("")]
     [ProducesResponseType<int>(StatusCodes.Status201Created)]
     [ProducesResponseType<Error[]>(StatusCodes.Status400BadRequest)]
@@ -45,6 +36,15 @@ public class AuthorsController : BaseApiController
             request.Info,
             request.ShortBio));
         return res.ToHttpCreated($"/authors/{res.Value}");
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType<AuthorDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetAuthorById(int id)
+    {
+        var res = await _mediator.Send(new GetAuthorByIdQuery(id));
+        return res.ToHttpNotFound();
     }
 
     [HttpPut("{id}")]
@@ -72,5 +72,15 @@ public class AuthorsController : BaseApiController
 
         return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
     }
+
+    [HttpGet("{id}/articles")]
+    [ProducesResponseType<ArticleDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetAuthorArticles(int id)
+    {
+        var res = await _mediator.Send(new GetAuthorArticlesQuery(id));
+        return res.ToHttpNotFound();
+    }
+
 
 }

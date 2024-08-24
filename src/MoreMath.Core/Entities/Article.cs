@@ -10,7 +10,7 @@ public class Article : EntityWithDates<int>
     public string Abstract {  get; set; } = string.Empty;
     public Uri? BodyUri { get; set; }
 
-    public List<Author> Authors { get; set; } = [];
+    public ICollection<Author> Authors { get; set; } = [];
 
     [ForeignKey("Category")]
     public int CategoryId { get; set; }

@@ -9,7 +9,7 @@ public static class UserMappers
         user.Id,
         user.Username,
         user.IsActive,
-        user.AuthorId,        
+        user.AuthorId,
         user.Created,
         user.Modified);
 
