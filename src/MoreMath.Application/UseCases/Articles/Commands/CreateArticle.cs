@@ -27,7 +27,7 @@ public class CreateArticleHandler(IUnitOfWork unitOfWork, IAuthorService authorS
     {
         var authorList = await _authorService.GetAuthorsByIdsAsync(command.AuthorsId);
         var category = await _unitOfWork.CategoryRepo.FindAsync(command.CategoryId);
-        var tags = await _tagService.GetTagsByNames(command.Tags);
+        var tags = await _tagService.GetTagsByNamesAsync(command.Tags);
 
 
         Article article = new()

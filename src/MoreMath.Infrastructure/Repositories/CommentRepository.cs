@@ -6,4 +6,9 @@ namespace MoreMath.Infrastructure.Repositories;
 
 public class CommentRepository(DbContext context) : RepositoryWithDate<Comment, int>(context), ICommentRepository
 {
+    protected override IQueryable<Comment> MakeInclusions()
+    {
+        return base.MakeInclusions().Include(c => c.User);
+    }
+
 }

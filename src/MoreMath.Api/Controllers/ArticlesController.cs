@@ -105,4 +105,67 @@ public class ArticlesController : BaseApiController
         return res.ToHttp(HttpStatusCode.OK, HttpStatusCode.NoContent);
     }
 
+    [HttpGet("{id}/tags")]
+    [ProducesResponseType<IEnumerable<TagDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetArticleTags(int id)
+    {
+        var res = await _mediator.Send(new GetArticleTagsQuery(id));
+        return res.ToHttpNotFound();
+    }
+
+    [HttpPost("{id}/tags")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> AddTagsToArticle(int id, [FromBody] AddTagsToArticleRequest request)
+    {
+        var res = await _mediator.Send(new AddTagsToArticleCommand(id, request.TagsId, request.TagNames));
+        return res.ToOkOrNotFound();
+    }
+
+    [HttpDelete("{id}/tags/{tagId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> DeleteTagFromArticle(int id, int tagId)
+    {
+        var res = await _mediator.Send(new DeleteTagFromArticleCommand(id, tagId));
+        return res.ToHttp(HttpStatusCode.OK, HttpStatusCode.NoContent);
+    }
+
+    [HttpGet("{id}/comments")]
+    [ProducesResponseType<IEnumerable<CommentDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetArticleComments(int id)
+    {
+        var res = await _mediator.Send(new GetArticleCommentsQuery(id));
+        return res.ToHttpNotFound();
+    }
+
+    [HttpPost("{id}/comments")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> AddCommentToArticle(int id, [FromBody] AddCommentToArticleRequest request)
+    {
+        var res = await _mediator.Send(new AddCommentToArticleCommand(id, request.UserId, request.Text));
+        return res.ToOkOrNotFound();
+    }
+
+    [HttpPost("{id}/comments/{commentId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> UpdateCommentToArticle(int id, int commentId, [FromBody] UpdateCommentToArticleRequest request)
+    {
+        var res = await _mediator.Send(new UpdateCommentToArticleCommand(id, commentId, request.UserId, request.Text, request.IsDeleted));
+        return res.ToOkOrNotFound();
+    }
+
+    [HttpDelete("{id}/tags/{commentId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> DeleteCommentToArticle(int id, int commentId)
+    {
+        var res = await _mediator.Send(new DeleteCommentToArticleCommand(id, commentId));
+        return res.ToHttp(HttpStatusCode.OK, HttpStatusCode.NoContent);
+    }
+
 }

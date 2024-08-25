@@ -29,6 +29,8 @@ public class DeleteAuthorFromArticleHandler(IUnitOfWork unitOfWork):
         }
 
         article.Authors.Remove(author);
+        article.UpdateTimeMark();
+
         await _unitOfWork.CommitAsync();
 
         return ResultWrap.Success();

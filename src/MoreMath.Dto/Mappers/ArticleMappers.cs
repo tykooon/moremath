@@ -12,6 +12,7 @@ public static class ArticleMappers
         article.BodyUri?.ToString() ?? "",
         article.Authors.Select(a => a.Id).ToArray(),
         article.CategoryId,
+        article.Category?.CategoryName ?? "",
         article.Tags.Select(t => t.TagName).ToArray(),
         article.Created,
         article.Modified);

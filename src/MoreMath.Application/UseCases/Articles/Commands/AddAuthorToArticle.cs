@@ -40,12 +40,9 @@ public class AddAuthorToArticleHandler(IUnitOfWork unitOfWork):
 
         var author = authors.First();
 
-        if (article.Authors.Contains(author))
-        {
-            return ResultWrap.Success();
-        }
-
         article.Authors.Add(author);
+        article.UpdateTimeMark();
+
         await _unitOfWork.CommitAsync();
 
         return ResultWrap.Success();

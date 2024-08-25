@@ -8,9 +8,9 @@ public class TagService(AppDbContext context) : ITagService
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<IEnumerable<Tag>> CreateTagsFromNames(IEnumerable<string> tagList)
+    public async Task<IEnumerable<Tag>> CreateTagsFromNamesAsync(IEnumerable<string> tagList)
     {
-        var existingTags = (await GetTagsByNames(tagList)).Select(t => t.TagName);
+        var existingTags = (await GetTagsByNamesAsync(tagList)).Select(t => t.TagName);
 
         var newTags = tagList.Where(name => !existingTags.Contains(name)).Select(name => new Tag() { TagName = name });
 
@@ -20,7 +20,13 @@ public class TagService(AppDbContext context) : ITagService
         return newTags;
     }
 
-    public async Task<IEnumerable<Tag>> GetTagsByNames(IEnumerable<string> tagList)
+    public async Task<IEnumerable<Tag>> GetTagsByIdsAsync(IEnumerable<int> tagList)
+    {
+        var existingTags = await _context.Tags.Where(t => tagList.Contains(t.Id)).ToListAsync();
+        return existingTags;
+    }
+
+    public async Task<IEnumerable<Tag>> GetTagsByNamesAsync(IEnumerable<string> tagList)
     {
         var existingTags = await _context.Tags.Where(t => tagList.Contains(t.TagName)).ToListAsync();
         return existingTags;
