@@ -55,6 +55,17 @@ public class UsersController(IMediator mediator) : BaseApiController(mediator)
         return res.ToHttpResult();
     }
 
+    [HttpPut("{id}/author")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> LinkUserToAuthor(int id, LinkUserToAuthorRequest request)
+    {
+        var res = await _mediator.Send(new LinkUserToAuthorCommand(
+            id,
+            request.AuthorId));
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
+    }
+
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]

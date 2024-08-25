@@ -10,7 +10,9 @@ public class User : EntityWithDates<int>
     public bool IsActive { get; set; } = true;
 
     [ForeignKey("Author")]
-    public int AuthorId { get; set; }
+    public int? AuthorId { get; set; }
+
+    public Author? Author { get; set; }
 
     [JsonIgnore]
     [InverseProperty("User")]

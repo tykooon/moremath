@@ -9,20 +9,22 @@ public static class ArticleMappers
         article.Id,
         article.Title,
         article.Abstract,
-        article.BodyUri?.ToString() ?? "",
+        article.BodyUri,
         article.Authors.Select(a => a.Id).ToArray(),
-        article.CategoryId,
+        article.CategoryId ?? 0,
         article.Category?.CategoryName ?? "",
         article.Tags.Select(t => t.TagName).ToArray(),
         article.Created,
         article.Modified);
+
+    // TODO Check, if any FromDto Mapper is really needed / used
 
     public static Article FromDto(this ArticleDto dto) => new()
     {
         Id = dto.Id,
         Title = dto.Title,
         Abstract = dto.Abstract,
-        BodyUri = dto.BodyUri == null ? null : new Uri(Uri.EscapeDataString(dto.BodyUri), UriKind.RelativeOrAbsolute),
-        CategoryId = dto.CategoryId
+        BodyUri = dto.BodyUri,
+        CategoryId = dto.CategoryId == 0 ? null : dto.CategoryId
     };
 }

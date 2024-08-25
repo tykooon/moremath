@@ -9,7 +9,7 @@ public static class UserMappers
         user.Id,
         user.Username,
         user.IsActive,
-        user.AuthorId,
+        user.AuthorId ?? 0,
         user.Created,
         user.Modified);
 
@@ -18,6 +18,6 @@ public static class UserMappers
         Id = dto.Id,
         Username = dto.Username,
         IsActive = dto.IsActive,
-        AuthorId = dto.AuthorId
+        AuthorId = dto.AuthorId == 0 ? null : dto.AuthorId
     };
 }

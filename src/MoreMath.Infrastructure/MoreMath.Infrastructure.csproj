@@ -19,4 +19,8 @@
     <ProjectReference Include="..\MoreMath.Application\MoreMath.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

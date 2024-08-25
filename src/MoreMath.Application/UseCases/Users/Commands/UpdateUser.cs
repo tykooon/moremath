@@ -15,17 +15,17 @@ public class UpdateUserHandler(IUnitOfWork unitOfWork) :
 {
     public override async Task<ResultWrap> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
-        var User = await _unitOfWork.UserRepo.FindAsync(command.Id);
+        var user = await _unitOfWork.UserRepo.FindAsync(command.Id);
 
-        if (User == null)
+        if (user == null)
         {
-            return ResultWrap.Failure([new Error("User.NotFound", "Failed to update User with given Id. User wasn't found.")]);
+            return ResultWrap.Failure(new Error("User.NotFound", "Failed to update User with given Id. User wasn't found."));
         }
 
-        User.Username = command.Username ?? User.Username;
-        User.IsActive = command.IsActive ?? User.IsActive;
+        user.Username = command.Username ?? user.Username;
+        user.IsActive = command.IsActive ?? user.IsActive;
 
-        _unitOfWork.UserRepo.Update(User);
+        _unitOfWork.UserRepo.Update(user);
 
         await _unitOfWork.CommitAsync();
         return ResultWrap.Success();

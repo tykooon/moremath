@@ -34,7 +34,13 @@ public class AuthorsController : BaseApiController
             request.LastName,
             request.AvatarUri,
             request.Info,
-            request.ShortBio));
+            request.ShortBio,
+            request.Phone,
+            request.Email,
+            request.WhatsApp,
+            request.Telegram,
+            request.Website,
+            request.Options));
         return res.ToHttpCreated($"/authors/{res.Value}");
     }
 
@@ -59,7 +65,13 @@ public class AuthorsController : BaseApiController
             request.LastName,
             request.AvatarUri,
             request.Info,
-            request.ShortBio));
+            request.ShortBio,
+            request.Phone,
+            request.Email,
+            request.WhatsApp,
+            request.Telegram,
+            request.Website,
+            request.Options));
         return res.ToHttpResult();
     }
 

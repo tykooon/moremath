@@ -8,17 +8,18 @@ public class Article : EntityWithDates<int>
 {
     public string Title { get; set; } = string.Empty;
     public string Abstract {  get; set; } = string.Empty;
-    public Uri? BodyUri { get; set; }
+    public string BodyUri { get; set; } = string.Empty;
 
     public ICollection<Author> Authors { get; set; } = [];
 
     [ForeignKey("Category")]
-    public int CategoryId { get; set; }
+    public int? CategoryId { get; set; }
     public Category? Category { get; set; }
 
     [JsonIgnore]
     [InverseProperty("Article")]
     public ICollection<Comment> Comments { get; set; } = [];
 
+    [InverseProperty("Articles")]
     public ICollection<Tag> Tags { get; set; } = [];
 }

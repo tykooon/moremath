@@ -7,7 +7,7 @@ public static class CommentMappers
 {
     public static CommentDto ToDto(this Comment comment) => new(
         comment.Id,
-        comment.UserId,
+        comment.UserId ?? 0,
         comment.ArticleId,
         comment.Text,
         comment.IsDeleted,

@@ -6,14 +6,14 @@ namespace MoreMath.Core.Entities;
 public class Comment : EntityWithDates<int>
 {
     [ForeignKey("User")]
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public User? User { get; set; }
 
     [ForeignKey("Article")]
     public int ArticleId { get; set; }
 
-    public Article? Article { get; set; }
+    public Article Article { get; set; } = null!;
 
     public string Text { get; set; } = string.Empty;
     public bool IsDeleted { get; set; }

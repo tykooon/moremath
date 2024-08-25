@@ -29,7 +29,7 @@ public class  UpdateArticleHandler(IUnitOfWork unitOfWork):
 
         article.Title = command.Title ?? article.Title;
         article.Abstract = command.Abstract ?? article.Abstract;
-        article.BodyUri = command.BodyUri != null ? new Uri(command.BodyUri) : article.BodyUri;
+        article.BodyUri = command.BodyUri ?? article.BodyUri;
         if (command.CategoryId != null)
         {
             var category = await _unitOfWork.CategoryRepo.FindAsync(command.CategoryId.Value);

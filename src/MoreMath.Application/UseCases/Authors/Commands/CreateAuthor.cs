@@ -11,7 +11,13 @@ public record CreateAuthorCommand(
     string LastName,
     string AvatarUri,
     string Info,
-    string ShortBio) : IRequest<ResultWrap<int>>;
+    string ShortBio,
+    string? Phone,
+    string? Email,
+    string? WhatsApp,
+    string? Telegram,
+    string? Website,
+    string? Options) : IRequest<ResultWrap<int>>;
 
 
 
@@ -24,9 +30,15 @@ public class CreateAuthorHandler(IUnitOfWork unitOfWork):
         {
             FirstName = command.FirstName,
             LastName = command.LastName,
-            Avatar = command.AvatarUri == null ? null : new Uri(command.AvatarUri, UriKind.RelativeOrAbsolute),
+            Avatar = command.AvatarUri,
             Info = command.Info,
-            ShortBio = command.ShortBio
+            ShortBio = command.ShortBio,
+            Phone = command.Phone,
+            Email = command.Email,
+            WhatsApp = command.WhatsApp,
+            Telegram = command.Telegram,
+            Website = command.Website,
+            Options = command.Options
         };
 
         await _unitOfWork.AuthorRepo.AddAsync(author);

@@ -5,4 +5,10 @@ public record CreateAuthorRequest(
     string LastName,
     string AvatarUri,
     string Info,
-    string ShortBio);
+    string ShortBio,
+    string? Phone,
+    string? Email,
+    string? WhatsApp,
+    string? Telegram,
+    string? Website,
+    string? Options);

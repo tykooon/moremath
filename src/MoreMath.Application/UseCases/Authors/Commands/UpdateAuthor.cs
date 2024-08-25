@@ -11,7 +11,13 @@ public record UpdateAuthorCommand(
     string? LastName,
     string? AvatarUri,
     string? Info,
-    string? ShortBio) : IRequest<ResultWrap>;
+    string? ShortBio,
+    string? Phone,
+    string? Email,
+    string? WhatsApp,
+    string? Telegram,
+    string? Website,
+    string? Options) : IRequest<ResultWrap>;
 
 
 
@@ -29,9 +35,15 @@ public class  UpdateAuthorHandler(IUnitOfWork unitOfWork):
 
         author.FirstName = command.FirstName ?? author.FirstName;
         author.LastName = command.LastName ?? author.LastName;
-        author.Avatar = command.AvatarUri != null ? new Uri(command.AvatarUri) : author.Avatar;
+        author.Avatar = command.AvatarUri ?? (string.IsNullOrWhiteSpace(command.AvatarUri) ? null : author.Avatar);
         author.Info = command.Info ?? author.Info;
         author.ShortBio = command.ShortBio ?? author.ShortBio;
+        author.Phone = command.Phone ?? author.Phone;
+        author.Email = command.Email ?? author.Email;
+        author.WhatsApp = command.WhatsApp ?? author.WhatsApp;
+        author.Telegram = command.Telegram ?? author.Telegram;
+        author.Website = command.Website ?? author.Website;
+        author.Options = command.Options ?? author.Options;
 
         _unitOfWork.AuthorRepo.Update(author);
 

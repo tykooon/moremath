@@ -6,4 +6,8 @@ namespace MoreMath.Infrastructure.Repositories;
 
 public class AuthorRepository(DbContext context) : RepositoryWithDate<Author, int>(context), IAuthorRepository
 {
+    protected override IQueryable<Author> MakeInclusions()
+    {
+        return base.MakeInclusions();
+    }
 }

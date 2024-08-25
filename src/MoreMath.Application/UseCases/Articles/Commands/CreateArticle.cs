@@ -34,7 +34,7 @@ public class CreateArticleHandler(IUnitOfWork unitOfWork, IAuthorService authorS
         {
             Title = command.Title,
             Abstract = command.Abstract,
-            BodyUri = command.BodyUri == null ? null : new Uri(command.BodyUri, UriKind.RelativeOrAbsolute),
+            BodyUri = command.BodyUri,
             Authors = authorList.ToList(),
             Category = category,
             Tags = tags.ToList(), 
