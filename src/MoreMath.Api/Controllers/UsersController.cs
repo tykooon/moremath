@@ -43,7 +43,7 @@ public class UsersController(IMediator mediator) : BaseApiController(mediator)
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<Error[]>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
     public async Task<IResult> UpdateUser(int id, UpdateUserRequest request)
@@ -52,7 +52,8 @@ public class UsersController(IMediator mediator) : BaseApiController(mediator)
             id,
             request.Username,
             request.IsActive));
-        return res.ToHttpResult();
+        // TODO Refactor ToHttp to interact with Error.Code
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.BadRequest);
     }
 
     [HttpPut("{id}/author")]

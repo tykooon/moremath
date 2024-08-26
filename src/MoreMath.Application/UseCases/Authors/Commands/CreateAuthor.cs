@@ -9,7 +9,7 @@ namespace MoreMath.Application.UseCases.Authors.Commands;
 public record CreateAuthorCommand(
     string FirstName,
     string LastName,
-    string AvatarUri,
+    string? AvatarUri,
     string Info,
     string ShortBio,
     string? Phone,

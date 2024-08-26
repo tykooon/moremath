@@ -17,7 +17,7 @@ public static class ResultExtensions
                 _ => Results.Ok()
             };
         }
-        return successCode switch
+        return falilureCode switch
         {
             HttpStatusCode.NotFound => Results.NotFound(result.Errors),
             HttpStatusCode.Unauthorized => Results.Unauthorized(),

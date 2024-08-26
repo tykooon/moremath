@@ -28,6 +28,8 @@ public class DeleteTagFromArticleHandler(IUnitOfWork unitOfWork):
             return ResultWrap.Failure(new Error("Tag.NotFound", "Failed to get Tag with provided Id."));
         }
 
+        // TODO: Send or not 404 if article has no tag with given id ??
+
         article.Tags.Remove(Tag);
         article.UpdateTimeMark();
 

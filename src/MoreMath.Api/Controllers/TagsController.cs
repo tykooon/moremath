@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MoreMath.Api.Extensions;
+using MoreMath.Api.Requests.Tags;
 using MoreMath.Application.UseCases.Tags.Commands;
 using MoreMath.Application.UseCases.Tags.Queries;
 using MoreMath.Dto.Dtos;
@@ -13,11 +14,20 @@ namespace MoreMath.Api.Controllers;
 [ApiController]
 public class TagsController(IMediator mediator) : BaseApiController(mediator)
 {
+    [HttpPost("")]
+    [ProducesResponseType<int>(StatusCodes.Status201Created)]
+    [ProducesResponseType<Error[]>(StatusCodes.Status400BadRequest)]
+    public async Task<IResult> CreateTag(CreateTagRequest request)
+    {
+        var res = await _mediator.Send(new CreateTagCommand(request.TagName));
+        return res.ToHttpCreated($"/tags/{res.Value}");
+    }
+
     [HttpGet("")]
     [ProducesResponseType<IEnumerable<TagDto>>(StatusCodes.Status200OK)]
-    public async Task<IResult> GetTags(string? searchString)
+    public async Task<IResult> GetTags(string? search)
     {
-        var res = await _mediator.Send(new GetTagsQuery(searchString));
+        var res = await _mediator.Send(new GetTagsQuery(search));
         return res.ToHttpResult();
     }
 
@@ -30,13 +40,13 @@ public class TagsController(IMediator mediator) : BaseApiController(mediator)
         return res.ToHttpNotFound();
     }
 
-    [HttpPost("")]
-    [ProducesResponseType<int>(StatusCodes.Status201Created)]
-    [ProducesResponseType<Error[]>(StatusCodes.Status400BadRequest)]
-    public async Task<IResult> CreateTag(string tagName)
+    [HttpGet("{id}/articles")]
+    [ProducesResponseType<ArticleDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetArticlesByTag(int id)
     {
-        var res = await _mediator.Send(new CreateTagCommand(tagName));
-        return res.ToHttpCreated($"/tags/{res.Value}");
+        var res = await _mediator.Send(new GetArticlesByTagQuery(id));
+        return res.ToHttpNotFound();
     }
 
     [HttpDelete("{id}")]

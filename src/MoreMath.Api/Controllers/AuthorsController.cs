@@ -12,18 +12,8 @@ namespace MoreMath.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthorsController : BaseApiController
+public class AuthorsController(IMediator mediator) : BaseApiController(mediator)
 {
-    public AuthorsController(IMediator mediator) : base(mediator) { }
-
-    [HttpGet("")]
-    [ProducesResponseType<IEnumerable<AuthorDto>>(StatusCodes.Status200OK)]
-    public async Task<IResult> GetAuthors(string? firstName, string? lastName)
-    {
-        var res = await _mediator.Send(new GetAuthorsQuery(firstName, lastName));
-        return res.ToHttpResult();
-    }
-
     [HttpPost("")]
     [ProducesResponseType<int>(StatusCodes.Status201Created)]
     [ProducesResponseType<Error[]>(StatusCodes.Status400BadRequest)]
@@ -44,12 +34,30 @@ public class AuthorsController : BaseApiController
         return res.ToHttpCreated($"/authors/{res.Value}");
     }
 
+    [HttpGet("")]
+    [ProducesResponseType<IEnumerable<AuthorDto>>(StatusCodes.Status200OK)]
+    public async Task<IResult> GetAuthors(string? firstName, string? lastName)
+    {
+        var res = await _mediator.Send(new GetAuthorsQuery(firstName, lastName));
+        return res.ToHttpResult();
+    }
+
+
     [HttpGet("{id}")]
     [ProducesResponseType<AuthorDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
     public async Task<IResult> GetAuthorById(int id)
     {
         var res = await _mediator.Send(new GetAuthorByIdQuery(id));
+        return res.ToHttpNotFound();
+    }
+
+    [HttpGet("{id}/articles")]
+    [ProducesResponseType<ArticleDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetAuthorArticles(int id)
+    {
+        var res = await _mediator.Send(new GetAuthorArticlesQuery(id));
         return res.ToHttpNotFound();
     }
 
@@ -72,7 +80,7 @@ public class AuthorsController : BaseApiController
             request.Telegram,
             request.Website,
             request.Options));
-        return res.ToHttpResult();
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.BadRequest);
     }
 
     [HttpDelete("{id}")]
@@ -84,15 +92,4 @@ public class AuthorsController : BaseApiController
 
         return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
     }
-
-    [HttpGet("{id}/articles")]
-    [ProducesResponseType<ArticleDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
-    public async Task<IResult> GetAuthorArticles(int id)
-    {
-        var res = await _mediator.Send(new GetAuthorArticlesQuery(id));
-        return res.ToHttpNotFound();
-    }
-
-
 }

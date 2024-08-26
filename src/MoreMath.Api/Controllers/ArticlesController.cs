@@ -65,7 +65,7 @@ public class ArticlesController : BaseApiController
             request.Abstract,
             request.BodyUri,
             request.CategoryId));
-        return res.ToHttpResult();
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.BadRequest);
     }
 
     [HttpDelete("{id}")]
@@ -102,7 +102,7 @@ public class ArticlesController : BaseApiController
     public async Task<IResult> DeleteAuthorFromArticle(int id, int authorId)
     {
         var res = await _mediator.Send(new DeleteAuthorFromArticleCommand(id, authorId));
-        return res.ToHttp(HttpStatusCode.OK, HttpStatusCode.NoContent);
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
     }
 
     [HttpGet("{id}/tags")]
@@ -129,7 +129,7 @@ public class ArticlesController : BaseApiController
     public async Task<IResult> DeleteTagFromArticle(int id, int tagId)
     {
         var res = await _mediator.Send(new DeleteTagFromArticleCommand(id, tagId));
-        return res.ToHttp(HttpStatusCode.OK, HttpStatusCode.NoContent);
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
     }
 
     [HttpGet("{id}/comments")]
@@ -150,16 +150,16 @@ public class ArticlesController : BaseApiController
         return res.ToOkOrNotFound();
     }
 
-    [HttpPost("{id}/comments/{commentId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [HttpPut("{id}/comments/{commentId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
     public async Task<IResult> UpdateCommentToArticle(int id, int commentId, [FromBody] UpdateCommentToArticleRequest request)
     {
         var res = await _mediator.Send(new UpdateCommentToArticleCommand(id, commentId, request.UserId, request.Text, request.IsDeleted));
-        return res.ToOkOrNotFound();
+        return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
     }
 
-    [HttpDelete("{id}/tags/{commentId}")]
+    [HttpDelete("{id}/comments/{commentId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<Error[]>(StatusCodes.Status404NotFound)]
     public async Task<IResult> DeleteCommentToArticle(int id, int commentId)
