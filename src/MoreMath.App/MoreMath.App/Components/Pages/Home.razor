@@ -1,0 +1,61 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>More Math</PageTitle>
+
+<section>
+    <div class="greetings">
+        <div class="greetings__banner">
+            <img class="greetings__banner__image"  src="/assets/images/svg/mm-main-banner-center-1x1.svg" alt="moremath haifa"/>
+        </div>
+        <div class="greetings__welcome">
+            <h2 class="greetings__welcome__title">Всем привет!</h2>
+            <p class="greetings__welcome__subtitle">
+                <span class="mm-brand__text">more math</span>
+                &mdash; это проект для тех,
+                кто любит математику или хочет её полюбить,
+                ну или хотя бы хочет перестать её бояться.
+            </p>
+            <button class="greetings__welcome__button">
+                Пробное занятие
+                <MdIcon Name="menu-right" />
+            </button>
+        </div>
+    </div>
+
+</section>
+
+<section>
+    @*Homepage Cards *@
+    <div class="cards-container">
+        <ServiceCard MdIcon="school" Title="Подготовка к багруту" ButtonLink=@Roots.Bagrut>
+            Нужны регулярные занятия один или два раза в неделю по всем темам с решением и разбором задач? Возможен как онлайн-формат, так и очные занятия.
+         </ServiceCard>
+
+        <ServiceCard MdIcon="alarm-light-outline" Title="Скорая мат. помощь" ButtonLink=@Roots.QuickHelp>
+                    Застрял на сложной задаче или никак не получается “въехать” в тему? Через пару дней контрольная и надо разложить всё по полочкам? Не проблема.
+         </ServiceCard>
+
+        <ServiceCard MdIcon="trophy" Title="Олимпиады" ButtonLink=@Roots.Olympics>
+            Школьная математика кажется  слишком простой? Хочется занять мысли настоящими головоломными задачами олимпиадного уровня? А почему бы и нет.
+        </ServiceCard>
+
+        <ServiceCard MdIcon="feather" Title="Заметки на полях" ButtonLink=@Roots.Blog>
+            Учителя и авторы проекта готовы поделиться полезными материалами по математике: ссылками и своими мыслями в виде статей и заметок.
+        </ServiceCard>
+
+
+
+
+    </div>
+
+
+</section>
+
+<section>
+    @*Homepage Teams *@
+</section>
+
+<section>
+    @*Homepage Final *@
+</section>

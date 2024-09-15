@@ -1,0 +1,125 @@
+﻿@implements IDisposable
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+
+<nav class="navbar">
+    <button class="navbar__btn" @onclick="ToggleSidebar"></button>
+    <div class="navbar__content @SidebarVisibility">
+        <div class="navbar__overlay"></div>
+        <div class="navbar__close">
+            <i class="fas fa-times" @onclick="CloseSidebar"></i>
+        </div>
+        <ul class="navbar__list">
+            <li>
+                <NavLink href="/" Match="NavLinkMatch.All"  @onclick="CloseSidebar">
+                    <MdIcon Name="home" />
+                </NavLink>
+            </li>
+            <li class="navbar__dropdown">
+                <div class="navbar__dropdown__btn">
+                    <NavLink href="lessons" Match="NavLinkMatch.Prefix">
+                        Занятия
+                        <MdIcon Name="menu-down" />
+                    </NavLink>
+                </div>
+                <div class="navbar__dropdown__content">
+                    <NavLink href=@Roots.Bagrut class="navbar-link" @onclick="CloseSidebar">
+                        <MdIcon Name="school" />
+                        Багрут
+                    </NavLink>
+                    <NavLink href=@Roots.QuickHelp class="navbar-link" @onclick="CloseSidebar">
+                        <MdIcon Name="alarm-light-outline" />
+                        Скорая Помощь
+                    </NavLink>
+                    <NavLink href=@Roots.Olympics class="navbar-link" @onclick="CloseSidebar">
+                        <MdIcon Name="trophy" />
+                        Олимпиады
+                    </NavLink>
+                </div>
+            </li>
+            <li class="navbar__dropdown">
+                <div class="navbar__dropdown__btn">
+                    <NavLink href="articles" Match="NavLinkMatch.Prefix">
+                        Статьи
+                        <MdIcon Name="menu-down" />
+                    </NavLink>
+                </div>
+                <div class="navbar__dropdown__content">
+                    <NavLink href=@Roots.Mathematics class="navbar-link" @onclick="CloseSidebar">
+                        <MdIcon Name="square-root" />
+                        Математика
+                    </NavLink>
+                    <NavLink href=@Roots.MathHebrew class="navbar-link" @onclick="CloseSidebar">
+                        <MdIcon Name="abjad-hebrew" />
+                        Математический иврит
+                    </NavLink>
+                    <NavLink href=@Roots.Blog class="navbar-link" @onclick="CloseSidebar">
+                        <MdIcon Name="feather" />
+                        Заметки на полях
+                    </NavLink>
+                </div>
+            </li>
+            <li class="navbar__dropdown">
+                <div class="navbar__dropdown__btn">
+                    <NavLink href="about" Match="NavLinkMatch.Prefix">
+                        О проекте
+                        <MdIcon Name="menu-down" />
+                    </NavLink>
+                </div>
+                <div class="navbar__dropdown__content">
+                    <NavLink href=@Roots.Team class="navbar-link" @onclick="CloseSidebar">
+                        <MdIcon Name="account-group" />
+                        Команда
+                    </NavLink>
+                    <NavLink href=@Roots.Contacts type="button" class="navbar-link" @onclick="CloseSidebar">
+                        <MdIcon Name="email-fast-outline" />
+                        Контакты
+                    </NavLink>
+                </div>
+            </li>
+            <li>
+                <AuthorizeView>
+                    <NotAuthorized>
+                        <div class="navbar__login">
+                            <NavLink href="Account/Login">Войти</NavLink>
+                        </div>
+                    </NotAuthorized>
+                    <Authorized>
+                        Welcome!
+                    </Authorized>
+                </AuthorizeView>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+@code {
+    private string? currentUrl;
+
+    private bool isExpandedSidebar = false;
+    private string SidebarVisibility => isExpandedSidebar ? "visible" : "";
+
+    private void ToggleSidebar() => isExpandedSidebar = !isExpandedSidebar;
+
+    private void CloseSidebar() => isExpandedSidebar = false;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
+

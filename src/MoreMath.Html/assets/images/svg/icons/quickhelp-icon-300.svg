@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="300"
+   height="300"
+   viewBox="0 0 79.374998 79.375"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="quickhelp-icon-300.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.3843855"
+     inkscape:cx="281.35226"
+     inkscape:cy="238.37291"
+     inkscape:window-width="1920"
+     inkscape:window-height="1080"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:none;stroke-width:2.11666667;stroke-linejoin:round;stroke-miterlimit:10.6;stroke:#ed000d;stroke-opacity:1;stroke-dasharray:none"
+       id="path1"
+       cx="39.561779"
+       cy="39.083977"
+       r="35" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:41.1421px;font-family:'Bodoni MT';-inkscape-font-specification:'Bodoni MT, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#c40000;fill-opacity:1;stroke:none;stroke-width:2.05711;stroke-linejoin:round;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       x="33.554314"
+       y="61.093079"
+       id="text2"
+       transform="scale(1.028953,0.97186169)"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         x="33.554314"
+         y="61.093079"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:41.1421px;font-family:'Bodoni MT';-inkscape-font-specification:'Bodoni MT, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#c40000;fill-opacity:1;stroke-width:2.05711">∑</tspan></text>
+    <path
+       style="fill:none;fill-opacity:1;stroke:#c40000;stroke-width:1.5875;stroke-linejoin:round;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       d="M 12.260362,54.057032 C 38.50495,8.6000711 38.50495,8.6000711 38.50495,8.6000711 L 64.518449,53.656782 Z"
+       id="path5" />
+  </g>
+</svg>

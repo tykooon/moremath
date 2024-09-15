@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="75"
+   height="75"
+   viewBox="0 0 19.84375 19.84375"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="blog-icon-75-new.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="7.8312672"
+     inkscape:cx="56.185032"
+     inkscape:cy="37.924897"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:none;stroke:#005b99;stroke-width:1.05833;stroke-linejoin:round;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       id="path1"
+       cx="9.9994602"
+       cy="9.9608698"
+       r="8.75" />
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:condensed;font-size:8.46667px;font-family:'Bodoni MT';-inkscape-font-specification:'Bodoni MT, Bold Italic Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#0073d4;fill-opacity:1;stroke:none;stroke-width:0.396875;stroke-linejoin:round;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       x="2.5108778"
+       y="11.549943"
+       id="text5-6-9"><tspan
+         sodipodi:role="line"
+         id="tspan15"
+         x="2.5108778"
+         y="11.549943"
+         style="stroke-width:0.396875">log</tspan><tspan
+         sodipodi:role="line"
+         id="tspan16"
+         x="2.5108778"
+         y="22.133282"
+         style="stroke-width:0.396875" /></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.46667px;font-family:'Bodoni MT';-inkscape-font-specification:'Bodoni MT, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#0073d4;fill-opacity:1;stroke:none;stroke-width:0.396875;stroke-linejoin:round;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       x="10.359056"
+       y="15.708951"
+       id="text5-6-9-8"><tspan
+         sodipodi:role="line"
+         id="tspan15-2"
+         x="10.359056"
+         y="15.708951"
+         style="stroke-width:0.396875">B</tspan><tspan
+         sodipodi:role="line"
+         id="tspan16-3"
+         x="10.359056"
+         y="26.29229"
+         style="stroke-width:0.396875" /></text>
+  </g>
+</svg>

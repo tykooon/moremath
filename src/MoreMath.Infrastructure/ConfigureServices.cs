@@ -12,7 +12,7 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastucture(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(opt =>
-            opt.UseSqlServer(configuration["Database:Development:ConnectionString"]));
+            opt.UseSqlServer(configuration.GetConnectionString("Development:SqlServer")));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IAuthorService, AuthorService>();

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <!-- <link rel="stylesheet" href="MoreMath.App.styles.css" /> -->
+    <link
+      rel="icon"
+      type="image/svg"
+      href="assets/images/svg/brain_logo-75.svg"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header__inner">
+          <div class="brand-group">
+            <a href="#" class="brand-group__logo">
+              <img
+                class="brand-group__logo__image"
+                src="/assets/images/svg/brain_logo-75.svg"
+                alt="logo"
+              />
+            </a>
+            <div class="brand-group__title">
+              <span class="brand-group__title__text">more math</span>
+            </div>
+          </div>
+          <nav class="navbar">
+            <button class="navbar__btn" onclick="toggle_navbar()"></button>
+            <div class="navbar__content visible">
+              <div class="navbar__overlay"></div>
+              <div class="navbar__close">
+                <i class="fas fa-times" onclick="close_navbar()"></i>
+              </div>
+              <ul class="navbar__list">
+                <li class="navbar__dropdown">
+                  <div class="navbar__dropdown__btn">
+                    <a>
+                      Занятия
+                      <i class="fas fa-caret-down"></i>
+                    </a>
+                  </div>
+                  <div class="navbar__dropdown__content">
+                    <a href="#" class="navbar-link">
+                      <i class="fas fa-user"></i>
+                      Багрут
+                    </a>
+                    <a href="#" class="navbar-link">
+                      <i class="fas fa-newspaper"></i>
+                      Скорая Помощь
+                    </a>
+                    <a href="#" class="navbar-link">
+                      <i class="fas fa-graduation-cap"></i>
+                      Олимпиады
+                    </a>
+                  </div>
+                </li>
+                <li class="navbar__dropdown">
+                  <div class="navbar__dropdown__btn">
+                    <a>
+                      Статьи
+                      <i class="fas fa-caret-down"></i>
+                    </a>
+                  </div>
+                  <div class="navbar__dropdown__content">
+                    <a href="#" class="navbar-link">
+                      <i class="fas fa-user"></i>
+                      Математика
+                    </a>
+                    <a href="#" class="navbar-link">
+                      <i class="fas fa-newspaper"></i>
+                      Математический иврит
+                    </a>
+                    <a href="#" class="navbar-link">
+                      <i class="fas fa-graduation-cap"></i>
+                      Заметки на полях
+                    </a>
+                  </div>
+                </li>
+                <li class="navbar__dropdown">
+                  <div class="navbar__dropdown__btn">
+                    <a>
+                      О проекте
+                      <i class="fas fa-caret-down"></i>
+                    </a>
+                  </div>
+                  <div class="navbar__dropdown__content">
+                    <a href="#" class="navbar-link">
+                      <i class="fas fa-user"></i>
+                      Команда
+                    </a>
+                    <a href="#" type="button" class="navbar-link">
+                      <i class="fas fa-newspaper"></i>
+                      Контакты
+                    </a>
+                  </div>
+                </li>
+                <!-- <li><a href="#">About</a></li> -->
+                <li>
+                  <div class="navbar__login">
+                    <a href="#">Войти</a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="top-row px-4">
+        <a href="https://learn.microsoft.com/aspnet/core/" target="_blank"
+          >About</a
+        >
+      </div>
+
+      <article class="content px-4">@Body</article>
+    </main>
+
+    <footer>
+      <!-- Your footer content goes here -->
+      Footer Here!
+    </footer>
+
+    <script type="text/javascript" src="js/main.js"></script>
+  </body>
+</html>

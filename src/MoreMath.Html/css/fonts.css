@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "GochiHand-Regular";
+  font-size: 36;
+  font-weight: 400;
+  font-size: normal;
+  src: url("/fonts/GochiHand-Regular.woff") format("woff"), url("/fonts/GochiHand-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "DancingScript-SemiBold";
+  font-size: 36;
+  font-weight: 600;
+  font-size: normal;
+  src: url("/fonts/DancingScript-SemiBold.woff") format("woff"), url("/fonts/DancingScript-SemiBold.woff2") format("woff2");
+}/*# sourceMappingURL=fonts.css.map */
