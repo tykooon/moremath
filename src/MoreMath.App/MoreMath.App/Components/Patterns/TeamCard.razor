@@ -1,0 +1,35 @@
+﻿@inject NavigationManager _navigationManager
+@rendermode InteractiveServer
+
+
+<div class="team-card mm-card">
+    <div class="mm-card__body">
+        <div class="team-card__person">
+            <div class="team-card__person__photo">
+                <img src=@PhotoUrl alt=@_imgAlt />
+            </div>
+            <a class="team-card__person__link" href=@PersonLink> @FullName </a>
+        </div>
+        <div class="team-card__info">
+            @ChildContent
+        </div>
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public string PhotoUrl { get; set; } = "/";
+
+    [Parameter]
+    public string FullName { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    public string PersonLink { get; set; } = "/";
+
+    private string _imgAlt => PersonLink.Split('/').Last();
+}

@@ -5,6 +5,12 @@
     padding: 0 10px;
 }
 
+@media (min-width: $mm-media-xss) {
+    .container {
+        padding: 0 20px;
+    }
+}
+
 @media (min-width: $mm-media-sm) {
     .container {
         padding: 0 20px;

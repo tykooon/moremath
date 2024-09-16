@@ -1,0 +1,18 @@
+﻿@inject NavigationManager _navigationManager
+@rendermode InteractiveServer
+
+
+<div class="mm-card team-join-card">
+    <div class="team-join-card__body">
+        У тебя есть классные идеи, интересный опыт, желание помогать другим осваивать математику? Наша команда будет рада пополнению.
+    </div>
+    <div class="team-join-card__footer">
+        <button class="accent-btn" @onclick="()=>_navigationManager.NavigateTo(Roots.JoinTeam)">
+            Присоединиться
+        </button>
+    </div>
+</div>
+
+@code {
+
+}
