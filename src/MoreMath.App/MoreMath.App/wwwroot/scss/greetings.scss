@@ -1,0 +1,144 @@
+﻿@import "vars";
+
+/*#region greetings */
+.greetings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0 0;
+
+    &__banner {
+        border-radius: 50%;
+        width: 75%;
+        height: 75%;
+        background-image: url("../assets/images/haifa-banner-center-600x600.jpg");
+        background-size: contain;
+
+        &__image {
+            width: 100%;
+            display: block;
+        }
+    }
+
+    &__welcome {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &__title {
+            font-weight: bold;
+            color: $mmc-base-dark;
+            margin: 10px 0 0;
+        }
+
+        &__subtitle {
+            font-size: $mm-fs-lgx;
+            line-height: $mm-lh-wide;
+            color: $mmc-base-dark;
+            font-weight: 500;
+            text-align: center;
+        }
+    }
+}
+
+@media(min-width: $mm-media-sm) {
+    .greetings {
+        flex-direction: row;
+        justify-content: space-around;
+
+        &__banner {
+            max-width: 320px;
+            min-width: 40%;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        &__welcome {
+            margin-left: 30px;
+        }
+    }
+}
+
+@media(min-width: $mm-media-md) {
+    .greetings {
+        &__welcome {
+            max-width: 60%;
+
+            &__title {
+                margin: 20px 0;
+            }
+            &__subtitle {
+                margin: 20px 0;
+            }
+        }
+    }
+}
+
+@media(min-width: $mm-media-lg) {
+    .greetings {
+        &__welcome {
+            &__title {
+                font-size: 3em;
+            }
+
+            &__subtitle {
+                font-size: $mm-fs-xl;
+            }
+        }
+    }
+}
+
+.testlesson-call {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &__text {
+        font-size: $mm-fs-lg;
+        display: block;
+        text-align: center;
+
+        p {
+            color: $mmc-base-dark;
+        }
+
+        .phone-number {
+            font-weight: 700;
+            margin: 5px auto;
+        }
+    }
+
+    &__action {
+        text-align: center;
+        margin: 10px auto;
+
+        .accent-btn {
+            width: 240px;
+            font-size: $mm-fs-lg;
+        }
+    }
+}
+@media(min-width: $mm-media-xss) {
+    .testlesson-call {
+        padding: 20px 40px;
+    }
+}
+@media(min-width: $mm-media-lg) {
+    .testlesson-call {
+        max-width: 700px;
+        margin: 0 auto;
+
+        &__text {
+            font-size: $mm-fs-lgx;
+        }
+        &__action{
+            .accent-btn {
+                width: 300px;
+                font-size: $mm-fs-lg;
+            }
+        }
+    }
+}
+
+/*#endregion greetings */

@@ -1,5 +1,202 @@
 ﻿@page "/lessons/letstry"
 
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity.UI.Services
+@using MoreMath.Api.Requests.TestLessons
+@using MoreMath.Shared.Common
+
+@rendermode InteractiveServer
+
+@inject ILogger<TestLesson> Logger
+@inject IHttpClientFactory HttpClientFactory
+@inject IEmailSender InfoMailSender
+@inject NavigationManager NavigationManager
+
 <PageTitle>Пробное занятие</PageTitle>
 
-<UnderConstruction />
+
+<div class="container">
+    <div class="mm-page-title">
+        <h1>Пробное занятие</h1>
+    </div>
+    <div class="mm-content">
+        <p>
+            Пробное занятие &mdash; это полноценное часовое занятие <span class="red-emph"> со&nbsp;скидкой&nbsp;50%! </span>
+        </p>
+        <p>
+            На этом занятии ты сможешь познакомиться с преподавателем, понять насколько тебе подходит его стиль обучения, озвучить свои пожелания и наметить темы, которые хотелось бы проработать глубже, вопросы с которыми нужно разобраться. По желанию в ходе пробного занятия можно пройти небольшое тестирование, чтобы лучше понять свои слабые места. 
+        </p>
+        <p>
+            Также на пробном занятии удобно обсудить график занятий, темп работы с материалом, необходимость в домашних заданиях.
+        </p>
+    </div>
+
+    <div class="mm-center">
+        <h3>
+            Запись на пробное занятие
+        </h3>
+    </div>
+
+    <EditForm Model="FormModel"  OnValidSubmit="Submit" FormName="TestLessonOrderForm" class="mm-form">
+        <DataAnnotationsValidator />
+        <fieldset disabled="@IsDisabledForm">
+
+        <div class="mm-form__row">
+            <div class="mm-form__field">
+                <InputText id="test-lesson-order-name" placeholder="" class="mm-form__field__input"
+                    @bind-Value="FormModel!.Name" />
+                <label for="test-lesson-order-name" class="mm-form__field__label">
+                    Ваше имя:
+                </label>
+                <ValidationMessage class="validattion-message" For="(() => FormModel.Name)" />
+            </div>
+        </div>
+
+        <div class="mm-form__row">
+            <div class="mm-form__field">
+                <InputText id="test-lesson-order-email" placeholder="" class="mm-form__field__input"
+                           @bind-Value="FormModel!.Email" />
+                <label for="test-lesson-order-email" class="mm-form__field__label">
+                    Электронная почта:
+                </label>
+                <ValidationMessage class="validattion-message" For="(() => FormModel.Email)" />
+            </div>
+        </div>
+
+        <div class="mm-form__row">
+            <div class="mm-form__field">
+                <InputText id="test-lesson-order-contacts" placeholder="" class="mm-form__field__input"
+                           @bind-Value="FormModel!.Contacts" />
+                <label for="test-lesson-order-contacts" class="mm-form__field__label">
+                    Другой способ связи:
+                </label>
+                <ValidationMessage class="validattion-message" For="(() => FormModel.Contacts)" />
+            </div>
+        </div>
+
+        <div class="mm-form__row">
+            <div class="mm-form__field">
+                <InputTextArea id="test-lesson-order-notes" placeholder="" class="mm-form__field__textarea"
+                    @bind-Value="FormModel!.Notes" />
+                <label for="test-lesson-order-notes" class="mm-form__field__label">
+                    Пожелания/Примечания:
+                </label>
+                <ValidationMessage class="validattion-message" For="(() => FormModel.Notes)" />
+            </div>
+        </div>
+
+        <div class="mm-form__row">
+            <button type="submit" class="accent-btn">Отправить</button>
+        </div>
+        </fieldset>
+    </EditForm>
+
+    <div class="mm-content last-unit">
+        <p>
+            Если в силу какой-либо технической ошибки вы не получили отклика 
+            на свою заявку &mdash; обратитесь напрямую к администратору проекта 
+            по адресу электронной почты <a href="admin@more-math.com">admin@more-math.com</a>
+            либо по телефону (+972)55-77-03-882.
+        </p>
+    </div>
+</div>
+
+
+
+<SubmitModal @ref="SubmitModal" Title="Заявка принята" OnClose="@(()=>NavigationManager.NavigateTo("/"))">
+    <p class="modal__message">
+        Отлично! В ближайшее время с вами свяжется представитель нашей команды, чтобы согласовать время, место проведения и другие подробности пробного занятия.
+    </p>
+</SubmitModal>
+
+<SubmitModal @ref="SubmitFailedModal" Title="Упс! Что-то пошло не так" OnClose="@(()=>NavigationManager.NavigateTo("/lessons/letstry", forceLoad: true))">
+    <p class="modal__message">
+        Простите, но в силу технической ошибки вашу заявку отправить не удалось. Предлагаем попробовать еще раз.
+    </p>
+    <p class="modal__message-note">
+        Если ошибка повторяется снова, обратитесь к администратору проекта по почте 
+        <a href="admin@more-math.com">admin@more-math.com</a> либо по телефону (+972)55-77-03-882.
+    </p>
+</SubmitModal>
+
+
+@code {
+    [SupplyParameterFromForm]
+    private TestLessonOrderData? FormModel { get; set; }
+
+    private SubmitModal SubmitModal { get; set; } = null!;
+    private SubmitModal SubmitFailedModal { get; set; } = null!;
+
+    private bool FormSubmitted { get; set; } = false;
+    private bool FormSubmitFailed { get; set; } = false;
+    private bool IsDisabledForm => FormSubmitted || FormSubmitFailed;
+
+    protected override void OnInitialized()
+    {
+        FormModel ??= new();
+    }
+
+    private async Task Submit()
+    {
+        int userId = 0;
+        // TODO: Get UserId From CurrentUserService 
+        CreateTestLessonRequest request = new(
+            FormModel?.Name!,
+            $"Email: {FormModel?.Email} | Contacts: {FormModel?.Contacts}",
+            FormModel?.Notes,
+            userId,
+            TestLessonOrderStatus.New);
+
+        using (var BackendClient = HttpClientFactory.CreateClient("MoreMath.Backend"))
+        {
+            try
+            {
+                var response = await BackendClient.PostAsJsonAsync("api/testlessons", request);
+                if (response.IsSuccessStatusCode)
+                {
+                    Logger.LogInformation("TestLessonOrder Form submitted successfully");
+                    await InfoMailSender.SendEmailAsync("moremath.haifa@gmail.com", "New Test Lesson Order", $"<p>You've got new order for test lesson.</p><p> Order Details:</p><p> {FormModel?.ToHtmlString()} <p>Order No.: {response.Content.ToString()}</p>");
+                    SubmitModal.Show(true);
+                }
+                else
+                {
+                    Logger.LogError("TestLessonOrder Form submission failed with status code {StatusCode}", response.StatusCode);
+                    SubmitFailedModal.Show(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "TestLessonOrder Form submission failed due to unhandled inner exception: {0}", ex.Message);
+                SubmitFailedModal.Show(false);
+            }
+        }
+    }
+
+    public class TestLessonOrderData
+    {
+        [Required(ErrorMessage = "Поле с указанием имени - обязательное")]
+        [StringLength(50, ErrorMessage = "Слишном длинное имя")]
+        public string? Name { get; set; }
+
+        [EmailAddress(ErrorMessage = "Неправильный формат электронного адреса")]
+        public string? Email { get; set; }
+
+        [StringLength(100, ErrorMessage = "Ограниение 100 символов")]
+        public string? Contacts { get; set; }
+
+        [StringLength(200, ErrorMessage = "Ограниение 200 символов")]
+        public string? Notes { get; set; }
+
+        public string ToHtmlString()
+        {
+            return $""""
+                <div>
+                    <p>Name: {Name},</p>
+                    <p>Email: {Email},</p>
+                    <p>Contacts: {Contacts},</p>
+                    <p>Notes: {Notes},</p>
+                </div>
+            """";
+        }
+    }
+}

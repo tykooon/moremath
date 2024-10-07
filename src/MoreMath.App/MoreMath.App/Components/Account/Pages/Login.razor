@@ -3,12 +3,14 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.UI.Services
 @using MoreMath.App.Data
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+
 
 <PageTitle>Log in</PageTitle>
 
@@ -92,7 +94,7 @@
         var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
-            Logger.LogInformation("User logged in.");
+            Logger.LogInformation($"User {Input.Email} logged in.");
             RedirectManager.RedirectTo(ReturnUrl);
         }
         else if (result.RequiresTwoFactor)
@@ -105,6 +107,19 @@
         {
             Logger.LogWarning("User account locked out.");
             RedirectManager.RedirectTo("Account/Lockout");
+        }
+        else if (result.IsNotAllowed)
+        {
+            var user = await SignInManager.UserManager.FindByEmailAsync(Input.Email);
+            if (user is not null && !user.EmailConfirmed)
+            {
+                Logger.LogWarning($"User email {Input.Email} not confirmed.");
+                RedirectManager.RedirectTo("Account/ResendEmailConfirmation");
+            }
+            else
+            {
+                errorMessage = "Error: User is not allowed to log in.";
+            }
         }
         else
         {

@@ -5,8 +5,10 @@ using MoreMath.Application;
 using MoreMath.Api.Authentication.ApiKey;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.AddSerilogLogging();
+builder.Configuration.AddSecrets();
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerService();
@@ -26,7 +28,6 @@ app.ApplyMigrations();
 
 app.UseSwaggerForDevelopment();
 app.UseExceptionHandler(opt => { });
-app.UseHttpsRedirection();
 
 app.MapControllers();
 app.AddInfoEndpoint();

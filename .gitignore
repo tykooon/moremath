@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/src/MoreMath.Api/api-secrets.json.lnk
+/src/MoreMath.App/MoreMath.App/web-secrets.json.lnk

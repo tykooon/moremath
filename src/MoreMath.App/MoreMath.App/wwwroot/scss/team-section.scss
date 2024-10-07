@@ -1,0 +1,145 @@
+﻿@import "vars";
+
+.team-section {
+    background-color: $mmc-base;
+    margin: 20px 0;
+    padding-bottom: 30px;
+
+    &__title {
+        font-weight: 500;
+        text-align: center;
+        align-content: center;
+        color: $mm-white;
+        margin:0;
+        padding: 20px;
+    }
+}
+
+.team-card {
+    padding: 10px 20px;
+    max-width:400px;
+    margin-inline:auto;
+
+    &__person {
+        display: flex;
+        flex-direction: row;
+        text-align: left;
+        text-decoration: none;
+        color: $mmc-accent;
+        cursor: pointer;
+        justify-content: start;
+        align-items: center;
+
+
+        &__photo {
+            width: 50%;
+            img {
+                width: 100%
+            }
+        }
+        &__name {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            p {
+                max-width: min-content;
+                font-weight: bold;
+                font-size: $mm-fs-xl;
+                line-height: $mm-lh-wide;
+            }
+        }
+    }
+
+    &__info {
+        text-align: left;
+        padding-top: 10px;
+    }
+}
+
+@media(min-width: $mm-media-xss) {
+    .team-card {
+        &__person {
+            &__photo {
+                width: 40%;
+            }
+        }
+    }
+}
+
+@media(min-width: $mm-media-md) {
+    .team-card {
+        &__person {
+            &__photo {
+                width: 40%;
+            }
+
+            &__name {
+                font-size: $mm-fs-lg;
+            }
+        }
+    }
+}
+
+@media(min-width: $mm-media-lg) {
+    .team-card {
+        &__person {
+            &__photo {
+                width: 40%;
+            }
+        }
+    }
+}
+
+@media(min-width: $mm-media-sm) {
+    .team-join-area {
+        grid-column: span 2;
+    }
+}
+
+@media(min-width: $mm-media-xl) {
+    .team-join-area {
+        grid-column: unset;
+    }
+}
+
+.team-join-card {
+    background-color: transparent;
+    color: $mmc-white;
+    height: 100%;
+    padding: 0 20px;
+    max-width:400px;
+    margin-inline:auto;
+
+    &__body {
+        padding: unset;
+        line-height: $mm-lh-wide;
+        font-size: $mm-fs-mdx;
+    }
+
+    &__footer {
+        margin-top: 15px;
+        text-align: center;
+
+        button {
+            width: 240px;
+            font-size: $mm-fs-lg;
+        }
+    }
+}
+
+@media(min-width: $mm-media-sm) {
+    .team-join-card {
+        width: 60%;
+        margin: auto;
+        max-width: unset;
+    }
+}
+@media(min-width: $mm-media-xl) {
+    .team-join-card {
+        width: 100%;
+
+        &__footer {
+            margin-top: auto;
+        }
+    }
+}

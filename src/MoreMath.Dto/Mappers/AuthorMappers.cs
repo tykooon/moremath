@@ -10,7 +10,7 @@ public static class AuthorMappers
         author.Id,
         author.FirstName,
         author.LastName,
-        author.Avatar,
+        author.SlugName,
         author.Info,
         author.ShortBio,
         author.Phone,
@@ -27,7 +27,7 @@ public static class AuthorMappers
         Id = dto.Id,
         FirstName = dto.FirstName,
         LastName = dto.LastName,
-        Avatar = dto.AvatarUrl,
+        SlugName = dto.SlugName,
         Info = dto.Info,
         ShortBio = dto.ShortBio
     };

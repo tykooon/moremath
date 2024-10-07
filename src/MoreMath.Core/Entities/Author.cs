@@ -7,7 +7,7 @@ public class Author : EntityWithDates<int>
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
-    public string? Avatar { get; set; }
+    public string SlugName { get; set; } = string.Empty;
     public string Info { get; set; } = string.Empty;
     public string ShortBio { get; set; } = string.Empty;
 

@@ -8,7 +8,7 @@ using MoreMath.Shared.Result;
 
 namespace MoreMath.Application.UseCases.Authors.Queries;
 
-public record GetAuthorsQuery(string? FirstName = null, string? LastName = null) : IRequest<ResultWrap<IEnumerable<AuthorDto>>>;
+public record GetAuthorsQuery(string? FirstName = null, string? LastName = null, string? SlugName = null) : IRequest<ResultWrap<IEnumerable<AuthorDto>>>;
 
 public class GetAuthorsHandler(IUnitOfWork unitOfWork):
     AbstractHandler<GetAuthorsQuery, ResultWrap<IEnumerable<AuthorDto>>>(unitOfWork)
@@ -18,7 +18,8 @@ public class GetAuthorsHandler(IUnitOfWork unitOfWork):
     {
         var authors = await _unitOfWork.AuthorRepo.GetFilteredAsync(a =>
             (request.FirstName == null || a.FirstName == request.FirstName) &&
-            (request.LastName == null || a.LastName == request.LastName));
+            (request.LastName == null || a.LastName == request.LastName) &&
+            (request.SlugName == null || a.SlugName == request.SlugName));
         var response = authors.Select(a => a.ToDto());
         return ResultWrap<IEnumerable<AuthorDto>>.Success(response);
     }

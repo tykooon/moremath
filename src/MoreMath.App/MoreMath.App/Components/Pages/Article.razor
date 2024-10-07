@@ -1,0 +1,136 @@
+﻿@page "/articles/{ArticleSlug}"
+
+@inherits MathJaxBlazor.MathJaxContentComponent
+@using MoreMath.Dto.Dtos
+
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+@inject IHttpClientFactory HttpClientFactory 
+@inject ILogger<Article> Logger
+@inject NavigationManager NavigationManager
+
+<HeadContent>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+</HeadContent>
+
+<PageTitle>@_title</PageTitle>
+
+
+<div class="container">
+    <div class="mm-content">
+        <div class="mm-article">
+            <div class="mm-article__header">
+                <div class="mm-article__title">
+                    @_title
+                </div>
+                <div class="mm-article__header__row">
+                    <div class="mm-article__image">
+                        <img src="@(Constants.BLOB_STORAGE)/articles/@(ArticleSlug).jpg" alt="banner"/>
+                    </div>
+                    <div class="mm-article__abstract">
+                        @_abstract
+                        <div class="mm-article__authors">
+                            <b>
+                                @(authors.Count() switch
+                                {
+                                    0 => "",
+                                    1 => "Автор: ",
+                                    _ => "Авторы: "
+                                })
+                            </b>
+                            @foreach(var author in authors)
+                            {
+                                <AuthorChip Author=@author/>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mm-article__body"> 
+                @if(articleContent == null)
+                {
+                    <p>
+                        Article content is still loading ...
+                    </p>
+                }
+                else
+                {
+                    @((MarkupString)articleContent)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public string? ArticleSlug { get; set; }
+
+    private ArticleDto? articleDto = null;
+    private IEnumerable<AuthorDto> authors = [];
+    private string? articleContent = null;
+
+    private string articleContentUri => "https://stmoremathdev001.blob.core.windows.net/mm-content/articles/mathematics/test-article.mjax";
+    //"https://raw.githubusercontent.com/MoreMath/MoreMath-Content/main/articles/mathematics/1.md";
+
+    private string _title => articleDto?.Title ?? "";
+    private string _abstract => articleDto?.Abstract ?? "";
+    private string _authorsString => string.Join(",", authors.Select(a => $"{a.FirstName} {a.LastName}"));
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(string.IsNullOrWhiteSpace(ArticleSlug))
+        {
+            NavigationManager.NavigateTo("/articles/mathematics");
+        }
+
+        using (var BackendClient = HttpClientFactory.CreateClient("MoreMath.Backend"))
+        {
+            var response = await BackendClient.GetFromJsonAsync<ArticleDto?>($"api/articles/{ArticleSlug}");
+            if (response is null)
+            {
+                Logger.LogError("Article with given request data (/articles/{0}) was not found", ArticleSlug);
+                NavigationManager.NavigateTo("/articles/mathematics");
+            }
+            else
+            {
+                Logger.LogInformation("Article  data recieved for (/articles/{0})", ArticleSlug);
+                articleDto = response;
+            }
+
+            if(articleDto != null)
+            {
+                authors = (await BackendClient.GetFromJsonAsync<IEnumerable<AuthorDto>>($"api/articles/{articleDto.Id}/authors")) ?? [];
+            } 
+        }
+
+        // TODO: Fetch Article content fron uri provided in ArticleDto;
+        using (var ContentClient = HttpClientFactory.CreateClient("MoreMath.Content"))
+        {
+            var articleUri = ContentClient.BaseAddress + $"/articles/mathematics/{ArticleSlug}.mjax";
+            var response = await ContentClient.GetStringAsync(articleUri);
+            if (string.IsNullOrWhiteSpace(response))
+            {
+                Logger.LogError("Article content fom {0} was not found", ArticleSlug);
+                NavigationManager.NavigateTo("/articles/mathematics");
+            }
+
+            articleContent = response;
+        }
+
+        Console.WriteLine(articleContent);
+        //await JsRuntime.InvokeAsync("Math")
+    }
+}

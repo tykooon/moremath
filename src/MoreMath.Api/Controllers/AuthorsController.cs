@@ -22,7 +22,7 @@ public class AuthorsController(IMediator mediator) : BaseApiController(mediator)
         var res = await _mediator.Send(new CreateAuthorCommand(
             request.FirstName,
             request.LastName,
-            request.AvatarUri,
+            request.SlugName,
             request.Info,
             request.ShortBio,
             request.Phone,
@@ -36,9 +36,9 @@ public class AuthorsController(IMediator mediator) : BaseApiController(mediator)
 
     [HttpGet("")]
     [ProducesResponseType<IEnumerable<AuthorDto>>(StatusCodes.Status200OK)]
-    public async Task<IResult> GetAuthors(string? firstName, string? lastName)
+    public async Task<IResult> GetAuthors(string? firstName, string? lastName, string? slugName)
     {
-        var res = await _mediator.Send(new GetAuthorsQuery(firstName, lastName));
+        var res = await _mediator.Send(new GetAuthorsQuery(firstName, lastName, slugName));
         return res.ToHttpResult();
     }
 
@@ -71,7 +71,7 @@ public class AuthorsController(IMediator mediator) : BaseApiController(mediator)
             id,
             request.FirstName,
             request.LastName,
-            request.AvatarUri,
+            request.SlugName,
             request.Info,
             request.ShortBio,
             request.Phone,

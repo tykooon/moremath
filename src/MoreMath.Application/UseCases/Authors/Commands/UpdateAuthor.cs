@@ -9,7 +9,7 @@ public record UpdateAuthorCommand(
     int Id,
     string? FirstName,
     string? LastName,
-    string? AvatarUri,
+    string? SlugName,
     string? Info,
     string? ShortBio,
     string? Phone,
@@ -35,7 +35,7 @@ public class  UpdateAuthorHandler(IUnitOfWork unitOfWork):
 
         author.FirstName = command.FirstName ?? author.FirstName;
         author.LastName = command.LastName ?? author.LastName;
-        author.Avatar = command.AvatarUri ?? (string.IsNullOrWhiteSpace(command.AvatarUri) ? null : author.Avatar);
+        author.SlugName = command.SlugName ?? author.SlugName;
         author.Info = command.Info ?? author.Info;
         author.ShortBio = command.ShortBio ?? author.ShortBio;
         author.Phone = command.Phone ?? author.Phone;

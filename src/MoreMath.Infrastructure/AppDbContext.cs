@@ -18,6 +18,7 @@ public class AppDbContext: DbContext
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Tag> Tags => Set<Tag>();
+    public DbSet<TestLessonOrder> TestLessonOrders => Set<TestLessonOrder>();
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

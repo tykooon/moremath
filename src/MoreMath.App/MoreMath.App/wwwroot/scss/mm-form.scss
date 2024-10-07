@@ -1,0 +1,89 @@
+﻿@import "vars";
+
+/*#region mm-form */
+
+.mm-form {
+    padding-inline:30px;
+    max-width:720px;
+    margin-inline:auto;
+
+    fieldset {
+        border: none;
+    }
+
+    &__row {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+
+        .accent-btn {
+            height: 40px;
+            font-size: large;
+        }
+    }
+
+    &__field {
+        width: 100%;
+        height: 4rem;
+        margin: 0 20px;
+        position: relative;
+
+        &__input, &__textarea {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin-top: 0.1rem;
+            display: block;
+            width: 100%;
+            height: 3rem;
+            border: none;
+            font-size: large;
+            background-color: $mmc-white;
+            border-bottom: 2px solid rgba(0,0,0, 0.2);
+
+            &:focus-visible {
+                border-bottom: 2px solid $mmc-base;
+            }
+        }
+
+        &__textarea {
+            resize: none;
+            height: 70px;
+        }
+
+        &__label {
+            color: $mmc-base-dark;
+            position: absolute;
+            top: 0.8rem;
+            left: 1rem;
+            display: block;
+            border: none;
+            cursor: text;
+            background-color: transparent;
+            transition: top 200ms ease-in, left 200ms ease-in, font-size 200ms ease-in;
+        }
+
+        &__input:focus ~ &__label, &__textarea:focus ~ &__label {
+            top: -0.7rem;
+            font-size: small;
+            left: 0.8rem;
+        }
+    }
+}
+
+
+.mm-form__field__input:not(:placeholder-shown).mm-form__field__input:not(:focus) ~ .mm-form__field__label,
+.mm-form__field__textarea:not(:placeholder-shown).mm-form__field__textarea:not(:focus) ~ .mm-form__field__label {
+    top: -0.7rem;
+    font-size: small;
+    left: 0.8rem;
+}
+
+.validattion-message {
+    color: red;
+    position: absolute;
+    top: 3rem;
+    font-size: 60%;
+}
+
+/*#endregion mm-form */

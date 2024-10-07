@@ -25,16 +25,13 @@
                 </div>
                 <div class="navbar__dropdown__content">
                     <NavLink href=@Roots.Bagrut class="navbar-link" @onclick="CloseSidebar">
-                        <MdIcon Name="school" />
-                        Багрут
+                        @Icons.Bagrut Багрут
                     </NavLink>
                     <NavLink href=@Roots.QuickHelp class="navbar-link" @onclick="CloseSidebar">
-                        <MdIcon Name="alarm-light-outline" />
-                        Скорая Помощь
+                        @Icons.QuickHelp Скорая Помощь
                     </NavLink>
                     <NavLink href=@Roots.Olympics class="navbar-link" @onclick="CloseSidebar">
-                        <MdIcon Name="trophy" />
-                        Олимпиады
+                        @Icons.Olympics Олимпиады
                     </NavLink>
                 </div>
             </li>
@@ -47,16 +44,13 @@
                 </div>
                 <div class="navbar__dropdown__content">
                     <NavLink href=@Roots.Mathematics class="navbar-link" @onclick="CloseSidebar">
-                        <MdIcon Name="square-root" />
-                        Математика
+                        @Icons.Mathematics Математика
                     </NavLink>
                     <NavLink href=@Roots.MathHebrew class="navbar-link" @onclick="CloseSidebar">
-                        <MdIcon Name="abjad-hebrew" />
-                        Математический иврит
+                        @Icons.MathHebrew Математический иврит
                     </NavLink>
                     <NavLink href=@Roots.Blog class="navbar-link" @onclick="CloseSidebar">
-                        <MdIcon Name="feather" />
-                        Заметки на полях
+                        @Icons.Blog Заметки на полях
                     </NavLink>
                 </div>
             </li>
@@ -69,12 +63,10 @@
                 </div>
                 <div class="navbar__dropdown__content">
                     <NavLink href=@Roots.Team class="navbar-link" @onclick="CloseSidebar">
-                        <MdIcon Name="account-group" />
-                        Команда
+                        @Icons.Team Команда
                     </NavLink>
                     <NavLink href=@Roots.Contacts type="button" class="navbar-link" @onclick="CloseSidebar">
-                        <MdIcon Name="email-fast-outline" />
-                        Контакты
+                        @Icons.Contacts Контакты
                     </NavLink>
                 </div>
             </li>
@@ -87,6 +79,7 @@
                     </NotAuthorized>
                     <Authorized>
                         Welcome!
+                        @* TODO: User Dropdown Submenu for account managment *@
                     </Authorized>
                 </AuthorizeView>
             </li>

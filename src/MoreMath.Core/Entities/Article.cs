@@ -9,6 +9,8 @@ public class Article : EntityWithDates<int>
     public string Title { get; set; } = string.Empty;
     public string Abstract {  get; set; } = string.Empty;
     public string BodyUri { get; set; } = string.Empty;
+    public string ImageUri { get; set; } = string.Empty;
+    public string Slug { get; set; } = string.Empty;
 
     public ICollection<Author> Authors { get; set; } = [];
 

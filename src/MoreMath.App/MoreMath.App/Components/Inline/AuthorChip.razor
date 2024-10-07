@@ -1,0 +1,16 @@
+﻿@using MoreMath.Dto.Dtos
+
+@if(Author != null)
+{
+    <a class="author-chip" href="about/team/@Author.SlugName">
+        <img src="@_authorAvaUrl" alt="@Author.SlugName" />
+        <span>@Author.FirstName @Author.LastName</span>    
+    </a>
+}
+
+@code {
+    [Parameter]
+    public AuthorDto? Author { get; set; }
+
+    private string _authorAvaUrl => $"{Constants.BLOB_STORAGE}/authors/thumbs/_{Author?.SlugName}.png";
+}

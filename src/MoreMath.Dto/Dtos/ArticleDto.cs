@@ -5,6 +5,8 @@ public record ArticleDto(
     string Title,
     string Abstract,
     string BodyUri,
+    string ImageUri,
+    string Slug,
     int[] AuthorsId,
     int CategoryId,
     string? CategoryName,

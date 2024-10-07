@@ -10,6 +10,7 @@ public interface IUnitOfWork : IDisposable
     IUserRepository UserRepo { get; }
     ICategoryRepository CategoryRepo { get; }
     ITagRepository TagRepo { get; }
+    ITestLessonRepository TestLessonRepo { get; }
 
     Task CommitAsync();
 }

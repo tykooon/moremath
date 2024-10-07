@@ -1,0 +1,24 @@
+﻿<div class="container">
+    <div class="mm-content">
+        <h1 class="red-emph">Fatal Error Occured!</h1>
+        <p>
+            Sorry! If you see this page it means that something went wrong.
+        </p>
+        <p>
+            Inner exception can not be handled by the application. The exception message is:
+        </p>
+        <p style="font-size: 1.25rem; color:darkred;">
+            @(Message ?? "Oops! Error message is emtpy!")
+        </p>
+        <p>
+            Please try to reload the page or contact the support.
+        </p>
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public string? Message { get; set; }
+}

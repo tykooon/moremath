@@ -11,6 +11,8 @@ public record CreateArticleCommand(
     string Title,
     string Abstract,
     string BodyUri,
+    string ImageUri,
+    string Slug,
     int[] AuthorsId,
     int CategoryId,
     string[] Tags) : IRequest<ResultWrap<int>>;
@@ -35,6 +37,8 @@ public class CreateArticleHandler(IUnitOfWork unitOfWork, IAuthorService authorS
             Title = command.Title,
             Abstract = command.Abstract,
             BodyUri = command.BodyUri,
+            ImageUri = command.ImageUri,
+            Slug = command.Slug,
             Authors = authorList.ToList(),
             Category = category,
             Tags = tags.ToList(), 

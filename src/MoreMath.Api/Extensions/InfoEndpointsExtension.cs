@@ -8,7 +8,7 @@ public static class InfoEndpointsExtension
             {
                 ApiName = "More Math backend for frontend API",
                 Version = "0.0.1",
-                Error = "0123"[5]
+                //Error = "0123"[5]
             }))
         .WithSummary("provide general information about API")
         .WithOpenApi();

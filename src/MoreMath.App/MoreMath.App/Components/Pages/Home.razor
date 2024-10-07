@@ -4,36 +4,57 @@
 
 <PageTitle>More Math</PageTitle>
 
+@* TODO: Refactor css and classes: font-size must depend on media on body level *@
+
 <section class="container">
     <div class="greetings">
         <div class="greetings__banner">
             <img class="greetings__banner__image"  src="/assets/images/svg/mm-main-banner-plain-min.svg" alt="moremath haifa"/>
         </div>
         <div class="greetings__welcome">
-            <h2 class="greetings__welcome__title">Всем привет!</h2>
+            <h1 class="greetings__welcome__title">Всем привет!</h1>
             <p class="greetings__welcome__subtitle">
                 <span class="mm-brand__text">more math</span>
                 &mdash; это проект для тех,
                 кто любит математику или хочет её полюбить,
                 ну или хотя бы хочет перестать её бояться.
             </p>
-            <button class="greetings__welcome__button accent-btn" @onclick="()=>_navigationManager.NavigateTo(Roots.TestLesson)">
+        </div>
+    </div>
+    <div class="testlesson-call">
+        <div class="testlesson-call__text">
+            <p>
+                С чего начать? Конечно, с пробного занятия!
+            </p>
+            <p>
+                Полноценное часовое занятие <span class="red-emph"> со&nbsp;скидкой&nbsp;50%! </span>
+            </p>
+            <p>
+                Запишись по телефону
+            </p>
+            <p class="phone-number">
+                (+972) 55-7703-882
+            </p>
+            <p>
+                либо по ссылке:
+            </p>
+        </div>
+        <div class="testlesson-call__action">
+            <button class="accent-btn" @onclick="()=>_navigationManager.NavigateTo(Roots.TestLesson)">
                 Пробное занятие
-                <MdIcon Name="menu-right" />
             </button>
         </div>
     </div>
-
 </section>
 
 <section class="container">
     @*Homepage Cards *@
     <div class="cards-container">
-        <ServiceCard MdIcon="school" Title="Подготовка к багруту" ButtonLink=@Roots.Bagrut>
+        <ServiceCard MdIcon="school" Title="Подготовка к~~багруту" ButtonLink=@Roots.Bagrut>
             Нужны регулярные занятия один или два раза в неделю по всем темам с решением и разбором задач? Возможен как онлайн-формат, так и очные занятия.
          </ServiceCard>
 
-        <ServiceCard MdIcon="alarm-light-outline" Title="Скорая мат. помощь" ButtonLink=@Roots.QuickHelp>
+        <ServiceCard MdIcon="alarm-light-outline" Title="Скорая мат.~~помощь" ButtonLink=@Roots.QuickHelp>
                     Застрял на сложной задаче или никак не получается “въехать” в тему? Через пару дней контрольная и надо разложить всё по полочкам? Не проблема.
          </ServiceCard>
 
@@ -42,7 +63,7 @@
         </ServiceCard>
 
         <ServiceCard MdIcon="trophy" Title="Олимпиады" ButtonLink=@Roots.Olympics>
-            Школьная математика кажется  слишком простой? Хочется занять мысли настоящими головоломными задачами олимпиадного уровня? А почему бы и нет.
+            Школьная математика кажется слишком простой? Хочется занять мысли настоящими головоломными задачами олимпиадного уровня? А почему бы и нет.
         </ServiceCard>
 
         <ServiceCard MdIcon="abjad-hebrew" Title="Математический иврит" ButtonLink=@Roots.MathHebrew>
@@ -52,7 +73,7 @@
             Если вы всё ещё путаете <span class="hebrew-text">משולש</span> и <span class="hebrew-text">משושה</span>, то вам сюда. У нас есть словарь основных школьных математических терминов на иврите.
         </ServiceCard>
 
-        <ServiceCard MdIcon="feather" Title="Заметки на полях" ButtonLink=@Roots.Blog>
+        <ServiceCard MdIcon="feather" Title="Заметки на~~полях" ButtonLink=@Roots.Blog>
             Небольшой блог авторов проекта со своими мыслями о подходах к изучению математики, путевыми заметками и историями из реальной жизни.
         </ServiceCard>
     </div>
@@ -60,9 +81,9 @@
 
 <section class="team-section">
     <div class="container">
-        <div class="team-section__title">
+        <h1 class="team-section__title">
             НАША КОМАНДА
-        </div>
+        </h1>
         <div class="cards-container">
             <TeamCard PhotoUrl="/assets/images/AlexTykoun.png" FullName="Александр Тыкун" PersonLink=@Roots.AlexTykoun>
                 математик, кандидат физ.-мат. наук, доцент БГУ (Минск). Занятия в Хайфе или Online.
@@ -94,7 +115,7 @@
             </p>
         </div>
         <div class="afterword__action">
-            <button class="accent-btn">
+            <button class="accent-btn" @onclick="()=>_navigationManager.NavigateTo(Roots.TestLesson)">
                 Пробное занятие
             </button>
         </div>

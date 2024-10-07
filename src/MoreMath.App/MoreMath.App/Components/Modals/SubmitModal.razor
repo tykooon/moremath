@@ -1,0 +1,44 @@
+﻿@rendermode InteractiveAuto
+
+<div class="modal-overlay @(_isOpen ? "show" : "")">
+    <div class="modal">
+        <div class="modal__header @(_isSucceeded ? "" : "modal__fail")">
+            <p class="modal__header__title ">@Title</p>
+        </div>
+        <div class="modal__body">
+            @ChildContent
+        </div>
+        <div class="modal__actions">
+            <button type="button" class="accent-btn" @onclick=OnButtonClick>ОК </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool _isOpen = false;
+    private bool _isSucceeded = true;
+
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private async Task OnButtonClick()
+    {
+        Close();
+        await OnClose.InvokeAsync();
+    }
+
+    public void Show(bool isSucceeded)
+    {
+        _isSucceeded = isSucceeded;
+        _isOpen = true;
+        StateHasChanged();
+    }
+
+    public void Close() => _isOpen = false;
+}

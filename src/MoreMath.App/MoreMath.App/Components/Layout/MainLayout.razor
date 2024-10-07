@@ -1,9 +1,17 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <Header />
 
 <main>
-    @Body
+    <ErrorBoundary>
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <ErrorContent>
+            <ErrorBlock Message="@context.Message" />
+        </ErrorContent>
+    </ErrorBoundary>
 </main>
 
 <Footer />

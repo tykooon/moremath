@@ -38,13 +38,15 @@ public class ArticlesController : BaseApiController
             request.Title,
             request.Abstract,
             request.BodyUri,
+            request.ImageUri,
+            request.Slug,
             request.AuthorsId,
             request.CategoryId,
             request.Tags));
         return res.ToHttpCreated($"/articles/{res.Value}");
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     [ProducesResponseType<ArticleDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
     public async Task<IResult> GetArticleById(int id)
@@ -52,6 +54,16 @@ public class ArticlesController : BaseApiController
         var res = await _mediator.Send(new GetArticleByIdQuery(id));
         return res.ToHttpNotFound();
     }
+
+    [HttpGet("{slug:minlength(8)}")]
+    [ProducesResponseType<ArticleDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<Error>(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetArticleBySlug(string slug)
+    {
+        var res = await _mediator.Send(new GetArticleBySlugQuery(slug));
+        return res.ToHttpNotFound();
+    }
+
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -64,6 +76,8 @@ public class ArticlesController : BaseApiController
             request.Title,
             request.Abstract,
             request.BodyUri,
+            request.ImageUri,
+            request.Slug,
             request.CategoryId));
         return res.ToHttp(HttpStatusCode.NoContent, HttpStatusCode.BadRequest);
     }

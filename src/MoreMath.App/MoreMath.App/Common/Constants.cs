@@ -16,6 +16,7 @@ public static class Constants
         public const string TestLesson = "lessons/letstry";
         public const string AlexTykoun = "about/team/alextykoun";
         public const string OlgaPindrik = "about/team/olgapindrik";
-
     }
+    
+    public static string BLOB_STORAGE { get; set; } = "https://stmoremathdev001.blob.core.windows.net/images";
 }

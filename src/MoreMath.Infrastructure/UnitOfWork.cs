@@ -15,6 +15,7 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
     private UserRepository? _userRepo;
     private CategoryRepository? _categoryRepo;
     private TagRepository? _tagRepo;
+    private TestLessonRepository? _testLessonRepo;
 
     public AppDbContext Context => _context ?? new AppDbContext();
 
@@ -24,6 +25,7 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
     public IUserRepository UserRepo => _userRepo ??= new UserRepository(Context);
     public ICategoryRepository CategoryRepo => _categoryRepo ??= new CategoryRepository(Context);
     public ITagRepository TagRepo => _tagRepo ??= new TagRepository(Context);
+    public ITestLessonRepository TestLessonRepo => _testLessonRepo ??= new TestLessonRepository(Context);
 
     public async Task CommitAsync()
     {

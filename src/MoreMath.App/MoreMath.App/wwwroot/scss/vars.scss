@@ -13,6 +13,7 @@ $main-dense-font-family: "Roboto Condensed", "Arial";
 
 $mmc-base: #0e3f89;
 $mmc-accent: #e16c3b;
+$mmc-accent-dark: #d65a26;
 $mmc-light-cold: #d9ecff;
 $mmc-light-warm: #f9f4e7;
 $mmc-base-light: #85b5e6;
@@ -21,19 +22,20 @@ $mmc-white: #fff;
 $mmc-bg-main: #f5f9ff;
 $mmc-active-link: #f1e2aa;
 $mmc-overlay: #11171e;
+$mmc-overlay-transparent: #11171edd;
 
 $mmc-icon-bagrut: #199931;
-$mmc-icon-blog:#fff;
+$mmc-icon-blog:#61ecfd;
 $mmc-icon-olympics: #e5ae00;
 $mmc-icon-quickhelp: #f62c22;
 $mmc-icon-mathematics: #ff3aa9;
-$mmc-icon-mathhebrew: #2892ff;
+$mmc-icon-mathhebrew: #1a54ff;
 $mmc-icon-team: #81ff5a;
 $mmc-icon-contacts: #ff7d00;
 
 
 $mm-media-xs: 320px;
-$mm-media-xss: 448px;
+$mm-media-xss: 375px;
 $mm-media-sm: 576px;
 $mm-media-md: 768px;
 $mm-media-lg: 1024px;
@@ -41,3 +43,19 @@ $mm-media-xl: 1280px;
 
 $mm-header-height-sm: 80px;
 $mm-header-height-lg: 100px;
+$mm-footer-height-sm: 340px;
+$mm-footer-height-md: 280px;
+
+$mm-fs-xxs: 0.5rem;
+$mm-fs-xs: 0.75rem;
+$mm-fs-sm: 0.875rem;
+$mm-fs-md: 1rem;
+$mm-fs-mdx: 1.13rem;
+$mm-fs-lg: 1.25rem;
+$mm-fs-lgx: 1.4rem;
+$mm-fs-xl: 1.5rem;
+$mm-fs-xxl: 2rem;
+
+$mm-lh-dense: 1;
+$mm-lh-base: 1.15;
+$mm-lh-wide: 1.3;

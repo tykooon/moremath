@@ -1,0 +1,36 @@
+﻿@inject NavigationManager _navigationManager
+@rendermode InteractiveServer
+
+
+<div class="service-card mm-card">
+    <div class="mm-card__header">
+        <MdIcon Name=@MdIcon/>
+        <div class="mm-card__header__text">@Title.ToHtml()</div>
+    </div>
+    <div class="mm-card__body">
+        <div class="mm-card__body__text">
+            @ChildContent
+        </div>
+    </div>
+    <div class="mm-card__footer">
+        <div class="mm-card__footer__text">
+        </div>
+        <button class="mm-card__footer__button accent-btn" @onclick="()=>_navigationManager.NavigateTo(ButtonLink)">
+            <MdIcon Name="menu-right" />
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string MdIcon { get; set; } = "virus";
+
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    public string ButtonLink { get; set; } = "#";
+}

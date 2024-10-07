@@ -4,7 +4,7 @@ public record AuthorDto(
     int Id,
     string FirstName,
     string LastName,
-    string? AvatarUrl,
+    string SlugName,
     string Info,
     string ShortBio,
     string? Phone,

@@ -9,7 +9,7 @@ namespace MoreMath.Application.UseCases.Authors.Commands;
 public record CreateAuthorCommand(
     string FirstName,
     string LastName,
-    string? AvatarUri,
+    string SlugName,
     string Info,
     string ShortBio,
     string? Phone,
@@ -30,7 +30,7 @@ public class CreateAuthorHandler(IUnitOfWork unitOfWork):
         {
             FirstName = command.FirstName,
             LastName = command.LastName,
-            Avatar = command.AvatarUri,
+            SlugName = command.SlugName,
             Info = command.Info,
             ShortBio = command.ShortBio,
             Phone = command.Phone,

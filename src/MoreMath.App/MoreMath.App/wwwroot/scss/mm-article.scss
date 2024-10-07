@@ -1,0 +1,120 @@
+﻿@import "vars";
+
+/*#region mm-article */
+
+.mm-article {
+    padding: 15px 10px;
+    &__header {
+        display: flex;
+        flex-direction: column;
+
+        &__row {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+        }
+    }
+
+    &__title {
+        color: $mmc-base-dark;
+        font-size: $mm-fs-xxl;
+        margin: 15px 0;
+        font-weight: 700;
+    }
+
+    &__image {
+        height: fit-content;
+        width: 80%;
+        text-align: center;
+        margin-inline: auto;
+        margin-bottom: auto;
+
+        img {
+            width: 100%;
+            height: inherit;
+            border-radius: 15px;
+            object-fit: cover;
+        }
+    }
+
+    &__authors {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+    &__abstract {
+        color: $mmc-base-dark;
+        font-size: $mm-fs-sm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        padding-inline: 30px;
+    }
+
+    &__body{
+        font-size: $mm-fs-mdx;
+    }
+}
+
+@media(min-width: $mm-media-md){
+    .mm-article {
+        max-width: 800px;
+        margin-inline: auto;
+        &__header {
+            &__row {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+            }
+        }
+
+        &__title {
+            font-size: $mm-fs-xxl;
+        }
+
+        &__authors {
+            font-size: $mm-fs-lg;
+        }
+
+        &__image {
+            img {
+                width: 100%;
+            }
+        }
+
+        &__abstract {
+            max-width: 50%;
+            padding-inline: 10px;
+        }
+    }
+
+}
+
+
+.author-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px;
+    margin-inline: 5px;
+    border-radius:20px;
+    background-color: $mmc-light-cold;
+    text-decoration:none;
+
+    img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    span {
+        font-size: $mm-fs-sm;
+        padding-inline: 5px;
+    }
+}
+
+
+/*#endregion mm-article */

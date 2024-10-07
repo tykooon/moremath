@@ -10,6 +10,8 @@ public static class ArticleMappers
         article.Title,
         article.Abstract,
         article.BodyUri,
+        article.ImageUri,
+        article.Slug,
         article.Authors.Select(a => a.Id).ToArray(),
         article.CategoryId ?? 0,
         article.Category?.CategoryName ?? "",
@@ -25,6 +27,8 @@ public static class ArticleMappers
         Title = dto.Title,
         Abstract = dto.Abstract,
         BodyUri = dto.BodyUri,
+        ImageUri = dto.ImageUri,
+        Slug = dto.Slug,
         CategoryId = dto.CategoryId == 0 ? null : dto.CategoryId
     };
 }
