@@ -19,9 +19,9 @@
     <ProjectReference Include="..\..\MoreMath.Shared\MoreMath.Shared.csproj" />
     <ProjectReference Include="..\MoreMath.App.Client\MoreMath.App.Client.csproj" />
     <PackageReference Include="Azure.Identity" Version="1.12.1" />
+    <PackageReference Include="BlazorPro.BlazorSize" Version="8.0.0" />
     <PackageReference Include="DartSassBuilder" Version="1.1.0" />
     <PackageReference Include="MailKit" Version="4.8.0" />
-    <PackageReference Include="MathJaxBlazor" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />

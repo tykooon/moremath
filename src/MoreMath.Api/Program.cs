@@ -6,8 +6,8 @@ using MoreMath.Api.Authentication.ApiKey;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddSerilogLogging();
-builder.Configuration.AddSecrets();
 
+builder.Configuration.AddSecrets();
 
 
 builder.Services.AddEndpointsApiExplorer();

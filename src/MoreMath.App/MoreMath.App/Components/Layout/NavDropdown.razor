@@ -1,0 +1,61 @@
+<li class="navbar__dropdown">
+    <div class="navbar__dropdown__btn " @onclick=OnDropdownClicked>
+        <NavLink href=@Prefix Match="NavLinkMatch.Prefix" >
+            @Title
+            @if (!isExpanded)
+            {
+                <MdIcon Name="menu-down" />
+            }
+            else
+            {
+                <MdIcon Name="menu-up" />
+            }
+        </NavLink>
+    </div>
+    <div class="navbar__dropdown__content @visibilityClass">
+        @foreach(var item in NavDropdownList)
+        {
+            <NavLink href=@item.ItemLink class="navbar-link" @onclick=OnLinkClicked>
+                @item.ItemIcon @item.ItemText
+            </NavLink>
+        }
+    </div>
+</li>
+
+<MediaQuery Media="(min-width: 1024px)" @bind-Matches=isWideScreen/>
+
+@code{
+    private string @visibilityClass => (!isWideScreen && isExpanded) ? "visible" : "";
+    private bool isExpanded = false;
+    private bool isWideScreen;
+
+    private void OnDropdownClicked()
+    {
+        if(!isWideScreen)
+        {
+            isExpanded = !isExpanded;
+            StateHasChanged();
+        }
+    }
+
+
+    [Parameter]
+    public EventCallback OnLinkClicked { get; set; }
+
+    [Parameter]
+    public NavDropdownItem[] NavDropdownList { get; set; } = [];
+
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string Prefix { get; set; } = "";
+
+    public void HideContent()
+    {
+        isExpanded = false;
+    }
+
+
+    public record NavDropdownItem(string ItemLink, string ItemText, RenderFragment ItemIcon);
+}

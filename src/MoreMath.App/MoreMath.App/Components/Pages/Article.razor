@@ -1,13 +1,15 @@
-﻿@page "/articles/{ArticleSlug}"
+﻿@using MoreMath.Dto.Dtos
+@using System.Globalization
 
-@inherits MathJaxBlazor.MathJaxContentComponent
-@using MoreMath.Dto.Dtos
+@page "/articles/{ArticleSlug}"
 
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 @inject IHttpClientFactory HttpClientFactory 
 @inject ILogger<Article> Logger
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntimeUnit
+
+<PageTitle>@_title</PageTitle>
 
 <HeadContent>
     <script>
@@ -25,45 +27,37 @@
     </script>
 </HeadContent>
 
-<PageTitle>@_title</PageTitle>
-
-
 <div class="container">
     <div class="mm-content">
         <div class="mm-article">
             <div class="mm-article__header">
-                <div class="mm-article__title">
+                <h1 class="mm-article__title">
                     @_title
+                </h1>
+                <div class="mm-article__info">
+                    <span>
+                        @(articleDto?.Created.ToString("dd MMMM yyyy", new CultureInfo("ru-Ru"))+" | ")
+                    </span>
+                    @foreach (var author in authors)
+                        {
+                            <AuthorChip Author=@author />
+                        }
                 </div>
                 <div class="mm-article__header__row">
                     <div class="mm-article__image">
                         <img src="@(Constants.BLOB_STORAGE)/articles/@(ArticleSlug).jpg" alt="banner"/>
                     </div>
                     <div class="mm-article__abstract">
-                        @_abstract
-                        <div class="mm-article__authors">
-                            <b>
-                                @(authors.Count() switch
-                                {
-                                    0 => "",
-                                    1 => "Автор: ",
-                                    _ => "Авторы: "
-                                })
-                            </b>
-                            @foreach(var author in authors)
-                            {
-                                <AuthorChip Author=@author/>
-                            }
-                        </div>
+                        <p>
+                            @_abstract
+                        </p>
                     </div>
                 </div>
             </div>
             <div class="mm-article__body"> 
                 @if(articleContent == null)
                 {
-                    <p>
-                        Article content is still loading ...
-                    </p>
+                    <WaitingSpinner Text="Article content is still loading ..."/>
                 }
                 else
                 {
@@ -129,8 +123,13 @@
 
             articleContent = response;
         }
+    }
 
-        Console.WriteLine(articleContent);
-        //await JsRuntime.InvokeAsync("Math")
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            await JsRuntimeUnit.InvokeVoidAsync("MathJax.typesetPromise");
+        }
     }
 }

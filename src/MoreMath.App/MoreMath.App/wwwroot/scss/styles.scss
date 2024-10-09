@@ -31,12 +31,12 @@ html {
 }
 @media (min-width: $mm-media-lg) {
     html {
-        font-size: 16px;
+        font-size: 18px;
     }
 }
 @media (min-width: $mm-media-xl) {
     html {
-        font-size: 15px;
+        font-size: 18px;
     }
 }
 
@@ -47,7 +47,9 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     background: $mmc-white;
-
+}
+body:has(.navbar__content.visible){
+    overflow:hidden;
 }
 
 input:focus-visible, textarea:focus-visible{
@@ -223,10 +225,8 @@ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
 }
 
-.mm-content.last-unit {
+.mm-content:last-child {
     margin-bottom: 20px;
-    p {
-    }
 }
 
 .mm-center{
@@ -237,19 +237,47 @@ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 /* ----------------------------- ONE-TIME STYLES AND CONSTANTS -------------------------------*/
 .accent-btn {
-    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: $mmc-accent;
-    color: $mmc-white;
     border: none;
-    text-align: center;
-    align-content: center;
-    font-weight: 500;
+    border-radius: 10px;
+    margin-inline:auto;
     padding: 8px;
+    font-weight: 500;
+    color: $mmc-white;
 
     &:hover, &:active, &:focus {
         background-color: $mmc-accent-dark;
         cursor: pointer;
     }
+}
+
+.accent-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: transparent;
+    color: $mmc-accent;
+    border: none;
+    font-weight: 500;
+
+    &:hover, &:active, &:focus {
+        background-color: $mmc-shadow;
+        cursor: pointer;
+    }
+}
+
+.pending-btn::before {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+    background-image: url("/assets/images/svg/spinning-dots.svg");
+    background-size: cover;
+    margin-inline: 3px;
 }
 
 .team-card {
@@ -336,3 +364,57 @@ span {
     }
 }
 
+mjx-container{
+    z-index:-1;
+}
+
+.no-scroll{
+    position:fixed;
+    z-index:-2;
+}
+
+@media(min-width:$mm-media-xs){
+    .hide-on-xs{
+        display: none;
+    }
+}
+
+@media(min-width:$mm-media-sm) {
+    .hide-on-sm {
+        display: none;
+    }
+}
+
+@media(min-width:$mm-media-md) {
+    .hide-on-md {
+        display: none;
+    }
+}
+
+@media(min-width:$mm-media-lg) {
+    .hide-on-lg {
+        display: none;
+    }
+}
+
+.waiting-spinner {
+    font-size:$mm-fs-xl;
+    display: inline-flex;
+    width:100%;
+    align-content: center;
+    justify-content:center;
+
+    img {
+        width: $mm-fs-xxl;
+        height: $mm-fs-xxl;
+    }
+}
+
+.textit{
+    font-style:italic;
+}
+
+.intext-link{
+    text-decoration-style:dotted;
+    text-decoration-color: $mmc-accent;
+}

@@ -3,8 +3,7 @@
 /*#region mm-form */
 
 .mm-form {
-    padding-inline:30px;
-    max-width:720px;
+    padding-inline:10px;
     margin-inline:auto;
 
     fieldset {
@@ -17,7 +16,6 @@
         margin: 20px 0;
 
         .accent-btn {
-            height: 40px;
             font-size: large;
         }
     }
@@ -71,6 +69,13 @@
     }
 }
 
+@media(min-width: $mm-media-md){
+    .mm-form {
+        padding-inline: 30px;
+        max-width: 720px;
+    }
+
+}
 
 .mm-form__field__input:not(:placeholder-shown).mm-form__field__input:not(:focus) ~ .mm-form__field__label,
 .mm-form__field__textarea:not(:placeholder-shown).mm-form__field__textarea:not(:focus) ~ .mm-form__field__label {

@@ -86,7 +86,7 @@
         </div>
 
         <div class="mm-form__row">
-            <button type="submit" class="accent-btn">Отправить</button>
+                <button type="submit" class="accent-btn @(IsInProgress ? "pending-btn" : "")">Отправить</button>
         </div>
         </fieldset>
     </EditForm>
@@ -130,6 +130,7 @@
     private bool FormSubmitted { get; set; } = false;
     private bool FormSubmitFailed { get; set; } = false;
     private bool IsDisabledForm => FormSubmitted || FormSubmitFailed;
+    private bool IsInProgress = false;
 
     protected override void OnInitialized()
     {
@@ -138,6 +139,7 @@
 
     private async Task Submit()
     {
+        IsInProgress = true;
         int userId = 0;
         // TODO: Get UserId From CurrentUserService 
         CreateTestLessonRequest request = new(
@@ -155,12 +157,14 @@
                 if (response.IsSuccessStatusCode)
                 {
                     Logger.LogInformation("TestLessonOrder Form submitted successfully");
-                    await InfoMailSender.SendEmailAsync("moremath.haifa@gmail.com", "New Test Lesson Order", $"<p>You've got new order for test lesson.</p><p> Order Details:</p><p> {FormModel?.ToHtmlString()} <p>Order No.: {response.Content.ToString()}</p>");
+                    await InfoMailSender.SendEmailAsync("moremath.haifa@gmail.com", "New Test Lesson Order", $"<p>You've got new order for test lesson.</p><p> Order Details:</p><p> {FormModel?.ToHtmlString()} <p>Order No.: {await response.Content.ReadAsStringAsync()}</p>");
+                    IsInProgress = false;
                     SubmitModal.Show(true);
                 }
                 else
                 {
                     Logger.LogError("TestLessonOrder Form submission failed with status code {StatusCode}", response.StatusCode);
+                    IsInProgress = false;
                     SubmitFailedModal.Show(false);
                 }
             }

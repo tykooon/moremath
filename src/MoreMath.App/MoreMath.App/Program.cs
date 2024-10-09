@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -7,12 +8,19 @@ using MoreMath.App.Components.Account;
 using MoreMath.App.Data;
 using MoreMath.App.Extensions;
 using MoreMath.App.Services.Mail;
+using BlazorPro.BlazorSize;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddSecrets();
 
 // Add services to the container.
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
@@ -58,7 +66,12 @@ builder.Services.AddTransient<IEmailSender, AppInfoMailSender>();
 // TODO: Check if singleton is the right lifetime for this service.
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityAppEmailSender>();
 
+builder.Services.AddMediaQueryService();
+
 var app = builder.Build();
+
+app.UseForwardedHeaders();
+
 
 app.ApplyMigrations();
 

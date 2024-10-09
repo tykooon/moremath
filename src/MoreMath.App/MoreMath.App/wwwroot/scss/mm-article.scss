@@ -3,35 +3,42 @@
 /*#region mm-article */
 
 .mm-article {
-    padding: 15px 10px;
+    line-height: $mm-lh-wide;
     &__header {
         display: flex;
         flex-direction: column;
+        margin-bottom: $mm-fs-xxl;
 
         &__row {
             display: flex;
             flex-direction: column;
-            padding: 10px 0;
+            padding: 10px;
+            background-color: $mmc-light-cold;
+            border-radius: 15px;
         }
     }
 
     &__title {
         color: $mmc-base-dark;
-        font-size: $mm-fs-xxl;
-        margin: 15px 0;
-        font-weight: 700;
+        margin-bottom: 0;
+    }
+
+    &__info {
+        display: inline-flex;
+        align-items: center;
+        text-indent: $mm-fs-xxs;
+        margin-bottom: $mm-fs-md;
+        font-size:$mm-fs-sm;
     }
 
     &__image {
-        height: fit-content;
+        display: flex;
         width: 80%;
-        text-align: center;
         margin-inline: auto;
-        margin-bottom: auto;
 
         img {
             width: 100%;
-            height: inherit;
+            height: 100%;
             border-radius: 15px;
             object-fit: cover;
         }
@@ -47,14 +54,14 @@
 
     &__abstract {
         color: $mmc-base-dark;
-        font-size: $mm-fs-sm;
+        font-size: $mm-fs-md;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
-        padding-inline: 30px;
+        justify-content: space-between;
+        padding: 20px 30px;
     }
 
-    &__body{
+    &__body {
         font-size: $mm-fs-mdx;
     }
 }
@@ -63,16 +70,18 @@
     .mm-article {
         max-width: 800px;
         margin-inline: auto;
+
         &__header {
             &__row {
-                display: flex;
                 flex-direction: row;
-                justify-content: space-around;
             }
         }
 
         &__title {
-            font-size: $mm-fs-xxl;
+        }
+
+        &__info {
+            text-indent: $mm-fs-xxl;
         }
 
         &__authors {
@@ -81,13 +90,12 @@
 
         &__image {
             img {
-                width: 100%;
             }
         }
 
         &__abstract {
             max-width: 50%;
-            padding-inline: 10px;
+            padding: 20px 10px;
         }
     }
 
@@ -100,7 +108,7 @@
     padding: 5px;
     margin-inline: 5px;
     border-radius:20px;
-    background-color: $mmc-light-cold;
+    background-color: transparent;
     text-decoration:none;
 
     img {
@@ -111,8 +119,8 @@
     }
 
     span {
-        font-size: $mm-fs-sm;
-        padding-inline: 5px;
+        padding-inline: 3px;
+        text-indent: 0;
     }
 }
 

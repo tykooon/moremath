@@ -137,11 +137,9 @@
     }
 
     .mm-card__footer {
-        font-size: $mm-fs-sm;
-
         &__button {
+            font-size: $mm-fs-xl;
             width: 50px;
-            padding: 2px;
         }
     }
 }
@@ -175,7 +173,6 @@
             font-size: $mm-fs-sm;
 
             &__button {
-                width: 50px;
             }
         }
     }

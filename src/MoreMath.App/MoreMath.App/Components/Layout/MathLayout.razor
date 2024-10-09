@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+@layout MainLayout
+
+@inject IJSRuntime JsRuntime
+
+<HeadContent>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+</HeadContent>
+
+@Body
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            await JsRuntime.InvokeVoidAsync("MathJax.typesetPromise");
+        }
+    }
+
+}
