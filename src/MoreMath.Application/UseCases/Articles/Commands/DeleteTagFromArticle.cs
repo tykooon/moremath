@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MoreMath.Application.Contracts;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
@@ -9,19 +10,19 @@ public record DeleteTagFromArticleCommand(
     int ArticleId,
     int TagId): IRequest<ResultWrap>;
 
-public class DeleteTagFromArticleHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<DeleteTagFromArticleCommand, ResultWrap>(unitOfWork)
+public class DeleteTagFromArticleHandler(IAppDbContext context):
+    AbstractHandler<DeleteTagFromArticleCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(DeleteTagFromArticleCommand command, CancellationToken cancellationToken)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(command.ArticleId);
+        var article = await _context.Articles.Include(a => a.Tags).FirstOrDefaultAsync(a => a.Id == command.ArticleId, cancellationToken);
 
         if(article == null)
         {
             return ResultWrap.Failure(new Error("Article.NotFound", "Failed to get article with given Id."));
         }
 
-        var Tag = await _unitOfWork.TagRepo.FindAsync(command.TagId);
+        var Tag = await _context.Tags.FindAsync(command.TagId);
 
         if (Tag == null)
         {
@@ -33,7 +34,7 @@ public class DeleteTagFromArticleHandler(IUnitOfWork unitOfWork):
         article.Tags.Remove(Tag);
         article.UpdateTimeMark();
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return ResultWrap.Success();
     }

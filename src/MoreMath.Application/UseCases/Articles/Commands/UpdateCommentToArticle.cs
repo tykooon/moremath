@@ -3,6 +3,7 @@ using MoreMath.Application.Contracts;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
 using MoreMath.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoreMath.Application.UseCases.Articles.Commands;
 
@@ -13,19 +14,19 @@ public record UpdateCommentToArticleCommand(
     string? Text,
     bool? IsDeleted): IRequest<ResultWrap>;
 
-public class UpdateCommentToArticleHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<UpdateCommentToArticleCommand, ResultWrap>(unitOfWork)
+public class UpdateCommentToArticleHandler(IAppDbContext context):
+    AbstractHandler<UpdateCommentToArticleCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(UpdateCommentToArticleCommand command, CancellationToken cancellationToken)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(command.ArticleId);
+        var article = await _context.Articles.Include(a => a.Comments).FirstOrDefaultAsync(a => a.Id == command.ArticleId, cancellationToken);
 
         if(article == null)
         {
             return ResultWrap.Failure(new Error("Article.NotFound", "Failed to get article with given Id."));
         }
 
-        var comment = await _unitOfWork.CommentRepo.FindAsync(command.CommentId);
+        var comment = await _context.Comments.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == command.CommentId, cancellationToken);
 
         if(comment == null)
         {
@@ -44,7 +45,7 @@ public class UpdateCommentToArticleHandler(IUnitOfWork unitOfWork):
 
         if (comment.User == null && command.UserId != null)
         {
-            var user = await _unitOfWork.UserRepo.FindAsync(command.UserId.Value);
+            var user = await _context.Users.FindAsync(command.UserId.Value);
 
             if(user == null)
             {
@@ -57,8 +58,8 @@ public class UpdateCommentToArticleHandler(IUnitOfWork unitOfWork):
         comment.Text = command.Text ?? comment.Text;
         comment.IsDeleted = command.IsDeleted ?? comment.IsDeleted;
 
-        _unitOfWork.CommentRepo.Update(comment);
-        await _unitOfWork.CommitAsync();
+        _context.Comments.Update(comment);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return ResultWrap.Success();
     }

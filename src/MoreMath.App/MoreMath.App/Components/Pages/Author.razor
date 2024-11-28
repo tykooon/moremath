@@ -1,0 +1,164 @@
+﻿@using MoreMath.Dto.Dtos
+@using System.Globalization
+@layout ColumnLayout
+
+@page "/about/{AuthorSlug}"
+
+@inject IHttpClientFactory HttpClientFactory 
+@inject ILogger<Article> Logger
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntimeUnit
+
+<PageTitle>@_fullName</PageTitle>
+
+<HeadContent>
+    <MathJaxScripts />
+</HeadContent>
+
+<div class="mm-content">
+    <div class="author-page">
+        @if(authorDto == null)
+        {
+            <WaitingSpinner Text="Page is loading ..."/>
+        }
+        else
+        {
+            <div class="author-page__top">
+                <h1> @_fullName </h1>
+                <div class="author-page__card">
+                    <div class="author-page__card__image">
+                        <img src="@(Constants.BLOB_STORAGE+"/authors/" + authorDto.SlugName + ".png")" alt="@_fullName" />
+                    </div>
+                    <div class="author-page__card__info">
+                        <p>
+                            @authorDto.Info
+                        </p>
+                    </div>
+                </div>
+                <div class="author-page__date">
+                    <span>
+                        автор проекта с @authorDto.Created.ToString("dd MMMM yyyy", new CultureInfo("ru-Ru"))
+                    </span>
+                </div>
+            </div>
+            <div class="author-page__body">
+                <p>
+                    @TextPreprocess(authorDto.ShortBio)
+                </p>
+            </div>
+
+            <div class="author-page__contacts">
+                <h3>Контакты для связи:</h3>
+                <ul>
+                    <li>
+                        <a href="tel:@authorDto.Phone">
+                            <MdIcon Name="phone" />
+                            <span>@authorDto.Phone</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href=@("mailto:"+authorDto.Email)>
+                            <MdIcon Name="email-fast" />
+                            <span>@authorDto.Email</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@authorDto.Telegram">
+                            <MdIcon Name="send-variant-outline" />
+                            <span>@authorDto.Telegram</span>
+                        </a>
+                    </li>
+                    @if(authorDto.WhatsApp != null)
+                    {
+                        <li>
+                            <a href="@authorDto.WhatsApp">
+                                <MdIcon Name="whatsapp" />
+                                <span>WhatsApp</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+                
+
+            </div>
+
+            <div>
+                <h2>Статьи автора:</h2>
+                <ArticleRack @ref=_rack AuthorsId="@(_id)"/>
+            </div>
+        }
+    </div>
+</div>
+
+
+<SectionContent SectionName="main-sidebar">
+    <section class="main-sidebar">
+        <div class="info-pad">
+            <TestLessonCall />
+        </div>
+        <div class="read-also">
+            <h3>Читайте также:</h3>
+            <ArticleRack IsSidebar />
+        </div>
+    </section>
+</SectionContent>
+
+@code{
+    [Parameter]
+    public string? AuthorSlug { get; set; }
+
+    private int[] _id = [];
+    private ArticleRack _rack = default!;
+
+    private AuthorDto? authorDto = null;
+    private IEnumerable<ArticleDto> articles = [];
+
+    private string _fullName => $"{authorDto?.FirstName} {authorDto?.LastName}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(string.IsNullOrWhiteSpace(AuthorSlug))
+        {
+            NavigationManager.NavigateTo("/about/team");
+        }
+
+        using (var BackendClient = HttpClientFactory.CreateClient("MoreMath.Backend"))
+        {
+            var response = await BackendClient.GetFromJsonAsync<IEnumerable<AuthorDto>>($"api/authors/?slugName={AuthorSlug}");
+            if (response == null || response.Count() == 0)
+            {
+                Logger.LogError("Author with given request data (/articles/{0}) was not found", AuthorSlug);
+                NavigationManager.NavigateTo("/about/team");
+            }
+            else
+            {
+                authorDto = response.First();
+            }
+
+            if(authorDto != null)
+            {
+                _id = [ authorDto.Id ];
+                articles = (await BackendClient.GetFromJsonAsync<IEnumerable<ArticleDto>>($"api/authors/{authorDto.Id}/articles")) ?? [];
+                StateHasChanged();
+            } 
+        }
+    }
+
+    private MarkupString TextPreprocess(string text)
+    {
+        text = text.Replace(" --", "&nbsp;&ndash;");
+        text = text.Replace(" ---", "&nbsp;&mdash;");
+        text = text.Replace("\\\\", "</p><p>");
+        text = text.Replace("\\-", "&shy;");
+        return new MarkupString(text);
+
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            await JsRuntimeUnit.InvokeVoidAsync("MathJax.typesetPromise");
+        }
+    }
+}

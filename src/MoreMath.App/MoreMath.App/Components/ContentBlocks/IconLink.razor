@@ -1,0 +1,29 @@
+﻿@inject NavigationManager NavManager
+@rendermode InteractiveServer
+
+
+<div class="icon-link" @onclick=@(() => NavManager.NavigateTo(Link))>
+    <div class="icon-link__icon">
+        <img src=@IconUrl alt="icon" />
+    </div>
+    <div class="icon-link__text">
+        <span>
+            @Text
+        </span>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public string IconUrl { get; set; } = "/";
+
+    [Parameter]
+    public string Text { get; set; } = "";
+
+    // [Parameter]
+    // public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    public string Link { get; set; } = "/";
+}

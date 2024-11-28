@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MoreMath.Application.Contracts;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
@@ -9,19 +10,19 @@ public record DeleteCommentToArticleCommand(
     int ArticleId,
     int CommentId): IRequest<ResultWrap>;
 
-public class DeleteCommentToArticleHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<DeleteCommentToArticleCommand, ResultWrap>(unitOfWork)
+public class DeleteCommentToArticleHandler(IAppDbContext context):
+    AbstractHandler<DeleteCommentToArticleCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(DeleteCommentToArticleCommand command, CancellationToken cancellationToken)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(command.ArticleId);
+        var article = await _context.Articles.Include(a => a.Comments).FirstOrDefaultAsync(a => a.Id == command.ArticleId, cancellationToken);
 
         if(article == null)
         {
             return ResultWrap.Failure(new Error("Article.NotFound", "Failed to get article with given Id."));
         }
 
-        var comment = await _unitOfWork.CommentRepo.FindAsync(command.CommentId);
+        var comment = await _context.Comments.FindAsync(command.CommentId);
 
         if (comment == null)
         {
@@ -34,8 +35,8 @@ public class DeleteCommentToArticleHandler(IUnitOfWork unitOfWork):
         }
 
 
-        _unitOfWork.CommentRepo.Delete(comment);
-        await _unitOfWork.CommitAsync();
+        _context.Comments.Remove(comment);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return ResultWrap.Success();
     }

@@ -21,6 +21,6 @@ public class UpdateAuthorCommandValidator : AbstractValidator<UpdateAuthorComman
             x.Website != null ||
             x.Options != null).WithMessage("Author update request should contain at least one property with new value");
         RuleFor(x => x.FirstName).Must(p => p is null || !string.IsNullOrWhiteSpace(p));
-        RuleFor(x => x.SlugName).Matches("^(((http|https|ftp):\\/\\/)|\\/)?[^\\s\\/$.?#].[^\\s]*$").WithMessage("Provided URL for Author avatar is not valid.");
+        //RuleFor(x => x.SlugName).Matches("^(((http|https|ftp):\\/\\/)|\\/)?[^\\s\\/$.?#].[^\\s]*$").WithMessage("Provided URL for Author avatar is not valid.");
     }
 }

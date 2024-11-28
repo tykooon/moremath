@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using MoreMath.Application.Contracts;
 using MoreMath.Application.Contracts.Services;
 using MoreMath.Application.UseCases.Abstracts;
@@ -19,18 +21,16 @@ public record CreateArticleCommand(
 
 
 
-public class CreateArticleHandler(IUnitOfWork unitOfWork, IAuthorService authorService, ITagService tagService):
-    AbstractHandler<CreateArticleCommand, ResultWrap<int>>(unitOfWork)
+public class CreateArticleHandler(IAppDbContext context):
+    AbstractHandler<CreateArticleCommand, ResultWrap<int>>(context)
 {
-    private readonly IAuthorService _authorService = authorService;
-    private readonly ITagService _tagService = tagService;
-
     public override async Task<ResultWrap<int>> Handle(CreateArticleCommand command, CancellationToken cancellationToken)
     {
-        var authorList = await _authorService.GetAuthorsByIdsAsync(command.AuthorsId);
-        var category = await _unitOfWork.CategoryRepo.FindAsync(command.CategoryId);
-        var tags = await _tagService.GetTagsByNamesAsync(command.Tags);
-
+        var authorList = await _context.Authors.AsNoTracking().Where(a => command.AuthorsId.Contains(a.Id)).ToListAsync(cancellationToken);
+        var category = await _context.Categories.FindAsync(command.CategoryId);
+        var tags = command.Tags.Length == 0
+            ? []
+            : await _context.Tags.AsNoTracking().Where(t => command.Tags.Contains(t.TagName)).ToListAsync(cancellationToken);
 
         Article article = new()
         {
@@ -39,13 +39,14 @@ public class CreateArticleHandler(IUnitOfWork unitOfWork, IAuthorService authorS
             BodyUri = command.BodyUri,
             ImageUri = command.ImageUri,
             Slug = command.Slug,
-            Authors = authorList.ToList(),
+            Authors = authorList,
             Category = category,
-            Tags = tags.ToList(), 
+            Tags = tags, 
         };
 
-        await _unitOfWork.ArticleRepo.AddAsync(article);
-        await _unitOfWork.CommitAsync();
+        await _context.Articles.AddAsync(article);
+        await _context.SaveChangesAsync(cancellationToken);
+
         return article.Id == 0
             ? ResultWrap.Failure(new Error("Article.CreateError", "Article was not created"))
             : ResultWrap<int>.Success(article.Id);

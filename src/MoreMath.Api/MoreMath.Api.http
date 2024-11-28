@@ -1,19 +1,732 @@
-@MoreMath.Api_HostAddress = http://localhost:5027
+﻿@MoreMath.Api_HostAddress = http://localhost:5050/api
 
-GET {{MoreMath.Api_HostAddress}}/authors
-Accept: application/json
+# GET {{MoreMath.Api_HostAddress}}/authors
+# Accept: application/json
+
+# ###
+
+# POST {{MoreMath.Api_HostAddress}}/authors
+# Content-Type: application/json
+
+# {
+#   "firstName":"Hello",
+#   "lastName":"Hello",
+#   "info":"Hello",
+#   "shortBio":"Hello"
+# }
 
 ###
-
-POST {{MoreMath.Api_HostAddress}}/authors
-Content-Type: application/json
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
 
 {
-  "firstName":"Hello",
-  "lastName":"Hello",
-  "info":"Hello",
-  "shortBio":"Hello"
+  "Shoresh": "סגר",
+  "Niqqud": "סוֹגֵר",
+  "NoNiqqud": "סוֹגֵר",
+  "ExtraForm": "мн.ч. (пара): [סוֹגְרַיִים] ",
+  "Spelling": "согер",
+  "StressLetter": 3,
+  "Translation": "скобка",
+  "Notes": "причастие глагола  [לִסְגּוֹר]-- закрывать",
+  "ExtraInfo": "раскрывать скобки -- [לִפְתּוֹחַ סוֹגְרַיִים]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "יצא",
+  "Niqqud": "לְהוֹצִיא",
+  "NoNiqqud": "לְהוֹצִיא",
+  "ExtraForm": "",
+  "Spelling": "леhоци",
+  "StressLetter": 5,
+  "Translation": "вынести, извлечь, выводить, удалить",
+  "Notes": "в разг. речи много вариантов перевода. Важен контекст.",
+  "ExtraInfo": "выносить за скобки -- [לְהוֹצִיא מִחוּץ לַסוֹגְרַיִים]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "עגל",
+  "Niqqud": "(סוֹגְרַיִים) עֲגוּלִּים",
+  "NoNiqqud": "(סוֹגְרַיִים) עָגוּלִּים",
+  "ExtraForm": "",
+  "Spelling": "(сограим) агулим",
+  "StressLetter": 14,
+  "Translation": "круглые скобки",
+  "Notes": "",
+  "ExtraInfo": "круг -- [עִיגּוּל]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "רבע",
+  "Niqqud": "(סוֹגְרַיִים) מְרוּבָּעִים",
+  "NoNiqqud": "(סוֹגְרַיִים) מְרוּבָּעִים",
+  "ExtraForm": "",
+  "Spelling": "(сограим) мерубаим",
+  "StressLetter": 16,
+  "Translation": "квадратные  скобки",
+  "Notes": "",
+  "ExtraInfo": "четырёхугольник -- [מְרוּבָּע]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "זוה",
+  "Niqqud": "(סוֹגְרַיִים) מְזוּוִים",
+  "NoNiqqud": "(סוֹגְרַיִים) מְזוּוִים",
+  "ExtraForm": "",
+  "Spelling": "(сограим) мезувим",
+  "StressLetter": 15,
+  "Translation": "угловые скобки",
+  "Notes": "",
+  "ExtraInfo": "угол -- [זָווִית]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "צמד",
+  "Niqqud": "(סוֹגְרַיִים) צוֹמֵדִם",
+  "NoNiqqud": "(סוֹגְרַיִים) צוֹמֵדִם",
+  "ExtraForm": "",
+  "Spelling": "(сограим) цомдим",
+  "StressLetter": 14,
+  "Translation": "фигурные скобки (вариант 1)",
+  "Notes": "также возм.вариант -- [(סוֹגְרַיִים) מְסוּלסָלִים]",
+  "ExtraInfo": "ярмо для пары животных в форме дуги -- [צֶמֶד]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "סלסל",
+  "Niqqud": "(סוֹגְרַיִים) מְסוּלסָלִים",
+  "NoNiqqud": "(סוֹגְרַיִים) מְסוּלסָלִים",
+  "ExtraForm": "",
+  "Spelling": "(сограим) месульсалим",
+  "StressLetter": 19,
+  "Translation": "фигурные скобки (вариант 2)",
+  "Notes": "также возм.вариант -- [(סוֹגְרַיִים) צוֹמֵדִם]",
+  "ExtraInfo": "кудрявый, вьющийся -- [מְסוּלסָל]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "בטא",
+  "Niqqud": "לְבַטֵּא",
+  "NoNiqqud": "לְבַטֵּא",
+  "ExtraForm": "",
+  "Spelling": "леватэ",
+  "StressLetter": 5,
+  "Translation": "произносить, выражать",
+  "Notes": "",
+  "ExtraInfo": "выражение -- [בִּיטּוּי]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "בטא",
+  "Niqqud": "בִּיטּוּי",
+  "NoNiqqud": "בִּיטּוּי",
+  "ExtraForm": "мн.ч.: [בִּיטּוּיִים]",
+  "Spelling": "битуй",
+  "StressLetter": 3,
+  "Translation": "выражение; (тж. высказывание, идиома)",
+  "Notes": "",
+  "ExtraInfo": "выражать -- [לְבַטֵּא]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "יצר",
+  "Niqqud": "לִיצוֹר",
+  "NoNiqqud": "לִיצוֹר",
+  "ExtraForm": "",
+  "Spelling": "лицор",
+  "StressLetter": 3,
+  "Translation": "создавать, образовывать,творить",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "סוג",
+  "Niqqud": "סוּג",
+  "NoNiqqud": "סוּג",
+  "ExtraForm": "мн.ч.: [סוּגִים]",
+  "Spelling": "суг",
+  "StressLetter": 1,
+  "Translation": "тип, вид, класс, категория",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "סוג",
+  "Niqqud": "לְסַווֵּג",
+  "NoNiqqud": "לְסַווֵּג",
+  "ExtraForm": "",
+  "Spelling": "лесавег",
+  "StressLetter": 5,
+  "Translation": "сортировать,классифицировать",
+  "Notes": "также: засекретить",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "יצא",
+  "Niqqud": "תּוֹצָאָה",
+  "NoNiqqud": "תּוֹצָאָה",
+  "ExtraForm": "",
+  "Spelling": "тоцаа",
+  "StressLetter": 4,
+  "Translation": "результат, последствие",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "",
+  "Niqqud": "קַו שֶׁבֶר",
+  "NoNiqqud": "קַו שֶׁבֶר",
+  "ExtraForm": "мн. ч.: [קַוִים] или [קַווִים]",
+  "Spelling": "кав шевер",
+  "StressLetter": 5,
+  "Translation": "дробная черта",
+  "Notes": "смихут мн.ч.: [קַוֵּי־]",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "חלק",
+  "Niqqud": "חֵלֶק",
+  "NoNiqqud": "חֵלֶק",
+  "ExtraForm": "мн.ч.: [חֲלָקִים]",
+  "Spelling": "хэлек",
+  "StressLetter": 1,
+  "Translation": "часть, доля (тж.: участь, участок)",
+  "Notes": "смихут мн.ч.: [חֶלקֵי־]",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "שׁלם",
+  "Niqqud": "(חֵלֶק) שָׁלֵם",
+  "NoNiqqud": "(חֵלֶק) שָׁלֵם",
+  "ExtraForm": "мн.ч.: [חֲלָקִים שְׁלֵמִים]",
+  "Spelling": "(хэлек) шалем",
+  "StressLetter": 11,
+  "Translation": "целая часть",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "שבר",
+  "Niqqud": "(חֵלֶק) שִׁבְרִי",
+  "NoNiqqud": "(חֵלֶק) שִׁבְרִי",
+  "ExtraForm": "мн.ч.: [חֲלָקִים שִׁבְרִיים]",
+  "Spelling": "(хэлек) шиври",
+  "StressLetter": 12,
+  "Translation": "дробная часть",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "מנה",
+  "Niqqud": "מוֹנֶה",
+  "NoNiqqud": "מוֹנֶה",
+  "ExtraForm": "мн.ч.: [מוֹנִים]",
+  "Spelling": "монэ",
+  "StressLetter": 3,
+  "Translation": "числитель дроби (тж.: счётчик)",
+  "Notes": "тот же корень, что и [מָנָה]",
+  "ExtraInfo": "частное -- [מָנָה] | такси -- [מוֹנִית]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "כנה",
+  "Niqqud": "מְכַנֶה",
+  "NoNiqqud": "מְכַנֶה",
+  "ExtraForm": "мн.ч.: [מְכַנִּים]",
+  "Spelling": "механэ",
+  "StressLetter": 5,
+  "Translation": "знаменатель дроби",
+  "Notes": "причастие глагола [לְכַנּוֹת] -- называть, давать прозвище",
+  "ExtraInfo": "по аналогии с англ.: | denominate -- называть | denominator -- знаменатель ",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "פשׁט",
+  "Niqqud": "(שֶׁבֶר) פָּשׁוּט",
+  "NoNiqqud": "(שֶׁבֶר) פָּשׁוּט",
+  "ExtraForm": "",
+  "Spelling": "(шевер) пашут",
+  "StressLetter": 11,
+  "Translation": "правильная дробь",
+  "Notes": "также возможно: [(שֶׁבֶר) אֲמִיתִּי]",
+  "ExtraInfo": "простой -- [פָּשׁוּט]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "אמת",
+  "Niqqud": "(שֶׁבֶר) אֲמִיתִּי",
+  "NoNiqqud": "(שֶׁבֶר) אֲמִיתִּי",
+  "ExtraForm": "",
+  "Spelling": "(шевер) амити",
+  "StressLetter": 12,
+  "Translation": "правильная дробь",
+  "Notes": "также возможно: [(שֶׁבֶר) פָּשׁוּט]",
+  "ExtraInfo": "истиный, настоящий -- [אֲמִיתִּי] | правда, истина -- [אֱמֶת]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "דמה",
+  "Niqqud": "(שֶבֶר) מְדוּמֶה",
+  "NoNiqqud": "(שֶבֶר) מְדוּמֶה",
+  "ExtraForm": "",
+  "Spelling": "(шевер) медумэ",
+  "StressLetter": 13,
+  "Translation": "неправильная дробь",
+  "Notes": "страд. залог глагола [לְדַמּוֹת] -- воображать",
+  "ExtraInfo": "быть похожим, подобным -- [לִדְמוֹת]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "דמה",
+  "Niqqud": "מְדוּמֶה",
+  "NoNiqqud": "מְדוּמֶה",
+  "ExtraForm": "",
+  "Spelling": "медумэ",
+  "StressLetter": 5,
+  "Translation": "мнимый (о числе), воображаемый",
+  "Notes": "для мнимого числа возм. также вариант [דִמְיוֹנִי]",
+  "ExtraInfo": "мнимая ось -- [צִיר מְדוּמֶה]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "ערב",
+  "Niqqud": "(שֶבֶר) מְעוֹרָב",
+  "NoNiqqud": "(שֶבֶר) מְעוֹרָב",
+  "ExtraForm": "",
+  "Spelling": "(шевер) меорав",
+  "StressLetter": 12,
+  "Translation": "смешанная дробь",
+  "Notes": "страд. залог глагола [לְעָרֵב] -- вмешивать, впутывать",
+  "ExtraInfo": "смешивать, запутывать -- [לְעַרְבֵּב]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "עשׂר",
+  "Niqqud": "(מס’) עֶשׂרוֹנִי",
+  "NoNiqqud": "(מס’) עֶשׂרוֹנִי",
+  "ExtraForm": "",
+  "Spelling": "(миспар) эсрони",
+  "StressLetter": 14,
+  "Translation": "десятичное (число)",
+  "Notes": "",
+  "ExtraInfo": "десять -- [עֶשֶׂר / עֲשַׂרָה]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "",
+  "Niqqud": "חֶצִי",
+  "NoNiqqud": "חֶצִי",
+  "ExtraForm": "мн.ч.: [חֲצָאִים]",
+  "Spelling": "хеци",
+  "StressLetter": 1,
+  "Translation": "1/2, половина",
+  "Notes": "в смихуте ед.ч.: [חֲצִי־], мн.ч.: [חֲצָאֵי־]",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "שׁלשׁ",
+  "Niqqud": "שְׁלִישׁ",
+  "NoNiqqud": "שְׁלִישׁ",
+  "ExtraForm": "мн.ч.: [שְׁלִישִׁים]",
+  "Spelling": "шлиш",
+  "StressLetter": 2,
+  "Translation": "1/3, треть",
+  "Notes": "для дробей используются порядковые числительные в ж.р.",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "רבע",
+  "Niqqud": "רֶבַע",
+  "NoNiqqud": "רֶבַע",
+  "ExtraForm": "мн.ч.: [רְבָעִים]",
+  "Spelling": "рэва",
+  "StressLetter": 1,
+  "Translation": "1/4, четверть",
+  "Notes": "для дробей используются порядковые числительные в ж.р.",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "חמשׁ",
+  "Niqqud": "חֲמִישִׁית",
+  "NoNiqqud": "חֲמִישִׁית",
+  "ExtraForm": "мн.ч.: [חֲמִישִׁיוֹּת]",
+  "Spelling": "хамишит",
+  "StressLetter": 5,
+  "Translation": "1/5, пятая",
+  "Notes": "для дробей используются порядковые числительные в ж.р.",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "",
+  "Niqqud": "שִׁישִׁית",
+  "NoNiqqud": "שִׁישִׁית",
+  "ExtraForm": "мн.ч.: [שִׁישִׁיוֹּת]",
+  "Spelling": "шишит",
+  "StressLetter": 3,
+  "Translation": "1/6, шестая",
+  "Notes": "для дробей используются порядковые числительные в ж.р.",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "עשׂר",
+  "Niqqud": "עֲשִׂירִית",
+  "NoNiqqud": "עֲשִׂירִית",
+  "ExtraForm": "мн.ч.: [עֲשִׂירִיוֹּת]",
+  "Spelling": "асирит",
+  "StressLetter": 4,
+  "Translation": "1/10, десятая",
+  "Notes": "для дробей используются порядковые числительные в ж.р.",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "",
+  "Niqqud": "מֵאִית",
+  "NoNiqqud": "מֵאִית",
+  "ExtraForm": "мн.ч.: [מֵאִיוֹת]",
+  "Spelling": "меит",
+  "StressLetter": 2,
+  "Translation": "1/100, сотая",
+  "Notes": "для дробей используются порядковые числительные в ж.р.",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "אלפ",
+  "Niqqud": "אַלפִּית",
+  "NoNiqqud": "אַלפִּית",
+  "ExtraForm": "мн.ч.: [אַלפִּיוֹת]",
+  "Spelling": "альпит",
+  "StressLetter": 4,
+  "Translation": "1/1000, тысячная",
+  "Notes": "для дробей используются порядковые числительные в ж.р.",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "חזר",
+  "Niqqud": "(שֶבֶר) מַחֲזוֹרִי",
+  "NoNiqqud": "(שֶבֶר) מַחֲזוֹרִי",
+  "ExtraForm": "",
+  "Spelling": "(шевер) махазори",
+  "StressLetter": 15,
+  "Translation": "периодическая дробь",
+  "Notes": "",
+  "ExtraInfo": "период, цикл -- [מַחְזוֹר]",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "נקד",
+  "Niqqud": "נְקוּדָּה",
+  "NoNiqqud": "נְקוּדָּה",
+  "ExtraForm": "мн.ч.: [נְקוּדּוֹת]",
+  "Spelling": "некуда",
+  "StressLetter": 5,
+  "Translation": "точка (и в геометрии, и в десятичнойдроби)",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "רחב",
+  "Niqqud": "הַרְחָבָה (שֶׁבֶר)",
+  "NoNiqqud": "הַרְחָבָה (שֶׁבֶר)",
+  "ExtraForm": "",
+  "Spelling": "архава (шевер)",
+  "StressLetter": 5,
+  "Translation": "расширение дроби (умножение числителя и знаменателя на одинаковое число)",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "צמצם",
+  "Niqqud": "צִמְצוּם (שֶׁבֶר)",
+  "NoNiqqud": "צִמְצוּם (שֶׁבֶר)",
+  "ExtraForm": "",
+  "Spelling": "цимцум (шевер)",
+  "StressLetter": 4,
+  "Translation": "сокращение дроби",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "יצא שלם",
+  "Niqqud": "הוֹצָאַת שְׁלֵמִים",
+  "NoNiqqud": "הוֹצָאַת שְׁלֵמִים",
+  "ExtraForm": "",
+  "Spelling": "hоцаа шлемим",
+  "StressLetter": 4,
+  "Translation": "выделение целой части",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "",
+  "Niqqud": "שִׁינּוּי לְשֶבֶר מְדוּמֶה",
+  "NoNiqqud": "שִׁינּוּי לְשֶבֶר מְדוּמֶה",
+  "ExtraForm": "",
+  "Spelling": "шинуй лешевер медумэ",
+  "StressLetter": 3,
+  "Translation": "переход к неправильнойдроби",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "",
+  "Niqqud": "מְצִיאַת מְכְַנֶהמְשוּתָף",
+  "NoNiqqud": "מְצִיאַת מְכְַנֶהמְשוּתָף",
+  "ExtraForm": "",
+  "Spelling": "мециат механэ мешутаф",
+  "StressLetter": 4,
+  "Translation": "нахождение общегознаменателя",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "הפך",
+  "Niqqud": "(מִסְפָּר) הוֹפְכִי",
+  "NoNiqqud": "(מִסְפָּר) הוֹפְכִי",
+  "ExtraForm": "",
+  "Spelling": "(миспар) hофхи",
+  "StressLetter": 13,
+  "Translation": "обратное (число)",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
+}
+###
+POST {{MoreMath.Api_HostAddress}}/hebwords 
+Content-Type: application/json 
+ 
+
+{
+  "Shoresh": "נגד",
+  "Niqqud": "(מִסְפָּר) נֶגדִי",
+  "NoNiqqud": "(מִסְפָּר) נֶגדִי",
+  "ExtraForm": "",
+  "Spelling": "(миспар) негди",
+  "StressLetter": 13,
+  "Translation": "противоположное (число)",
+  "Notes": "",
+  "ExtraInfo": "",
+  "Tags": []
 }
 
-
-###

@@ -21,12 +21,12 @@ public record UpdateAuthorCommand(
 
 
 
-public class  UpdateAuthorHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<UpdateAuthorCommand, ResultWrap>(unitOfWork)
+public class  UpdateAuthorHandler(IAppDbContext context):
+    AbstractHandler<UpdateAuthorCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
     {
-        var author = await _unitOfWork.AuthorRepo.FindAsync(command.Id);
+        var author = await _context.Authors.FindAsync([command.Id], cancellationToken);
 
         if (author == null)
         {
@@ -45,9 +45,9 @@ public class  UpdateAuthorHandler(IUnitOfWork unitOfWork):
         author.Website = command.Website ?? author.Website;
         author.Options = command.Options ?? author.Options;
 
-        _unitOfWork.AuthorRepo.Update(author);
+        _context.Authors.Update(author);
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
         return ResultWrap.Success();
     }
 }

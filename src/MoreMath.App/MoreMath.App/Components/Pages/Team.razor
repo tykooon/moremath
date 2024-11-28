@@ -1,5 +1,49 @@
 ﻿@page "/about/team"
+@using MoreMath.Application.Contracts.Services
+@using MoreMath.Dto.Dtos
+@layout ColumnLayout
+
+@inject IAuthorService AuthorService
 
 <PageTitle>Наша команда</PageTitle>
 
-<UnderConstruction />
+<div class="mm-content">
+
+    <h1>Наша команда</h1>
+    <p>
+        Познакомьтесь с авторами проекта. Это люди, которые руглярно пополняют наш сайт полезными материалами,
+        статьями, ссылками. Каждый из них всегда готов помочь разобраться со сложной темой или подготовиться к
+        экзаменам на индивидуальных занятиях как онлайн, так и оффлайн. 
+    </p>
+    <p>
+        Контакты для связи с любым из наших авторов можно найти на его песональной странице.
+    </p>
+    <div class="author-list">
+        @foreach(var auth in _authors)
+        {
+            <AuthorLink Author="@auth" />
+        }
+    </div>
+</div>
+
+
+<SectionContent SectionName="main-sidebar">
+    <section class="main-sidebar">
+        <div class="info-pad">
+            <TestLessonCall />
+        </div>
+        <div class="read-also">
+            <h3>Читайте также:</h3>
+            <ArticleRack CategoryName="Математика" IsSidebar />
+        </div>
+    </section>
+</SectionContent>
+
+@code{
+    private IEnumerable<AuthorDto> _authors = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _authors = await AuthorService.GetAuthorsAsync();
+    }
+}

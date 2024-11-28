@@ -1,5 +1,49 @@
 ﻿@page "/articles/math-hebrew"
+@layout ColumnLayout
+
+@using MoreMath.Dto.Dtos
 
 <PageTitle>Математический иврит</PageTitle>
 
-<UnderConstruction />
+<div class="mm-content">
+    <h1>Иврит и <Heb>מתמסיקה</Heb> </h1>
+
+     <p>
+        Каждый кто изучает матматику прекрасно знает, что этот процесс, даже когда он становится увлекательным, 
+        требует и времени и солидных умственных усилий. Также и изучение нового языка,
+        особенно такого непростого как иврит, усилий требует не меньше. 
+    </p>
+    <p>
+        А что уж говорить о ситуции, когда надо учить и то и другое одновременно? Тут бы для начала базовый словарный запас освоить!
+        Но чтобы решать задачи и писать контрльные приходится погружаться в математический иврит. 
+    </p>
+    <p>
+        Что мы можем предложить в помощь для облегчения этого процесса? В этом разделе сайта можно найти <b>словарь математических терминов</b>:
+        либо в виде <a class="intext-link" href="articles/math-hebrew/dict-table-s">таблицы</a> с возможностью поиска, либо в виде
+        <a class="intext-link" href="articles/math-hebrew/dict-cards">карточек</a> с возможностью использовать режим тренажёра.
+    </p>
+    <p>
+        Также мы делимся полезными материалами на тему математического иврита, тонкостей перевода и особенностей математической терминологии в школах Израиля.
+    </p>
+    <div class="links-stack">
+        <IconLink IconUrl="assets/images/svg/heb-cards.svg" Link="articles/math-hebrew/dict-cards" Text="КАРТОЧКИ математического иврита" />
+        <IconLink IconUrl="assets/images/svg/heb-table.svg" Link="articles/math-hebrew/dict-table-s" Text="СЛОВАРЬ математического иврита" />
+    </div>
+
+</div>
+
+<SectionContent SectionName="main-sidebar">
+    <section class="main-sidebar">
+        <div class="info-pad">
+            <TestLessonCall />
+        </div>
+        <div class="read-also">
+            <h3>Читайте также:</h3>
+            <ArticleRack CategoryName="Математический Иврит" IsSidebar />
+        </div>
+    </section>
+</SectionContent>
+
+@code{
+
+}

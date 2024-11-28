@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="120"
+   height="120"
+   viewBox="0 0 120 120"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1">
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1-91"
+       width="60"
+       height="90"
+       x="46.420017"
+       y="5.6969132"
+       ry="1.8532819"
+       transform="rotate(10)" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1-9"
+       width="60"
+       height="90"
+       x="33.983627"
+       y="9.6972351"
+       ry="1.8532819"
+       transform="rotate(5)" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1"
+       width="60"
+       height="90"
+       x="20.988417"
+       y="12.216215"
+       ry="1.8532819" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:42.6667px;font-family:'David Libre';-inkscape-font-specification:'David Libre, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       x="36.440155"
+       y="46.633205"
+       id="text2"><tspan
+         id="tspan2"
+         x="36.440155"
+         y="46.633205"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:42.6667px;font-family:'David Libre';-inkscape-font-specification:'David Libre, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none">א</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:48px;font-family:'David Libre';-inkscape-font-specification:'David Libre, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       x="38.315884"
+       y="89.787132"
+       id="text2-1"><tspan
+         id="tspan2-5"
+         x="38.315884"
+         y="89.787132"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:48px;font-family:'David Libre';-inkscape-font-specification:'David Libre, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none">π</tspan></text>
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:10.6;stroke-dasharray:none;stroke-opacity:1"
+       d="m 30.955728,57.148869 c 39.609216,0 39.609216,0 39.609216,0"
+       id="path2" />
+  </g>
+</svg>

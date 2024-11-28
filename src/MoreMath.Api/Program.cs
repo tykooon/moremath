@@ -17,9 +17,10 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddInfrastucture(builder.Configuration);
-builder.Services.AddAppServices(builder.Configuration);
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddTransient<IApiKeyValidation, ApiKeyValidation>();
 builder.Services.AddScoped<ApiKeyAuthenticationFilter>();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

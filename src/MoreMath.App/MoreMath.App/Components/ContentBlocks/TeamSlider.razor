@@ -1,0 +1,102 @@
+﻿@using MoreMath.Dto.Dtos
+@using MoreMath.Dto.Responses
+@using Syncfusion.Blazor
+
+<SfMediaQuery MediaBreakpoints="@mediaBreakPoint" @bind-ActiveBreakPoint="activeBreakpoint"></SfMediaQuery>
+
+<div class="team-slider" @ontouchstart="OnTouchStart" @ontouchend="OnTouchEnd" @ontouchmove="OnTouchMove">
+    <div class="team-slider__slides"
+        style="transform: translateX(calc(@(-currentIndex * 100/ slidesPerScreen)% - @((int)change)px));  transition: @(transition ? "transform 0.5s ease-in-out;" : "none")">
+        @foreach (var author in Slides)
+        {
+            <div class="team-slider__item" style="min-width:@(100/slidesPerScreen)%;">
+                <TeamCard Author="@author" />
+            </div>
+        }
+    </div>
+    <button @onclick="PreviousSlide" class="team-slider__nav-button prev @(IsPrevAvailable ? "" : "disable-btn")">❮</button>
+    <button @onclick="NextSlide" class="team-slider__nav-button next @(IsNextAvailable ? "" : "disable-btn")">❯</button>
+</div>
+
+@code {
+    [Parameter]
+    public List<AuthorDto> Slides { get; set; } = [];
+
+    private string activeBreakpoint = "";
+    private List<MediaBreakpoint> mediaBreakPoint = new List<MediaBreakpoint>();
+    private int slidesPerScreen => activeBreakpoint switch
+    {
+        "Md" or "Lg" or "Xl" => 2,
+        _ => 1
+    };
+
+    private int currentIndex = 0;
+    private double startX;
+    private double change;
+    private bool transition;
+
+    private bool IsPrevAvailable => currentIndex > 0 ;
+    private bool IsNextAvailable => Slides.Count > 1 && currentIndex < Slides.Count - slidesPerScreen;
+
+    private void NextSlide()
+    {
+        if (IsNextAvailable)
+        {
+            transition = true;
+            currentIndex++;
+        }
+    }
+
+    private void PreviousSlide()
+    {
+        if (IsPrevAvailable)
+        {
+            transition = true;
+            currentIndex--;
+        }
+    }
+
+    private void OnTouchStart(TouchEventArgs e)
+    {
+        transition = false;
+        startX = e.Touches[0].ClientX;
+    }
+    private void OnTouchMove(TouchEventArgs e) => change = startX - e.Touches[0].ClientX;
+    private void OnTouchEnd(TouchEventArgs e)
+    {
+        HandleSwipe(change);
+        change = 0;
+    }
+
+    private void HandleSwipe(double endX)
+    {
+        if (change > 50) // Swipe left
+        {
+            NextSlide();
+        }
+        else if (change < -50) // Swipe right
+        {
+            PreviousSlide();
+        }
+    }
+
+    public void Rewind()
+    {
+        currentIndex = 0;
+    }
+
+    protected override void OnInitialized()
+    {
+        mediaBreakPoint = new List<MediaBreakpoint>()
+        {
+            new MediaBreakpoint() { Breakpoint = "Xs", MediaQuery = "(max-width: 320px)" },
+            new MediaBreakpoint() { Breakpoint = "Xss", MediaQuery ="(min-width: 375px) and  (max-width: 575)" },
+            new MediaBreakpoint() { Breakpoint = "Sm", MediaQuery = "(min-width: 576px) and  (max-width: 767)" },
+            new MediaBreakpoint() { Breakpoint = "Md", MediaQuery = "(min-width: 768px) and  (max-width: 1023px)" },
+            new MediaBreakpoint() { Breakpoint = "Lg", MediaQuery = "(min-width: 1024px) and (max-width: 1279px)" },
+            new MediaBreakpoint() { Breakpoint = "Xl", MediaQuery = "(min-width: 1280px)" }
+        };
+
+        base.OnInitialized();
+    }
+}

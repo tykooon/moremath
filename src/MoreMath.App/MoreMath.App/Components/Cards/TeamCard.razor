@@ -1,39 +1,28 @@
-﻿@inject NavigationManager _navigationManager
+﻿@using MoreMath.Dto.Dtos
+@inject NavigationManager _navigationManager
 @rendermode InteractiveServer
 
 
 <div class="team-card mm-card">
     <div class="mm-card__body">
-        <a class="team-card__person" href=@PersonLink>
+        <a class="team-card__person" href="about/@Author.SlugName">
             <div class="team-card__person__photo">
-                <img src=@PhotoUrl alt=@_imgAlt />
+                <img src="@($"{Constants.BLOB_STORAGE}/authors/{Author.SlugName}.png")" alt=@Author.SlugName />
             </div>
             <div class="team-card__person__name">
                 <p>
-                    @FullName
+                    @($"{Author.FirstName} {Author.LastName}")
                 </p>
             </div>
         </a>
         <div class="team-card__info">
-            @ChildContent
+            @Author.Info
         </div>
     </div>
 
 </div>
 
 @code {
-
     [Parameter]
-    public string PhotoUrl { get; set; } = "/";
-
-    [Parameter]
-    public string FullName { get; set; } = "";
-
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = null!;
-
-    [Parameter]
-    public string PersonLink { get; set; } = "/";
-
-    private string _imgAlt => PersonLink.Split('/').Last();
+    public AuthorDto Author { get; set; } = default!;
 }

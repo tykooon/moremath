@@ -4,20 +4,23 @@ using MoreMath.Dto.Dtos;
 using MoreMath.Dto.Mappers;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoreMath.Application.UseCases.Articles.Queries;
 
-public record GetArticleBySlugQuery(string slug) : IRequest<ResultWrap<ArticleDto?>>;
+public record GetArticleBySlugQuery(string Slug) : IRequest<ResultWrap<ArticleDto?>>;
 
-public class GetArticleBySlugHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<GetArticleBySlugQuery, ResultWrap<ArticleDto?>>(unitOfWork)
+public class GetArticleBySlugHandler(IAppDbContext context):
+    AbstractHandler<GetArticleBySlugQuery, ResultWrap<ArticleDto?>>(context)
 {
 
     public override async Task<ResultWrap<ArticleDto?>> Handle(GetArticleBySlugQuery request, CancellationToken cancellationToken)
     {
-        var article = (await _unitOfWork.ArticleRepo
-            .GetFilteredAsync(a => a.Slug == request.slug))
-            .FirstOrDefault();
+        var article = await _context.Articles.AsNoTracking()
+            .Include(a => a.Authors)
+            .Include(a => a.Tags)
+            .Include(a => a.Category)
+            .FirstOrDefaultAsync(a => a.Slug == request.Slug, cancellationToken);
 
         return article == null
             ? ResultWrap<ArticleDto?>.Failure(new Error("Article.NotFound", "Failed to get article with given Slug."))

@@ -7,21 +7,21 @@ namespace MoreMath.Application.UseCases.Users.Commands;
 
 public record DeleteUserCommand(int Id) : IRequest<ResultWrap>;
 
-public class DeleteUserHandler(IUnitOfWork unitOfWork) :
-    AbstractHandler<DeleteUserCommand, ResultWrap>(unitOfWork)
+public class DeleteUserHandler(IAppDbContext context) :
+    AbstractHandler<DeleteUserCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
     {
-        var User = await _unitOfWork.UserRepo.FindAsync(command.Id);
+        var User = await _context.Users.FindAsync(command.Id);
 
         if (User == null)
         {
             return ResultWrap.Failure(new Error("User.NotFound", "Failed to delete User with given Id. User wasn't found."));
         }
 
-        _unitOfWork.UserRepo.Delete(User);
+        _context.Users.Remove(User);
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
         return ResultWrap.Success();
     }
 }

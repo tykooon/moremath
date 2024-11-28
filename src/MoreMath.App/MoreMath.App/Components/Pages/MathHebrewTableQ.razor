@@ -1,0 +1,173 @@
+﻿@page "/articles/math-hebrew/dict-table-q"
+
+@using MoreMath.Dto.Responses
+@using MoreMath.Dto.Dtos
+@using MoreMath.Shared.Models
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+
+@inject IHttpClientFactory HttpClientFactory
+@inject ILogger<MathHebrewTableQ> Logger
+@inject NavigationManager NavManager
+
+
+<section class="container">
+    <div class="mm-content">
+
+<h1> Словарь математического иврита</h1>
+
+        <br />
+        <button>Reset Tags</button>
+        <br />
+        @for (var i = 0; i < _tagMultiSelect.Length; i++)
+        {
+            <input type="checkbox" @bind=_tagMultiSelect[i] /> @_tagList[i]
+            <br />
+        }
+
+        <QuickGrid Pagination="@pagination" ItemsProvider="@hebWordProvider">
+            <PropertyColumn Property="@(w => w.Translation)" Title="Перевод" Sortable="true">
+                <ColumnOptions>
+                    <div>
+                        <input type="search"
+                               @bind-value="_filter.Translation"
+                               @bind-value:event="onchange" />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
+            <TemplateColumn Title="Корень" SortBy="@sortByRoot" Align="Align.Center">
+                <ColumnOptions>
+                    <div>
+                        <input type="search"
+                               @bind="_filter.Shoresh"
+                               @bind:event="onchange" />
+                    </div>
+                </ColumnOptions>
+                <ChildContent>
+                    <Heb>@context.Shoresh</Heb>
+                </ChildContent>
+            </TemplateColumn>
+            <TemplateColumn Title="Слово" SortBy="@sortByWord" Align="Align.End">
+                <ColumnOptions>
+                    <div>
+                        <input type="search"
+                               @bind="_filter.Word"
+                               @bind:event="onchange" />
+                    </div>
+                </ColumnOptions>
+                <ChildContent>
+                    <Heb>@context.NoNiqqud</Heb>
+                </ChildContent>
+            </TemplateColumn>
+
+        </QuickGrid>
+
+        <Paginator State="@pagination"/>
+
+    </div>
+</section>
+
+@code {
+    public List<string> ToolbarItems = new List<string>() { "Search" };
+    public string[] InitSearch = new string[] { "Translation", "NoNiqqud" };
+
+    private QuickGrid<HebWordPageItem> ColOps = null!;
+
+    public GridSort<HebWordPageItem> sortByWord = GridSort<HebWordPageItem>.ByAscending(h => h.NoNiqqud);
+    public GridSort<HebWordPageItem> sortByRoot = GridSort<HebWordPageItem>.ByAscending(h => h.Shoresh);
+
+    private List<HebWordPageItem> hebWords = [];
+
+    public static IHttpClientFactory httpClientFactory = default!;
+
+    private void TagFilterChanged()
+    {
+    }
+
+    private bool[] _tagMultiSelect = [];
+
+    private string[] _tagList = [];
+
+    private bool IsInProgress = false;
+    private bool IsAnySelected = false;
+
+    private void SelectTag(ChangeEventArgs e)
+    {
+        // _filter.Tags = (string[])e.Value!;
+        Console.WriteLine(string.Join(", ", e == null ? [] : (e.Value as string[] ?? [])));
+    }
+
+    private void ResetTags(EventArgs e)
+    {
+        // _filter.Tags = (string[])e.Value!;
+        _filter.Tags = [];
+    }
+
+
+    private void FilterRefresh()
+    {
+        Console.WriteLine (string.Join(", ", _filter.Tags));
+
+    }
+
+    GridItemsProvider<HebWordPageItem>? hebWordProvider;
+
+    PaginationState pagination = new();
+
+    public static HebWordFilter _filter = new()
+    {
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        httpClientFactory = HttpClientFactory;
+
+        using (var BackendClient = HttpClientFactory.CreateClient("MoreMath.Backend"))
+        {
+            var tags = await BackendClient.GetFromJsonAsync<IEnumerable<TagDto>>("api/tags?isHebWordTag=true");
+            _tagList = tags?.Select(t => t.TagName).ToArray() ?? [];
+            _tagMultiSelect = _tagList.Select(t => false).ToArray();
+        }
+
+        pagination.ItemsPerPage = 5;
+
+        hebWordProvider = async req =>
+        {
+            using (var BackendClient = HttpClientFactory.CreateClient("MoreMath.Backend"))
+            {
+
+                var orderCol = req.SortByColumn?.Title switch
+                {
+                    "Слово" => "noniqqud",
+                    "Перевод" => "translation",
+                    "Корень" => "shoresh",
+                    _ => "no"
+                };
+
+                var url = NavManager.GetUriWithQueryParameters($"{BackendClient.BaseAddress!.ToString()}api/hebwords/paged",
+                    new Dictionary<string, object?>
+                        {
+                            { "shoresh", _filter.Shoresh },
+                            { "noniqqud", _filter.Word },
+                            { "translation", _filter.Translation},
+                            { "tags", _filter.Tags },
+                            { "hasAllTags", _filter.HasAllTags },
+                            { "start", req.StartIndex },
+                            { "take", req.Count },
+                            { "orderBy", orderCol },
+                            { "descending", !req.SortByAscending }
+                        }
+                );
+                var response = await BackendClient.GetFromJsonAsync<IEnumerable<HebWordPageItem>>(url);
+                if (response is null)
+                {
+                    Logger.LogError("Dictionary Data Load Error");
+                    response = [];
+                }
+                hebWords = response.ToList();
+                return GridItemsProviderResult.From(items: hebWords, totalItemCount: hebWords.FirstOrDefault()?.Total ?? 0);
+            }
+        };
+    }
+}

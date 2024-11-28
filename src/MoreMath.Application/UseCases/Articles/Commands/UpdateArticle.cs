@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MoreMath.Application.Contracts;
-using MoreMath.Application.Contracts.Services;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
 
@@ -17,12 +17,12 @@ public record UpdateArticleCommand(
 
 
 
-public class  UpdateArticleHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<UpdateArticleCommand, ResultWrap>(unitOfWork)
+public class  UpdateArticleHandler(IAppDbContext context):
+    AbstractHandler<UpdateArticleCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(UpdateArticleCommand command, CancellationToken cancellationToken)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(command.Id);
+        var article = await _context.Articles.FindAsync(command.Id);
 
         if (article == null)
         {
@@ -36,7 +36,7 @@ public class  UpdateArticleHandler(IUnitOfWork unitOfWork):
         article.Slug = command.Slug ?? article.Slug;
         if (command.CategoryId != null)
         {
-            var category = await _unitOfWork.CategoryRepo.FindAsync(command.CategoryId.Value);
+            var category = await _context.Categories.FindAsync([command.CategoryId.Value], cancellationToken);
             if (category == null)
             {
                 return ResultWrap.Failure(new Error("Category.NotFound", "Failed to update article. Provided CategoryId was not found. Article wasn't found."));
@@ -44,9 +44,9 @@ public class  UpdateArticleHandler(IUnitOfWork unitOfWork):
             article.Category = category;
         }
 
-        _unitOfWork.ArticleRepo.Update(article);
+        _context.Articles.Update(article);
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
         return ResultWrap.Success();
     }
 }

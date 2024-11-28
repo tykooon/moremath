@@ -1,0 +1,26 @@
+﻿@using MoreMath.Dto.Dtos
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
+
+
+<div class="author-link" @onclick=@(() => NavManager.NavigateTo($"about/{Author?.SlugName ?? "team"}"))>
+    <div class="author-link__icon">
+        <img src=@(BLOB_STORAGE+"/authors/" + Author?.SlugName + ".png") alt="@_fullName" />
+    </div>
+    <div class="author-link__info">
+        <h3>@_fullName</h3>
+        <p>
+            @Author?.Info
+        </p>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public AuthorDto Author { get; set; } = default!;
+
+    private string _fullName => $"{Author?.FirstName} {Author?.LastName}";
+
+}

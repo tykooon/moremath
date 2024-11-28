@@ -7,6 +7,8 @@ using MoreMath.Application.UseCases.Articles.Queries;
 using MoreMath.Api.Requests.Articles;
 using MoreMath.Application.UseCases.Articles.Commands;
 using System.Net;
+using MoreMath.Application.UseCases.HebWords.Queries;
+using MoreMath.Dto.Responses;
 
 namespace MoreMath.Api.Controllers;
 
@@ -44,6 +46,36 @@ public class ArticlesController : BaseApiController
             request.CategoryId,
             request.Tags));
         return res.ToHttpCreated($"/articles/{res.Value}");
+    }
+
+    [HttpGet("paged")]
+    [ProducesResponseType<IEnumerable<ArticlePageItem>>(StatusCodes.Status200OK)]
+    public async Task<IResult> GetArticlesPaged(
+    string? title,
+    string? categoryName,
+    [FromQuery] string[]? tags,
+    bool hasAllTags,
+    [FromQuery] int[]? authorsId,
+    bool hasAllAuthors,
+    string? orderBy,
+    bool descending,
+    int start = 0,
+    int take = 10)
+    {
+        var res = await _mediator.Send(new GetArticlesPagedQuery()
+        {
+            Title = title,
+            AuthorsId = authorsId,
+            HasAllAuthors = hasAllAuthors,
+            CategoryName = categoryName,
+            TagList = tags,
+            HasAllTags = hasAllTags,
+            OrderBy = orderBy,
+            Decsending = descending,
+            Start = start,
+            Take = take
+        });
+        return res.ToHttpResult();
     }
 
     [HttpGet("{id:int}")]

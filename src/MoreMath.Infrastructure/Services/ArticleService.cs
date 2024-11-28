@@ -1,15 +1,16 @@
-﻿using MoreMath.Application.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using MoreMath.Application.Contracts;
 using MoreMath.Application.Contracts.Services;
 
 namespace MoreMath.Infrastructure.Services;
 
-public class ArticleService(IUnitOfWork unitOfWork) : IArticleService
+public class ArticleService(IAppDbContext context) : IArticleService
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IAppDbContext _context = context;
 
     public async Task AddAuthorToArticle(int articleId, int authorId)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(articleId);
+        var article = await _context.Articles.Include(a => a.Authors).FirstOrDefaultAsync(ar => ar.Id.Equals(articleId));
         if (article == null)
         {
             return;
@@ -19,13 +20,13 @@ public class ArticleService(IUnitOfWork unitOfWork) : IArticleService
         if(author != null && !article.Authors.Any(a => a.Id == authorId))
         {
             article.Authors.Add(author);
-            await _unitOfWork.CommitAsync();
+            await _context.SaveChangesAsync();
         }      
     }
 
     public async Task RemoveAuthorFromArticle(int articleId, int authorId)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(articleId);
+        var article = await _context.Articles.Include(a => a.Authors).FirstOrDefaultAsync(ar => ar.Id.Equals(articleId));
         if (article == null)
         {
             return;
@@ -36,7 +37,7 @@ public class ArticleService(IUnitOfWork unitOfWork) : IArticleService
         if (author != null && article.Authors.Any(a => a.Id == authorId))
         {
             article.Authors.Remove(author);
-            await _unitOfWork.CommitAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

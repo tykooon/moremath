@@ -2,38 +2,30 @@
 
 /*#region container */
 .container {
-    padding: 0 10px;
+    margin: 0 10px;
 }
 
 @media (min-width: $mm-media-xss) {
     .container {
-        padding: 0 20px;
+        margin: 0 20px;
     }
 }
 
 @media (min-width: $mm-media-sm) {
     .container {
-        padding: 0 20px;
+        margin: 0 30px;
     }
 }
 
 @media (min-width: $mm-media-md) {
     .container {
-        padding: 0 30px;
-    }
-}
-
-@media (min-width: $mm-media-lg) {
-    .container {
-        max-width: 944px;
-        margin: auto;
-        padding: 0 0px;
+        margin: 0 40px;
     }
 }
 
 @media (min-width: $mm-media-xl) {
     .container {
-        max-width: 1080px;
+        max-width: 1200px;
         margin: auto;
         padding: 0 0px;
     }

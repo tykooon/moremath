@@ -20,6 +20,16 @@ public class TagService(AppDbContext context) : ITagService
         return newTags;
     }
 
+    public async Task<IEnumerable<Tag>> GetArticleTagsAsync()
+    {
+        var res = await _context.Tags
+            .AsNoTracking()
+            .Include(t => t.Articles)
+            .Where(t => t.Articles.Count > 0)
+            .ToListAsync();
+        return res;
+    }
+
     public async Task<IEnumerable<Tag>> GetTagsByIdsAsync(IEnumerable<int> tagList)
     {
         var existingTags = await _context.Tags.Where(t => tagList.Contains(t.Id)).ToListAsync();

@@ -1,0 +1,173 @@
+﻿@page "/articles/math-hebrew/dict-table-s"
+
+@using MoreMath.Application.UseCases.HebWords.Queries
+@using MoreMath.Application.UseCases.Tags.Queries
+@using MoreMath.Dto.Responses
+@using MoreMath.Dto.Dtos
+@using MoreMath.Shared.Models
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Navigations
+
+@inject ILogger<MathHebrewTableS> Logger
+@inject NavigationManager NavManager
+@inject IMediator Mediator
+
+<section class="container">
+    <div class="mm-content e-bigger">
+
+        <h1> Словарь математического иврита</h1>
+
+        <p>
+            Словарик математического иврита содержит как базовые, так и продвинутые математические термины с переводом на иврит,
+            указанием огласовок, корня слова и некоторых особенностей. 
+        </p>
+        <p>
+            Доступен поиск по словам, а также возможность фильтровать их по тэгам.
+        </p>
+
+    </div>
+
+<SfGrid TValue="HebWordPageItem" @ref=HebWordGrid ID="Grid"
+        AllowSorting="true" AllowFiltering="true" AllowPaging="true"
+        EnableAdaptiveUI="true" AllowTextWrap="true">
+    @* RowRenderingMode="RowDirection.Vertical" *@
+    <SfDataManager AdaptorInstance="@typeof(CustomHebWordAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+    <GridPageSettings PageSize="6"></GridPageSettings>
+    <SfToolbar>
+        <ToolbarItems>
+            <ToolbarItem Type="ItemType.Input" Align="ItemAlign.Right">
+                <Template>
+                    <SfMultiSelect @ref=MultiTag id="tag-filter-selector" class="mm-form__field__multiselect"
+                                   TValue="string[]" TItem="string"
+                                   Width="200px"
+                                   AllowFiltering="true"
+                                   Placeholder="Поиск по тэгам"
+                                   Mode="@Syncfusion.Blazor.DropDowns.VisualMode.CheckBox"
+                                   DataSource="@_tagList"
+                                   ShowSelectAll=true
+                                   EnableSelectionOrder=true
+                                   ShowDropDownIcon=true
+                                   FilterBarPlaceholder="напр., арифметика"
+                                   @bind-Value=@_filter.Tags
+                                   PopupHeight="350px">
+                    </SfMultiSelect>
+                </Template>
+            </ToolbarItem>
+            <ToolbarItem Type="ItemType.Button" PrefixIcon="e-refresh icon" Align="ItemAlign.Left" Id="hw-grid-refresh" OnClick=@(async () => await DataReload())></ToolbarItem>
+        </ToolbarItems>
+    </SfToolbar>
+    <GridColumns>
+        <GridColumn Field=@nameof(HebWordPageItem.Translation) HeaderText="Перевод" Width="150" AllowFiltering="true"></GridColumn>
+            <GridColumn Field=@nameof(HebWordPageItem.Shoresh) HeaderText="Корень" TextAlign="@TextAlign.Center" Width="60" AllowFiltering="true">
+            <Template>
+                <Heb>@((context as HebWordPageItem)?.Shoresh)</Heb>
+            </Template>
+        </GridColumn>
+            <GridColumn Field=@nameof(HebWordPageItem.NoNiqqud) HeaderText="Слово" IsPrimaryKey="true" TextAlign="@TextAlign.Right" Width="90" AllowFiltering="true">
+            <Template>
+                <Heb>@((context as HebWordPageItem)?.NoNiqqud)</Heb>
+            </Template>
+        </GridColumn>
+    </GridColumns>
+</SfGrid>
+
+</section>
+
+@code {
+    // public List<string> ToolbarItems = new List<string>() { "Search" };
+    // public string[] InitSearch = new string[] { "Translation", "Shoresh", "NoNiqqud" };
+
+    SfGrid<HebWordPageItem> HebWordGrid = default!;
+    SfMultiSelect<string[], string> MultiTag = default!;
+    public static IServiceScopeFactory StaticScopeFactory = default!;
+
+    async Task DataReload()
+    {
+        await HebWordGrid.Refresh();
+    }
+
+    private List<HebWordPageItem> hebWords = [];
+    private List<string> _tagList = [];
+    public static HebWordFilter _filter = new()
+    {
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var request = new GetTagsQuery(null, IsWordTag: true);
+        var tags = await Mediator.Send(request);
+        _tagList = tags.IsSuccessfull
+            ? tags.Value!.Select(t => t.TagName).ToList()
+            : [];
+    }
+
+    public class CustomHebWordAdaptor(IServiceScopeFactory factory) : DataAdaptor
+    {
+        public IServiceScopeFactory _scopeFactory { get; set; } = factory;
+
+        public override async Task<object> ReadAsync(DataManagerRequest dataManagerRequest, string additionalParam = null!)
+        {
+            var hebWordRequest = new GetHebWordsPagedQuery();
+            if (dataManagerRequest.Where != null && dataManagerRequest.Where.Count > 0)
+            {
+                var predicates = dataManagerRequest.Where.First().predicates
+                    .Where(w => (w.Field == "Translation") || (w.Field == "NoNiqqud") || (w.Field == "Shoresh"))
+                    .Select(pr => (pr.Field, pr.value.ToString()))
+                    .ToDictionary();
+
+                if(predicates.Any())
+                {
+                    predicates.TryGetValue("Translation", out var value);
+                    hebWordRequest.Translation = value;
+                    predicates.TryGetValue("NoNiqqud", out value);
+                    hebWordRequest.NoNiqqud = value;
+                    predicates.TryGetValue("Shoresh", out value);
+                    hebWordRequest.Shoresh =  value;
+                }
+            }
+
+            if (dataManagerRequest.Sorted != null && dataManagerRequest.Sorted.Count > 0)
+            {
+                hebWordRequest.OrderBy = dataManagerRequest.Sorted.First().Name.ToLower();
+                hebWordRequest.Decsending = dataManagerRequest.Sorted.First().Direction.ToLower() == "descending";
+            }
+
+            hebWordRequest.TagList = _filter.Tags;
+            hebWordRequest.Start = dataManagerRequest.Skip;
+            hebWordRequest.Take = dataManagerRequest.Take != 0 ? dataManagerRequest.Take : 1;
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var response = await mediator.Send(hebWordRequest);
+                
+                if (response?.IsSuccessfull ?? false)
+                {
+                    var data = response.Value!;
+                    if(data.Any())
+                    {
+                        int count = data.First().Total;
+                        return dataManagerRequest.RequiresCounts
+                            ? new DataResult() { Result = data, Count = count } 
+                            : (object)data;
+                    }
+                }
+
+                var noData = new List<HebWordPageItem>();
+                return dataManagerRequest.RequiresCounts
+                    ? new DataResult() { Result = noData, Count = 0 }
+                    : (object) noData;
+            }
+        }
+
+        // Performs data Read operation
+        public override object Read(DataManagerRequest dm, string key = null!)
+        {
+            return ReadAsync(dm, key).GetAwaiter().GetResult();
+        }
+    }
+}

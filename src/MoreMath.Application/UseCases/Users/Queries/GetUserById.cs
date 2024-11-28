@@ -9,13 +9,13 @@ namespace MoreMath.Application.UseCases.Users.Queries;
 
 public record GetUserByIdQuery(int id) : IRequest<ResultWrap<UserDto?>>;
 
-public class GetUserByIdHandler(IUnitOfWork unitOfWork) :
-    AbstractHandler<GetUserByIdQuery, ResultWrap<UserDto?>>(unitOfWork)
+public class GetUserByIdHandler(IAppDbContext context) :
+    AbstractHandler<GetUserByIdQuery, ResultWrap<UserDto?>>(context)
 {
 
     public override async Task<ResultWrap<UserDto?>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var User = await _unitOfWork.UserRepo.FindAsync(request.id);
+        var User = await _context.Users.FindAsync([request.id], cancellationToken);
 
         return User == null
             ? ResultWrap<UserDto?>.Failure(new Error("User.NotFound", "Failed to get User with given Id."))

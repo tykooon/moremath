@@ -1,6 +1,14 @@
 ﻿@page "/"
+@using MoreMath.Application.Contracts.Services
+@using MoreMath.Application.UseCases.Authors.Queries
+@using MoreMath.Dto.Dtos
+
 @rendermode InteractiveServer
+
 @inject NavigationManager _navigationManager
+@inject IAuthorService AuthorService
+@inject IJSRuntime JsRuntime
+
 
 <PageTitle>More Math</PageTitle>
 
@@ -21,27 +29,7 @@
             </p>
         </div>
     </div>
-        <div class="testlesson-call">
-        <div class="testlesson-call__text">
-                        <p>
-                Полноценное часовое занятие <span class="red-emph"> со&nbsp;скидкой&nbsp;50%! </span>
-            </p>
-            <p>
-                Запишись по телефону
-            </p>
-            <p class="phone-number">
-                (+972) 55-7703-882
-            </p>
-            <p>
-                либо по ссылке:
-            </p>
-        </div>
-        <div class="testlesson-call__action">
-            <button class="accent-btn" @onclick="()=>_navigationManager.NavigateTo(Roots.TestLesson)">
-                Пробное занятие
-            </button>
-        </div>
-    </div>
+    <TestLessonCall />
  </section>
 
 <section class="container">
@@ -64,10 +52,10 @@
         </ServiceCard>
 
         <ServiceCard MdIcon="abjad-hebrew" Title="Математический иврит" ButtonLink=@Roots.MathHebrew>
-            <div class="hebrew-block">
-                <span class="hebrew-text">שלום לכולם!</span>
-            </div>
-            Если вы всё ещё путаете <span class="hebrew-text">משולש</span> и <span class="hebrew-text">משושה</span>, то вам сюда. У нас есть словарь основных школьных математических терминов на иврите.
+            <Heb IsParagraph>
+                <Heb>שלום לכולם!</Heb>
+            </Heb>
+            Если вы всё ещё путаете <Heb>משולש</Heb> и <Heb>משושה</Heb>, то вам сюда. У нас есть словарь основных школьных математических терминов на иврите.
         </ServiceCard>
 
         <ServiceCard MdIcon="feather" Title="Заметки на~~полях" ButtonLink=@Roots.Blog>
@@ -82,18 +70,22 @@
             НАША КОМАНДА
         </h1>
         <div class="cards-container">
-            <TeamCard PhotoUrl="/assets/images/AlexTykoun.png" FullName="Александр Тыкун" PersonLink=@Roots.AlexTykoun>
-                математик, кандидат физ.-мат. наук, доцент БГУ (Минск). Занятия в Хайфе или Online.
-            </TeamCard>
-
-            <TeamCard PhotoUrl="/assets/images/OlgaPindrik.png" FullName="Ольга Пиндрик" PersonLink=@Roots.OlgaPindrik>
-                математик, кандидат физ.-мат. наук, доцент БГУ (Минск). Занятия в Хайфе или Online.
-            </TeamCard>
-
+            <div class="team-carousel">
+                <TeamSlider Slides="@_authors.ToList()" />
+            </div>
             <div class="team-join-area">
-               <TeamJoinCard />
+                <TeamJoinCard />
             </div>
         </div>
+    </div>
+</section>
+
+<section class="last-articles">
+    <div class="container">
+        <h1 class="last-articles__title">
+            Новые статьи
+        </h1>
+        <ArticleRack CategoryName="Математика"/>
 
     </div>
 </section>
@@ -118,3 +110,12 @@
         </div>
     </div>
 </section>
+
+@code{
+    private IEnumerable<AuthorDto> _authors = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _authors = await AuthorService.GetAuthorsAsync();
+    }
+}

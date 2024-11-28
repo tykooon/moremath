@@ -1,0 +1,88 @@
+﻿@using MoreMath.Dto.Dtos
+@using MoreMath.Dto.Responses
+@using MoreMath.Shared.Extensions
+
+<div class="mm-hebrew-card">
+    <p class="mm-hebrew-card__spelling @MaskHebContent" @onclick="Unhide">
+        <Heb>@HebWord.Niqqud</Heb>
+        <br/>
+        (<WordWithStress Word=@HebWord.Spelling Stress=@HebWord.StressLetter/>)
+    </p>
+    <p class="mm-hebrew-card__extraform @MaskHebContent" @onclick="Unhide">
+        @HebTextProcess(HebWord.ExtraForm)
+    </p>
+    <hr class="soft-rule"/>
+    <p class="mm-hebrew-card__translation @(HideRussian && IsHidden ? "mask-content" : "")" @onclick="Unhide">
+        @HebWord.Translation
+    </p>
+    <hr />
+    <div class="mm-hebrew-card__notes @MaskContent">
+        <span class="attention-sign">!</span>
+        <span>
+            @HebTextProcess(HebWord.Notes)
+        </span>
+    </div>
+    <hr />
+    <p class="mm-hebrew-card__shoresh @MaskHebContent">
+    <span>корень: </span><Heb>@HebShoreshAddDots(HebWord.Shoresh)</Heb>
+    </p>
+    <p class="mm-hebrew-card__extra @MaskContent">
+        @HebTextProcess(HebWord.ExtraInfo)
+    </p>
+    <p class="mm-hebrew-card__tags">
+        @TagsProcess(HebWord.TagsConcat)
+    </p>
+</div>
+
+@code {
+    [Parameter]
+    public HebWordPageItem HebWord { get; set; } = null!;
+
+    [Parameter]
+    public bool HideHebrew { get; set; } = false;
+
+    [Parameter]
+    public bool HideRussian { get; set; } = false;
+
+    [Parameter]
+    public bool IsHidden { get; set; } = false;
+
+    [Parameter]
+    public Action OnReveal { get; set; } = default!;
+
+    private string MaskHebContent => HideHebrew && IsHidden ? "mask-content" : "";
+    private string MaskContent => (HideHebrew || HideRussian ) && IsHidden ? "mask-content" : "";
+
+    private MarkupString? TagsProcess(string? text)
+    {
+        MarkupString? res = string.IsNullOrWhiteSpace(text)
+            ? null
+            : new MarkupString("#" + text.Replace(",", ", #"));
+        return res;
+    }
+
+    private MarkupString HebTextProcess(string text)
+    {
+        text = text.Replace("|", "<br/>");
+        text = text.Replace("[", "<span class=\"hebrew-text\">");
+        text = text.Replace("]", "</span>");
+        text = text.Replace("--", "&ndash;");
+        return new MarkupString(text);
+
+    }
+
+    public void Unhide()
+    {
+        IsHidden = false;
+        OnReveal();
+        StateHasChanged();
+    }
+
+    private string HebShoreshAddDots(string text)
+    {
+        text = text.RemoveNiqqud();
+        text = string.Join(".", text.AsEnumerable());
+        return text;
+
+    }
+}

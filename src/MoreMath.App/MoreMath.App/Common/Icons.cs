@@ -47,6 +47,20 @@ public static class Icons
         builder.CloseComponent();
     };
 
+    public static RenderFragment Search => (builder) =>
+    {
+        builder.OpenComponent(0, typeof(MdIcon));
+        builder.AddAttribute(1, "Name", "magnify");
+        builder.CloseComponent();
+    };
+
+    public static RenderFragment News => (builder) =>
+    {
+        builder.OpenComponent(0, typeof(MdIcon));
+        builder.AddAttribute(1, "Name", "bell-ring-outline");
+        builder.CloseComponent();
+    };
+
     public static RenderFragment Team => (builder) =>
     {
         builder.OpenComponent(0, typeof(MdIcon));

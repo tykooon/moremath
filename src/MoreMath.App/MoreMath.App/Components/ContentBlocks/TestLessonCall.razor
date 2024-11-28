@@ -1,0 +1,23 @@
+﻿@inject NavigationManager NavManager
+
+<div class="testlesson-call">
+    <div class="testlesson-call__text">
+        <p>
+            Полноценное часовое занятие <span class="red-emph"> со&nbsp;скидкой&nbsp;50%! </span>
+        </p>
+        <p>
+            Запишись по телефону
+        </p>
+        <p class="phone-number">
+            (+972) 55-7703-882
+        </p>
+        <p>
+            либо по ссылке:
+        </p>
+    </div>
+    <div class="testlesson-call__action">
+        <button class="accent-btn" @onclick="()=>NavManager.NavigateTo(Roots.TestLesson)">
+            Пробное занятие
+        </button>
+    </div>
+</div>

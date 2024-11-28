@@ -9,7 +9,7 @@ namespace MoreMath.Application;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMediatR(cfg =>
         {

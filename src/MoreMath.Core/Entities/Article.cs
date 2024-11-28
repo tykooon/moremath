@@ -1,9 +1,11 @@
-﻿using MoreMath.Core.Abstracts;
+﻿using Microsoft.EntityFrameworkCore;
+using MoreMath.Core.Abstracts;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace MoreMath.Core.Entities;
 
+[Index(nameof(Slug))]
 public class Article : EntityWithDates<int>
 {
     public string Title { get; set; } = string.Empty;

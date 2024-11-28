@@ -1,0 +1,138 @@
+﻿@page "/articles/math-hebrew/dict-cards"
+@layout ColumnLayout
+
+@using MoreMath.Application.UseCases.HebWords.Queries
+@using MoreMath.Application.UseCases.Tags.Queries
+@using MoreMath.Dto.Dtos
+@using MoreMath.Dto.Responses
+@using MoreMath.Shared.Models
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Navigations
+
+@inject IMediator Mediator
+
+<HeadContent>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+</HeadContent>
+
+<section class="container">
+    <div class="mm-content e-bigger mm-center-block">
+        <h1>Математи&shy;ческий иврит. Карточки</h1>
+        <p>
+            На этой странице математические термины из нашего словаря представлены в виде карточек, которые можно пролистывать и использовать для заучивания и самопроверки.
+        </p>
+        <p>
+            По умолчанию загружаются 30 карточек, отобранных случайным образом среди всего словаря. Но количество карточек можно изменить, а также задать категорию для тематического подбора карточек.
+        </p>
+        <p>
+            Всего доступно три режима просмотра карточек. Основной&nbsp;&ndash; когда все поля карточек всегда открыты; режим иврита&nbsp;&ndash; когда каждая новая карточка появляется только со словом на иврите, чтобы дать возможность проверить себя. Остальная информация на карточке появлется после нажатия на слово. Третий режим аналогичен второму, только изначально появляется лишь перевод термина, а вся остальная информация открывается дополнительным нажатием.
+        </p>
+        <p>
+            Удачной тренировки!
+        </p>
+    </div>
+</section>
+
+<div class="mm-hebrew-card-container">
+    @if (_hebWords.Count() > 0)
+    {
+        <SfToolbar OverflowMode="OverflowMode.MultiRow">
+            <ToolbarItems>
+                <ToolbarItem Type="ItemType.Button" PrefixIcon="e-refresh icon" Id="hw-grid-refresh" OnClick=@(async () => await CardsReload())></ToolbarItem>
+                <ToolbarItem Type="ItemType.Input">
+                    <Template>
+                        <SfDropDownList TValue="int" Width="120px" TItem="CardsTotal" Placeholder="Кол-во карт" DataSource="@CardsTotal.Options" @bind-Value=cardViewAmount>
+                            <DropDownListFieldSettings Value="Amount" Text="OptionName"></DropDownListFieldSettings>
+                            <DropDownListEvents TValue="int" TItem="CardsTotal" ValueChange="CardsReload"></DropDownListEvents>
+                        </SfDropDownList>                        
+                    </Template>
+                </ToolbarItem>
+                 <ToolbarItem Type="ItemType.Input">
+                    <Template>
+                        <SfDropDownList TValue="string" Width="180px" TItem="CardViewMode" Placeholder="Режим" DataSource="@CardViewMode.Options" @bind-Value=cardViewMode>
+                            <DropDownListFieldSettings Value="ID" Text="ViewMode"></DropDownListFieldSettings>
+                            <DropDownListEvents TValue="string" TItem="CardViewMode" ValueChange="HideAllCards"></DropDownListEvents>
+                        </SfDropDownList>
+                    </Template>
+                </ToolbarItem>
+                <ToolbarItem Type="ItemType.Input" >
+                    <Template>
+                        <SfMultiSelect id="tag-filter-select" class="mm-form__field__multiselect"
+                            TValue="string[]" TItem="string"Width="180px" AllowFiltering="true"
+                            Placeholder="Поиск по тэгам" Mode="@Syncfusion.Blazor.DropDowns.VisualMode.CheckBox"
+                            DataSource="@_tagList" ShowSelectAll=true EnableSelectionOrder=true
+                            ShowDropDownIcon=true FilterBarPlaceholder="напр., арифметика"
+                            @bind-Value=@_filter.Tags @bind-Value:after="CardsReload" PopupHeight="350px">
+                        </SfMultiSelect>
+                    </Template>
+                </ToolbarItem> 
+            </ToolbarItems>
+        </SfToolbar>
+        <HebSlider @ref=hebSlider Slides="@_hebWords" CardViewMode="@cardViewMode" OnCardRevealed="RevealCard"/>
+    }
+    else
+    {
+        <h3>
+            <WaitingSpinner Text="Секундочку! Карточки уже в пути..." />
+        </h3>
+    }
+</div>
+
+<SectionContent SectionName="main-sidebar">
+    <section class="main-sidebar">
+        <div class="info-pad">
+            <TestLessonCall />
+        </div>
+        <div class="read-also">
+            <h3>Читайте также:</h3>
+            <ArticleRack CategoryName="Математический иврит" IsSidebar />
+        </div>
+    </section>
+</SectionContent>
+
+@code {
+    private List<HebWordCardViewModel> _hebWords = [];
+    private HebSlider hebSlider = default!;
+
+    private List<string> _tagList = [];
+    public HebWordFilter _filter = new() { };
+
+    private int cardViewAmount = 30;
+    private string cardViewMode = "Regular";
+
+    private void RevealCard(int index)
+    {
+        if(index >= 0 && index < _hebWords.Count)
+        {
+            _hebWords[index].Reveal();
+        }
+    }
+
+    private void HideAllCards() => _hebWords.ForEach(card => card.IsHidden = true);
+
+    private async Task CardsReload()
+    {
+        var wordsRequest = new GetHebWordsPagedQuery()
+            {
+                TagList = _filter.Tags,
+                Take = cardViewAmount,
+                OrderBy = "random"
+            };
+        var response = await Mediator.Send(wordsRequest);
+        IEnumerable<HebWordPageItem> data = response.IsSuccessfull ? response.Value! : [];
+        _hebWords = data.Select(w => new HebWordCardViewModel(w, true)).ToList();
+        hebSlider?.Rewind();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CardsReload();
+        var request = new GetTagsQuery(null, IsWordTag: true);
+        var tags = await Mediator.Send(request);
+        _tagList = tags.IsSuccessfull
+            ? tags.Value!.Select(t => t.TagName).ToList()
+            : [];
+    }
+}

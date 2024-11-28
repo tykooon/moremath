@@ -1,0 +1,92 @@
+﻿@using MoreMath.Dto.Responses
+
+<div class="heb-slider" @ontouchstart="OnTouchStart" @ontouchend="OnTouchEnd" @ontouchmove="OnTouchMove">
+    <div class="heb-slider__slides"
+        style="transform: translateX(calc(@(-currentIndex * 100)% - @((int)change)px)); @(transition ? "transition: transform 0.5s ease-in-out;" : "")">
+        @for (var i = 0; i < Slides.Count(); i++)
+        {
+            var index = i;
+            <div class="heb-slider__item">
+                <HebWordCard HebWord=@Slides[index].Word
+                             HideHebrew=@(CardViewMode == "RussianFirst")
+                             HideRussian=@(CardViewMode == "HebrewFirst")
+                             IsHidden=@Slides[index].IsHidden
+                             OnReveal=@(() => InnerReveal(index))/>
+            </div>
+        }
+    </div>
+    <button @onclick="PreviousSlide" class="heb-slider__nav-button prev @IsPrevAvailable">❮</button>
+    <button @onclick="NextSlide" class="heb-slider__nav-button next @IsNextAvailable">❯</button>
+</div>
+
+@code {
+    [Parameter]
+    public List<HebWordCardViewModel> Slides { get; set; } = [];
+
+    [Parameter]
+    public string CardViewMode { get; set; } = string.Empty;
+
+    [Parameter]
+    public Action<int> OnCardRevealed { get; set; } = default!;
+
+    private void InnerReveal(int i)
+    {
+        Slides[i].Reveal();
+        OnCardRevealed(i);
+    }
+
+    private int currentIndex = 0;
+    private double startX;
+    private double change;
+    private bool transition;
+
+    private string IsPrevAvailable => currentIndex > 0 ? "" : "disable-btn";
+    private string IsNextAvailable => (currentIndex < Slides.Count - 1) ? "" : "disable-btn";
+
+    private void NextSlide()
+    {
+        if (currentIndex < Slides.Count - 1)
+        {
+            transition = true;
+            currentIndex++;
+        }
+    }
+
+    private void PreviousSlide()
+    {
+        if (currentIndex > 0)
+        {
+            transition = true;
+            currentIndex--;
+        }
+    }
+
+    private void OnTouchStart(TouchEventArgs e)
+    {
+        transition = false;
+        startX = e.Touches[0].ClientX;
+    }
+    private void OnTouchMove(TouchEventArgs e) => change = startX - e.Touches[0].ClientX;
+    private void OnTouchEnd(TouchEventArgs e)
+    {
+        HandleSwipe(change);
+        change = 0;
+    }
+
+    private void HandleSwipe(double endX)
+    {
+        if (change > 50) // Swipe left
+        {
+            NextSlide();
+        }
+        else if (change < -50) // Swipe right
+        {
+            PreviousSlide();
+        }
+    }
+
+    public void Rewind()
+    {
+        currentIndex = 0;
+    }
+}

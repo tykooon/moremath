@@ -9,19 +9,19 @@ public record LinkUserToAuthorCommand(
     int Id,
     int AuthorId) : IRequest<ResultWrap>;
 
-public class LinkUserToAuthorHandler(IUnitOfWork unitOfWork) :
-    AbstractHandler<LinkUserToAuthorCommand, ResultWrap>(unitOfWork)
+public class LinkUserToAuthorHandler(IAppDbContext context) :
+    AbstractHandler<LinkUserToAuthorCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(LinkUserToAuthorCommand command, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepo.FindAsync(command.Id);
+        var user = await _context.Users.FindAsync(command.Id);
 
         if (user == null)
         {
             return ResultWrap.Failure(new Error("User.NotFound", "Failed to update User with given Id. User wasn't found."));
         }
 
-        var author = await _unitOfWork.AuthorRepo.FindAsync(command.AuthorId);
+        var author = await _context.Authors.FindAsync(command.AuthorId);
 
         if (author == null)
         {
@@ -29,9 +29,10 @@ public class LinkUserToAuthorHandler(IUnitOfWork unitOfWork) :
         }
 
         user.Author = author;
-        _unitOfWork.UserRepo.Update(user);
+        user.UpdateTimeMark();
+        _context.Users.Update(user);
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
         return ResultWrap.Success();
     }
 }

@@ -1,0 +1,129 @@
+﻿@import "vars";
+
+/*#region last-articles */
+
+.last-articles {
+    /*background-color: $mmc-light-warm;*/
+    padding: 20px 0 0 0;
+
+    &__title {
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        text-align: left;
+        color: $mmc-base-dark;
+    }
+}
+
+.article-rack {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    padding: 0 0 20px;
+    &.fluid-rack{
+
+    }
+}
+
+@media(min-width:$mm-media-xss) {
+    .article-rack {
+        padding: 0 0 0 10px;
+        &.fluid-rack {
+            padding: 0;
+        }
+    }
+}
+
+@media(min-width:$mm-media-lg) {
+    .article-rack {
+        &.fluid-rack {
+            flex-direction: column;
+            align-items:center;
+            overflow-x: hidden;
+            overflow-y: auto;
+            height:auto;
+        }
+    }
+}
+
+.article-card {
+    max-width: 300px;
+    min-width: 280px;
+    background-color: $mmc-white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px 10px 10px 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,.08),0 4px 6px rgba(0,0,0,.04);
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        cursor: pointer;
+    }
+
+    &__image {
+        max-width: 300px;
+        height: 200px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px 20px 0 0;
+            object-fit: cover;
+        }
+    }
+
+    &__title {
+        h3 {
+            font-size: $mm-fs-mdx;
+            padding: 15px;
+        }
+    }
+
+    &__abstract {
+        color: $mmc-base-dark;
+        padding-inline: 15px;
+        p {
+            line-height: 1.3 !important;
+            font-size: $mm-fs-md !important;
+        }
+    }
+
+    &__footer {
+        font-size: $mm-fs-sm;
+        color: #555;
+        text-align: end;
+        padding: 15px;
+    }
+}
+
+@media(min-width:$mm-media-xss){
+    .article-card {
+        margin: 20px 20px 20px 0;
+        max-width: 330px;
+
+        &.sidebar-card {
+            max-width: 300px;
+            &__image {
+                max-width: 300px;
+                height:175px;
+            }
+        }
+
+        &__image {
+            max-width: 330px;
+        }
+    }
+}
+
+@media(min-width:$mm-media-lg) {
+    .article-card {
+        &.sidebar-card{
+            margin: 20px 0;
+        }
+    }
+}
+
+/*#endregion last-articles */

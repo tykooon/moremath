@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MoreMath.Application.Contracts;
-using MoreMath.Application.Contracts.Services;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
 
@@ -11,44 +11,41 @@ public record AddTagsToArticleCommand(
     int[]? TagsId,
     string[]? TagNames): IRequest<ResultWrap>;
 
-public class AddTagsToArticleHandler(IUnitOfWork unitOfWork, ITagService tagService):
-    AbstractHandler<AddTagsToArticleCommand, ResultWrap>(unitOfWork)
+public class AddTagsToArticleHandler(IAppDbContext context):
+    AbstractHandler<AddTagsToArticleCommand, ResultWrap>(context)
 {
-    private readonly ITagService _tagService = tagService;
-
     public override async Task<ResultWrap> Handle(AddTagsToArticleCommand command, CancellationToken cancellationToken)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(command.ArticleId);
+        var article = await _context.Articles.Include(a => a.Tags).FirstOrDefaultAsync(a => a.Id ==  command.ArticleId, cancellationToken);
 
         if(article == null)
         {
             return ResultWrap.Failure(new Error("Article.NotFound", "Failed to get article with given Id."));
         }
 
-        var tagsById = command.TagsId != null
-            ? await _tagService.GetTagsByIdsAsync(command.TagsId)
+        var tagsById = command.TagsId?.Length > 0
+            ? await _context.Tags.Where(t =>command.TagsId.Contains(t.Id)).ToListAsync(cancellationToken)
             : [];
 
-        var tagsByName = command.TagNames != null
-            ? await _tagService.GetTagsByNamesAsync(command.TagNames)
+        var tagsByName = command.TagNames?.Length > 0
+            ? await _context.Tags.Where(t => command.TagNames.Contains(t.TagName)).ToListAsync(cancellationToken)
             : [];
 
-        var tags = tagsById.ToList();
-        tags.AddRange(tagsByName);
+        tagsById.AddRange(tagsByName);
 
-        if (tags.Count == 0)
+        if (tagsById.Count == 0)
         {
             return ResultWrap.Failure(new Error("Tags.NotFound", "Failed to get Tags with provided data."));
         }
 
-        foreach(var tag in tags)
+        foreach(var tag in tagsById)
         {
             article.Tags.Add(tag);
         }
 
         article.UpdateTimeMark();
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return ResultWrap.Success();
     }

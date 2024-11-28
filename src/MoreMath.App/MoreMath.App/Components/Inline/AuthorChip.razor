@@ -2,15 +2,25 @@
 
 @if(Author != null)
 {
-    <a class="author-chip" href="about/team/@Author.SlugName">
+    <Syncfusion.Blazor.Popups.SfTooltip Content="@_fullName">
+    <a class="author-chip" href="about/@Author.SlugName">
         <img src="@_authorAvaUrl" alt="@Author.SlugName" />
-        <span>@Author.FirstName @Author.LastName</span>    
+        @if (!IsMinified)
+        {
+            <span>@_fullName</span>
+        }
     </a>
+    </Syncfusion.Blazor.Popups.SfTooltip>
 }
 
 @code {
     [Parameter]
     public AuthorDto? Author { get; set; }
+
+    [Parameter]
+    public bool IsMinified { get; set; }
+
+    private string _fullName => $"{Author?.FirstName} {Author?.LastName}";
 
     private string _authorAvaUrl => $"{Constants.BLOB_STORAGE}/authors/thumbs/_{Author?.SlugName}.png";
 }

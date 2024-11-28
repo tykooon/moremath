@@ -1,0 +1,46 @@
+﻿@using MoreMath.Application.UseCases.Articles.Queries
+@using MoreMath.Dto.Responses
+
+@inject IMediator Mediator
+
+<div class="article-rack@(IsSidebar? " fluid-rack" : "")">
+        @foreach (var art in _articles)
+        {
+            <ArticleCard ArticleDto="@art" IsSidebar="@IsSidebar"/>
+        }
+    <AllArticlesCard IsSidebar="@IsSidebar" />
+</div>
+
+
+
+
+@code {
+    private IEnumerable<ArticlePageItem> _articles = [];
+
+    [Parameter]
+    public string? CategoryName { get; set; }
+
+    [Parameter]
+    public int[]? AuthorsId { get; set; }
+
+    [Parameter]
+    public IEnumerable<string>? TagNames { get; set; }
+
+    [Parameter]
+    public bool IsSidebar { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var query = new GetArticlesPagedQuery()
+        {
+            Take = 6,
+            CategoryName = CategoryName,
+            Decsending = true,
+            OrderBy = "created",
+            TagList = TagNames?.ToArray(),
+            AuthorsId = AuthorsId
+        };
+        var response = await Mediator.Send(query);
+        _articles = response.IsSuccessfull ? response.Value! : [];
+    }
+}

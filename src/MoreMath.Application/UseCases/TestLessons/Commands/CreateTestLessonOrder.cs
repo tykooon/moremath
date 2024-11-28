@@ -15,8 +15,8 @@ public record CreateTestLessonOrderCommand(
     TestLessonOrderStatus Status) : IRequest<ResultWrap<int>>;
 
 
-public class CreateTestLessonOrderHandler(IUnitOfWork unitOfWork) :
-    AbstractHandler<CreateTestLessonOrderCommand, ResultWrap<int>>(unitOfWork)
+public class CreateTestLessonOrderHandler(IAppDbContext context) :
+    AbstractHandler<CreateTestLessonOrderCommand, ResultWrap<int>>(context)
 {
     public override async Task<ResultWrap<int>> Handle(CreateTestLessonOrderCommand command, CancellationToken cancellationToken)
     {
@@ -30,12 +30,12 @@ public class CreateTestLessonOrderHandler(IUnitOfWork unitOfWork) :
 
         if (command.UserId.HasValue)
         {
-            var user = await _unitOfWork.UserRepo.FindAsync(command.UserId.Value);
+            var user = await _context.Users.FindAsync([command.UserId.Value], cancellationToken);
             testLessonOrder.User = user;
         }
 
-        await _unitOfWork.TestLessonRepo.AddAsync(testLessonOrder);
-        await _unitOfWork.CommitAsync();
+        await _context.TestLessonOrders.AddAsync(testLessonOrder, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return testLessonOrder.Id == 0
             ? ResultWrap.Failure(new Error("TestLesson.Create", "Test Lesson was not created"))

@@ -3,6 +3,7 @@ using MoreMath.Application.Contracts;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
 using MoreMath.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoreMath.Application.UseCases.Articles.Commands;
 
@@ -11,12 +12,12 @@ public record AddCommentToArticleCommand(
     int? UserId,
     string Text): IRequest<ResultWrap>;
 
-public class AddCommentToArticleHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<AddCommentToArticleCommand, ResultWrap>(unitOfWork)
+public class AddCommentToArticleHandler(IAppDbContext context):
+    AbstractHandler<AddCommentToArticleCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(AddCommentToArticleCommand command, CancellationToken cancellationToken)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(command.ArticleId);
+        var article = await _context.Articles.Include(a => a.Comments).FirstOrDefaultAsync(a => a.Id == command.ArticleId, cancellationToken);
 
         if(article == null)
         {
@@ -25,7 +26,7 @@ public class AddCommentToArticleHandler(IUnitOfWork unitOfWork):
 
         var user = command.UserId == null
             ? null
-            : await _unitOfWork.UserRepo.FindAsync(command.UserId.Value);
+            : await _context.Users.FindAsync([command.UserId.Value], cancellationToken);
 
         if (command.UserId != null && user == null)
         {
@@ -41,7 +42,7 @@ public class AddCommentToArticleHandler(IUnitOfWork unitOfWork):
 
         article.Comments.Add(comment);
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return ResultWrap.Success();
     }

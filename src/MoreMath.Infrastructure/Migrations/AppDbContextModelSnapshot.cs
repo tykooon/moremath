@@ -17,7 +17,7 @@ namespace MoreMath.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -52,6 +52,21 @@ namespace MoreMath.Infrastructure.Migrations
                     b.ToTable("ArticleTag");
                 });
 
+            modelBuilder.Entity("HebWordTag", b =>
+                {
+                    b.Property<int>("HebWordsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HebWordsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("HebWordTag");
+                });
+
             modelBuilder.Entity("MoreMath.Core.Entities.Article", b =>
                 {
                     b.Property<int>("Id")
@@ -83,7 +98,7 @@ namespace MoreMath.Infrastructure.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -92,6 +107,8 @@ namespace MoreMath.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("Slug");
 
                     b.ToTable("Articles");
                 });
@@ -213,6 +230,56 @@ namespace MoreMath.Infrastructure.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("MoreMath.Core.Entities.HebWord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ExtraForm")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ExtraInfo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Niqqud")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NoNiqqud")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Shoresh")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Spelling")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("StressLetter")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Translation")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Shoresh", "NoNiqqud", "Spelling");
+
+                    b.ToTable("HebWords");
+                });
+
             modelBuilder.Entity("MoreMath.Core.Entities.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -326,6 +393,21 @@ namespace MoreMath.Infrastructure.Migrations
                     b.HasOne("MoreMath.Core.Entities.Article", null)
                         .WithMany()
                         .HasForeignKey("ArticlesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MoreMath.Core.Entities.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HebWordTag", b =>
+                {
+                    b.HasOne("MoreMath.Core.Entities.HebWord", null)
+                        .WithMany()
+                        .HasForeignKey("HebWordsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

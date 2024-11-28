@@ -11,8 +11,8 @@ public record CreateUserCommand(
     bool IsActive) : IRequest<ResultWrap<int>>;
 
 
-public class CreateUserHandler(IUnitOfWork unitOfWork) :
-    AbstractHandler<CreateUserCommand, ResultWrap<int>>(unitOfWork)
+public class CreateUserHandler(IAppDbContext context) :
+    AbstractHandler<CreateUserCommand, ResultWrap<int>>(context)
 {
     public override async Task<ResultWrap<int>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
@@ -22,8 +22,8 @@ public class CreateUserHandler(IUnitOfWork unitOfWork) :
             IsActive = command.IsActive
         };
 
-        await _unitOfWork.UserRepo.AddAsync(user);
-        await _unitOfWork.CommitAsync();
+        await _context.Users.AddAsync(user, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return user.Id == 0
             ? ResultWrap.Failure(new Error("User.Create", "User was not created"))

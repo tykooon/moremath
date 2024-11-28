@@ -10,6 +10,8 @@ public static class Constants
         public const string Mathematics = "articles/mathematics";
         public const string MathHebrew = "articles/math-hebrew";
         public const string Blog = "articles/blog";
+        public const string Search = "articles/search";
+        public const string News = "about/news";
         public const string Team = "about/team";
         public const string Contacts = "about/contacts";
         public const string JoinTeam = "about/team/join";

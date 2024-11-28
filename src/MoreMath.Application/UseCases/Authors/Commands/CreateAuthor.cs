@@ -21,8 +21,8 @@ public record CreateAuthorCommand(
 
 
 
-public class CreateAuthorHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<CreateAuthorCommand, ResultWrap<int>>(unitOfWork)
+public class CreateAuthorHandler(IAppDbContext context):
+    AbstractHandler<CreateAuthorCommand, ResultWrap<int>>(context)
 {
     public override async Task<ResultWrap<int>> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
     {
@@ -41,8 +41,8 @@ public class CreateAuthorHandler(IUnitOfWork unitOfWork):
             Options = command.Options
         };
 
-        await _unitOfWork.AuthorRepo.AddAsync(author);
-        await _unitOfWork.CommitAsync();
+        await _context.Authors.AddAsync(author, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
         return author.Id == 0
             ? ResultWrap.Failure(new Error("Author.Create", "Author was not created"))
             : ResultWrap<int>.Success(author.Id);

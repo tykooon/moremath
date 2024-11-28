@@ -10,12 +10,12 @@ public record UpdateUserCommand(
     string? Username,
     bool? IsActive) : IRequest<ResultWrap>;
 
-public class UpdateUserHandler(IUnitOfWork unitOfWork) :
-    AbstractHandler<UpdateUserCommand, ResultWrap>(unitOfWork)
+public class UpdateUserHandler(IAppDbContext context) :
+    AbstractHandler<UpdateUserCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.UserRepo.FindAsync(command.Id);
+        var user = await _context.Users.FindAsync(command.Id);
 
         if (user == null)
         {
@@ -25,9 +25,9 @@ public class UpdateUserHandler(IUnitOfWork unitOfWork) :
         user.Username = command.Username ?? user.Username;
         user.IsActive = command.IsActive ?? user.IsActive;
 
-        _unitOfWork.UserRepo.Update(user);
+        _context.Users.Update(user);
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
         return ResultWrap.Success();
     }
 }

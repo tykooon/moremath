@@ -1,0 +1,225 @@
+﻿@using MoreMath.Application.Contracts.Services
+@using MoreMath.Application.UseCases.Articles.Queries
+@using MoreMath.Application.UseCases.Authors.Queries
+@using MoreMath.Application.UseCases.Tags.Queries
+@using MoreMath.Dto.Dtos
+@using System.Globalization
+@using MoreMath.Dto.Responses
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
+
+@page "/articles/search"
+
+@inject IHttpClientFactory HttpClientFactory 
+@inject ILogger<Article> Logger
+@inject NavigationManager NavigationManager
+@inject IMediator Mediator
+@inject IAuthorService AuthorService
+@inject ITagService TagService
+
+<PageTitle>Articles Search</PageTitle>
+
+<div class="mm-content">
+    <section class="last-articles">
+        <h1 class="last-articles__title">
+            Поиск статей
+        </h1>
+        <div class="search-filters">
+            <SfGrid TValue="ArticlePageItem" @ref=ArticlesGrid ID="ArticlesGrid"
+                AllowSorting="true" AllowFiltering="true" AllowPaging="true"
+                EnableAdaptiveUI="true" AllowTextWrap="true"
+                RowRenderingMode="RowDirection.Vertical">
+                
+                <SfDataManager AdaptorInstance="@typeof(CustomArticlesAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
+                <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+                <GridPageSettings PageSize="6"></GridPageSettings>
+                <SfToolbar OverflowMode="OverflowMode.MultiRow">
+                    <ToolbarItems>
+                        <ToolbarItem Type="ItemType.Input" Align="ItemAlign.Right">
+                            <Template>
+                                <SfMultiSelect @ref=MultiAuthor id="auth-filter-selector" class="mm-form__field__multiselect"
+                                    TValue="int[]" TItem="AuthorMultiSelectItem" Width="240px" AllowFiltering="true"
+                                    Placeholder="Поиск по авторам" Mode="@Syncfusion.Blazor.DropDowns.VisualMode.CheckBox"
+                                    DataSource="@_authorOptionList" ShowSelectAll=true EnableSelectionOrder=true ShowDropDownIcon=true
+                                    FilterBarPlaceholder="напр., арифметика" @bind-Value=@_filter.AuthorsId PopupHeight="350px">
+                                    
+                                    <MultiSelectTemplates TItem="AuthorMultiSelectItem">
+                                        <ItemTemplate>
+                                            <span>@((context as AuthorMultiSelectItem).FullName)</span>
+                                        </ItemTemplate>
+                                    </MultiSelectTemplates>
+                                    <MultiSelectFieldSettings Text="FullName" Value="Id"></MultiSelectFieldSettings>
+                                </SfMultiSelect>
+                            </Template>
+                        </ToolbarItem>
+                        <ToolbarItem Type="ItemType.Input" Align="ItemAlign.Right">
+                            <Template>
+                                <SfMultiSelect @ref=MultiTag id="tag-filter-selector" class="mm-form__field__multiselect"
+                                    TValue="string[]" TItem="string" Width="200px" AllowFiltering="true" Placeholder="Поиск по тэгам"
+                                    Mode="@Syncfusion.Blazor.DropDowns.VisualMode.CheckBox" DataSource="@_tagList"
+                                    ShowSelectAll=true EnableSelectionOrder=true ShowDropDownIcon=true
+                                    FilterBarPlaceholder="напр., арифметика" @bind-Value=@_filter.Tags PopupHeight="350px">
+                                </SfMultiSelect>
+                            </Template>
+                        </ToolbarItem>
+                        <ToolbarItem Type="ItemType.Button" PrefixIcon="e-refresh icon" Align="ItemAlign.Left" Id="hw-grid-refresh"
+                            OnClick=@(async () => await DataReload())>
+                        </ToolbarItem>
+                    </ToolbarItems>
+                </SfToolbar>
+                <GridColumns>
+                    <GridColumn Field=@nameof(ArticlePageItem.Created) AllowSorting="true" HeaderText="Дата" TextAlign="@TextAlign.Left" AllowFiltering="false">
+                        <Template>
+                            <div class="search-article__date">
+                                @{
+                                    var dateData = (context as ArticlePageItem)?.Created .ToString("dd-MMM-yy", new CultureInfo("ru-Ru")).Split("-");
+                                    @if(dateData?.Length == 3){
+                                        <span>@(dateData[0])</span><br />
+                                        <span>@(dateData[1])</span><br />
+                                        <span>@(dateData[2])</span>
+                                    }
+                                }
+                            </div>
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(ArticlePageItem.Title) HeaderText="Статья" HeaderTextAlign="TextAlign.Left" AllowFiltering="true">
+                        <Template>
+                            <div class="search-article__cell">
+                            @{
+                                var art = context as ArticlePageItem;
+                                <span class="search-article__title">@(art?.Title)</span>
+                                <p class="search-article__abstract">
+                                @(art?.Abstract)
+                                </p>
+                            }
+                            </div>
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field=@nameof(ArticlePageItem.AuthorsIdConcat) HeaderText="Авторы" TextAlign="@TextAlign.Left" AllowFiltering="false">
+                        <Template>
+                        @{
+                            var art = context as ArticlePageItem;
+                            <div style="display:inline-flex">
+                            @foreach(var id in art?.AuthorsIdConcat?.Split(",").Select(n => int.Parse(n)) ?? [])
+                            {
+                                if(_authors.ContainsKey(id))
+                                {
+                                    <AuthorChip Author="@_authors[id]" IsMinified/>
+                                }
+                            }
+                            </div>
+                        }
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </SfGrid>
+
+        </div>
+        <div class="search-results">
+            <ArticleRack />
+        </div>
+    </section>
+</div>
+
+@code{
+    public static ArticleFilter _filter = new();
+
+    SfGrid<ArticlePageItem> ArticlesGrid = default!;
+    SfMultiSelect<string[], string> MultiTag = default!;
+    SfMultiSelect<int[], AuthorMultiSelectItem> MultiAuthor = default!;
+    public static IServiceScopeFactory StaticScopeFactory = default!;
+
+    async Task DataReload()
+    {
+        await ArticlesGrid.Refresh();
+    }
+
+    private List<string> _tagList = [];
+    private Dictionary<int, AuthorDto> _authors = [];
+    private List<AuthorMultiSelectItem> _authorOptionList = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var tags = await TagService.GetArticleTagsAsync();
+        _tagList = tags.Select(t => t.TagName).ToList();
+
+        var authors = await AuthorService.GetAuthorsAsync();
+        _authors = authors.Select(t => (t.Id , t)).ToDictionary();
+        _authorOptionList = authors.Select(a => new AuthorMultiSelectItem(a.Id, $"{a.FirstName} {a.LastName}")).ToList();
+    }
+
+    public class ArticleFilter
+    {
+        public string[]? Tags { get; set; }
+        public int[]? AuthorsId { get; set; }
+    }
+
+    private record AuthorMultiSelectItem (int Id, string FullName);
+
+    public class CustomArticlesAdaptor(IServiceScopeFactory factory) : DataAdaptor
+    {
+        public IServiceScopeFactory _scopeFactory { get; set; } = factory;
+
+        public override async Task<object> ReadAsync(DataManagerRequest dataManagerRequest, string additionalParam = null!)
+        {
+            var articleRequest = new GetArticlesPagedQuery();
+            if (dataManagerRequest.Where != null && dataManagerRequest.Where.Count > 0)
+            {
+                var predicates = dataManagerRequest.Where.First().predicates
+                    .Where(w => (w.Field == "Title") || (w.Field == "CategoryName"))
+                    .Select(pr => (pr.Field, pr.value.ToString()))
+                    .ToDictionary();
+
+                if (predicates.Any())
+                {
+                    predicates.TryGetValue("Title", out var value);
+                    articleRequest.Title = value;
+                    predicates.TryGetValue("CategoryName", out value);
+                    articleRequest.CategoryName = value;
+                }
+            }
+
+            if (dataManagerRequest.Sorted != null && dataManagerRequest.Sorted.Count > 0)
+            {
+                articleRequest.OrderBy = dataManagerRequest.Sorted.First().Name.ToLower();
+                articleRequest.Decsending = dataManagerRequest.Sorted.First().Direction.ToLower() == "descending";
+            }
+
+            articleRequest.TagList = _filter.Tags;
+            articleRequest.Start = dataManagerRequest.Skip;
+            articleRequest.Take = dataManagerRequest.Take != 0 ? dataManagerRequest.Take : 1;
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var response = await mediator.Send(articleRequest);
+
+                if (response?.IsSuccessfull ?? false)
+                {
+                    var data = response.Value!;
+                    if (data.Any())
+                    {
+                        int count = data.First().Total;
+                        return dataManagerRequest.RequiresCounts
+                            ? new DataResult() { Result = data, Count = count }
+                            : (object)data;
+                    }
+                }
+
+                var noData = new List<HebWordPageItem>();
+                return dataManagerRequest.RequiresCounts
+                    ? new DataResult() { Result = noData, Count = 0 }
+                    : (object)noData;
+            }
+        }
+
+        // Performs data Read operation
+        public override object Read(DataManagerRequest dm, string key = null!)
+        {
+            return ReadAsync(dm, key).GetAwaiter().GetResult();
+        }
+    }
+}

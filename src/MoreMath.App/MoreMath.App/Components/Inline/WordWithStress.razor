@@ -1,0 +1,19 @@
+﻿@Word[..Stress]<span style="color:orangered"><b>@Word[Stress]</b></span>@Word[(Stress + 1)..]
+
+@code {
+    [Parameter]
+    public string Word { get; set; } = string.Empty;
+
+    [Parameter]
+    public int Stress { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        @if (string.IsNullOrEmpty(Word) || (uint)Stress >= Word.Length)
+        {
+            Word = "No Data";
+            Stress = 2;
+        }
+    }
+}

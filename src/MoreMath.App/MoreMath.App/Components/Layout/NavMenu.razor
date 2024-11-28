@@ -27,10 +27,12 @@
                     NavDropdownList=@(new NavDropdown.NavDropdownItem[] {
                          new(Roots.Mathematics, "Математика", Icons.Mathematics),
                          new(Roots.MathHebrew, "Математический иврит", Icons.MathHebrew),
-                         new(Roots.Blog, "Заметки на полях", Icons.Blog)
+                         new(Roots.Blog, "Заметки на полях", Icons.Blog),
+                         new(Roots.Search, "Поиск статей", Icons.Search)
                     }) @ref=Articles />
                 <NavDropdown Title="О проекте" Prefix="about" OnLinkClicked=@CloseSidebar
                     NavDropdownList=@(new NavDropdown.NavDropdownItem[] {
+                        new(Roots.News, "Новости проекта", Icons.News),
                         new(Roots.Team, "Команда", Icons.Team),
                         new(Roots.Contacts, "Контакты", Icons.Contacts)
                     }) @ref=About />

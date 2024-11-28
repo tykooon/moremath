@@ -14,12 +14,12 @@ public record UpdateTestLessonOrderCommand(
     TestLessonOrderStatus? Status
 ) : IRequest<ResultWrap>;
 
-public class UpdateTestLessonOrderHandler(IUnitOfWork unitOfWork) :
-    AbstractHandler<UpdateTestLessonOrderCommand, ResultWrap>(unitOfWork)
+public class UpdateTestLessonOrderHandler(IAppDbContext context) :
+    AbstractHandler<UpdateTestLessonOrderCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(UpdateTestLessonOrderCommand command, CancellationToken cancellationToken)
     {
-        var testLessonOrder = await _unitOfWork.TestLessonRepo.FindAsync(command.Id);
+        var testLessonOrder = await _context.TestLessonOrders.FindAsync(command.Id);
 
         if (testLessonOrder == null)
         {
@@ -31,9 +31,10 @@ public class UpdateTestLessonOrderHandler(IUnitOfWork unitOfWork) :
         testLessonOrder.Notes = command.Notes ?? testLessonOrder.Notes;
         testLessonOrder.Status = command.Status ?? testLessonOrder.Status;
 
-        _unitOfWork.TestLessonRepo.Update(testLessonOrder);
+        testLessonOrder.UpdateTimeMark();        
+        _context.TestLessonOrders.Update(testLessonOrder);
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
         return ResultWrap.Success();
     }
 }

@@ -3,24 +3,55 @@ using Microsoft.EntityFrameworkCore;
 using MoreMath.Application.Contracts;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Dto.Dtos;
-using MoreMath.Dto.Mappers;
 using MoreMath.Shared.Result;
 
 namespace MoreMath.Application.UseCases.Tags.Queries;
 
-public record GetTagsQuery(string? searchString) : IRequest<ResultWrap<IEnumerable<TagDto>>>;
+public record GetTagsQuery(string? SearchString, bool? IsWordTag = null, bool? IsArticleTag = null) : IRequest<ResultWrap<IEnumerable<TagDto>>>;
 
-public class GetTagsHandler(IUnitOfWork unitOfWork) :
-    AbstractHandler<GetTagsQuery, ResultWrap<IEnumerable<TagDto>>>(unitOfWork)
+public class GetTagsHandler(IAppDbContext context) :
+    AbstractHandler<GetTagsQuery, ResultWrap<IEnumerable<TagDto>>>(context)
 {
     public override async Task<ResultWrap<IEnumerable<TagDto>>> Handle(GetTagsQuery query, CancellationToken cancellationToken)
     {
-        var tags = await _unitOfWork.TagRepo.GetFilteredAsync(x =>
-            query.searchString == null ||
-            EF.Functions.Like(x.TagName, $"%{query.searchString}%"));
+        var IsWordTagClause = query.IsWordTag == null
+            ? "TRUE"
+            : $"""
+                 {NotIfFalse(query.IsWordTag.Value)} EXISTS (
+                 SELECT 1
+                 FROM HebWordTag AS ht
+                 WHERE ht.TagsId = t.Id)
+             """;
 
-        return tags == null
-            ? ResultWrap.Failure(new Error("Tag.NotFound", "Tag with provided Id was not found"))
-            : ResultWrap<IEnumerable<TagDto>>.Success(tags.Select(t => t.ToDto()));
+        var IsArticleTagClause = query.IsArticleTag == null
+            ? "TRUE"
+            : $"""
+                 {NotIfFalse(query.IsArticleTag.Value)} EXISTS (
+                 SELECT 1
+                 FROM ArticleTag AS arTag
+                 WHERE arTag.TagsId = t.Id)
+             """;
+
+        var rawQuery =
+            $"""
+             SELECT t.Id, t.TagName
+             FROM Tags AS t
+             WHERE (
+             {IsWordTagClause}
+             ) AND (
+             {IsArticleTagClause}
+             ) AND (
+                t.TagName LIKE '%{query.SearchString}%'
+             )
+            """;
+
+        var tags = await _context.DB
+            .SqlQueryRaw<TagDto>(rawQuery)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        return ResultWrap<IEnumerable<TagDto>>.Success(tags);
     }
+
+    private static string NotIfFalse(bool flag) => flag ? "" : "NOT ";
 }

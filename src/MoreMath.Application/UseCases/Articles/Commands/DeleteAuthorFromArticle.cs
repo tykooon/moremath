@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MoreMath.Application.Contracts;
 using MoreMath.Application.UseCases.Abstracts;
 using MoreMath.Shared.Result;
@@ -9,19 +10,19 @@ public record DeleteAuthorFromArticleCommand(
     int ArticleId,
     int AuthorId): IRequest<ResultWrap>;
 
-public class DeleteAuthorFromArticleHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<DeleteAuthorFromArticleCommand, ResultWrap>(unitOfWork)
+public class DeleteAuthorFromArticleHandler(IAppDbContext context):
+    AbstractHandler<DeleteAuthorFromArticleCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(DeleteAuthorFromArticleCommand command, CancellationToken cancellationToken)
     {
-        var article = await _unitOfWork.ArticleRepo.FindAsync(command.ArticleId);
+        var article = await _context.Articles.Include(a => a.Authors).FirstOrDefaultAsync(a => a.Id == command.ArticleId, cancellationToken);
 
         if(article == null)
         {
             return ResultWrap.Failure(new Error("Article.NotFound", "Failed to get article with given Id."));
         }
 
-        var author = await _unitOfWork.AuthorRepo.FindAsync(command.AuthorId);
+        var author = await _context.Authors.FindAsync(command.AuthorId);
 
         if (author == null)
         {
@@ -31,7 +32,7 @@ public class DeleteAuthorFromArticleHandler(IUnitOfWork unitOfWork):
         article.Authors.Remove(author);
         article.UpdateTimeMark();
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return ResultWrap.Success();
     }

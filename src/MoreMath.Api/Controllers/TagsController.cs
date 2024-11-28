@@ -25,9 +25,9 @@ public class TagsController(IMediator mediator) : BaseApiController(mediator)
 
     [HttpGet("")]
     [ProducesResponseType<IEnumerable<TagDto>>(StatusCodes.Status200OK)]
-    public async Task<IResult> GetTags(string? search)
+    public async Task<IResult> GetTags(string? search, bool? isHebWordTag = null, bool? isArticleTag = null)
     {
-        var res = await _mediator.Send(new GetTagsQuery(search));
+        var res = await _mediator.Send(new GetTagsQuery(search, isHebWordTag, isArticleTag));
         return res.ToHttpResult();
     }
 

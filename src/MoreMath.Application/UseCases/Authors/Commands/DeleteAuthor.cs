@@ -9,21 +9,21 @@ public record DeleteAuthorCommand(int Id) : IRequest<ResultWrap>;
 
 
 
-public class  DeleteAuthorHandler(IUnitOfWork unitOfWork):
-    AbstractHandler<DeleteAuthorCommand, ResultWrap>(unitOfWork)
+public class  DeleteAuthorHandler(IAppDbContext context):
+    AbstractHandler<DeleteAuthorCommand, ResultWrap>(context)
 {
     public override async Task<ResultWrap> Handle(DeleteAuthorCommand command, CancellationToken cancellationToken)
     {
-        var author = await _unitOfWork.AuthorRepo.FindAsync(command.Id);
+        var author = await _context.Authors.FindAsync(command.Id);
 
         if (author == null)
         {
             return ResultWrap.Failure(new Error("Author.NotFound", "Failed to delete author with given Id. Author wasn't found."));
         }
 
-        _unitOfWork.AuthorRepo.Delete(author);
+        _context.Authors.Remove(author);
 
-        await _unitOfWork.CommitAsync();
+        await _context.SaveChangesAsync(cancellationToken);
         return ResultWrap.Success();
     }
 }

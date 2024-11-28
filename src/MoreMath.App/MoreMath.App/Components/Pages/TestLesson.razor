@@ -2,13 +2,11 @@
 
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity.UI.Services
-@using MoreMath.Api.Requests.TestLessons
+@using MoreMath.Application.UseCases.TestLessons.Commands
 @using MoreMath.Shared.Common
 
-@rendermode InteractiveServer
-
+@inject IMediator Mediator
 @inject ILogger<TestLesson> Logger
-@inject IHttpClientFactory HttpClientFactory
 @inject IEmailSender InfoMailSender
 @inject NavigationManager NavigationManager
 
@@ -21,7 +19,10 @@
     </div>
     <div class="mm-content">
         <p>
-            Пробное занятие &mdash; это полноценное часовое занятие <span class="red-emph"> со&nbsp;скидкой&nbsp;50%! </span>
+            Найти хорошего учителя иногда бывает недостаточно. Очень важно,чтобы учитель и ученик также подошли друг другу на эмоциональном уровне, на уровне методов и подходов к работе.
+        </p>
+        <p>
+            Мы понимаем Ваши тревоги и сомнения и поэтому всегда предлагаем возможность провести <b>пробное занятие</b>&nbsp;&mdash; полноценное часовое занятие <span class="red-emph"> со&nbsp;скидкой&nbsp;50%! </span>
         </p>
         <p>
             На этом занятии ты сможешь познакомиться с преподавателем, понять насколько тебе подходит его стиль обучения, озвучить свои пожелания и наметить темы, которые хотелось бы проработать глубже, вопросы с которыми нужно разобраться. По желанию в ходе пробного занятия можно пройти небольшое тестирование, чтобы лучше понять свои слабые места. 
@@ -31,7 +32,7 @@
         </p>
     </div>
 
-    <div class="mm-center">
+    <div class="mm-center-text">
         <h3>
             Запись на пробное занятие
         </h3>
@@ -101,8 +102,6 @@
     </div>
 </div>
 
-
-
 <SubmitModal @ref="SubmitModal" Title="Заявка принята" OnClose="@(()=>NavigationManager.NavigateTo("/"))">
     <p class="modal__message">
         Отлично! В ближайшее время с вами свяжется представитель нашей команды, чтобы согласовать время, место проведения и другие подробности пробного занятия.
@@ -121,6 +120,8 @@
 
 
 @code {
+    // TODO: TestLesson page refactor. Form should be first component of page. Use Flex, columns.
+
     [SupplyParameterFromForm]
     private TestLessonOrderData? FormModel { get; set; }
 
@@ -142,37 +143,29 @@
         IsInProgress = true;
         int userId = 0;
         // TODO: Get UserId From CurrentUserService 
-        CreateTestLessonRequest request = new(
+
+        var command = new CreateTestLessonOrderCommand
+        (
             FormModel?.Name!,
             $"Email: {FormModel?.Email} | Contacts: {FormModel?.Contacts}",
             FormModel?.Notes,
             userId,
-            TestLessonOrderStatus.New);
+            TestLessonOrderStatus.New
+        );
 
-        using (var BackendClient = HttpClientFactory.CreateClient("MoreMath.Backend"))
+        var response = await Mediator.Send(command);
+        if (response.IsSuccessfull)
         {
-            try
-            {
-                var response = await BackendClient.PostAsJsonAsync("api/testlessons", request);
-                if (response.IsSuccessStatusCode)
-                {
-                    Logger.LogInformation("TestLessonOrder Form submitted successfully");
-                    await InfoMailSender.SendEmailAsync("moremath.haifa@gmail.com", "New Test Lesson Order", $"<p>You've got new order for test lesson.</p><p> Order Details:</p><p> {FormModel?.ToHtmlString()} <p>Order No.: {await response.Content.ReadAsStringAsync()}</p>");
-                    IsInProgress = false;
-                    SubmitModal.Show(true);
-                }
-                else
-                {
-                    Logger.LogError("TestLessonOrder Form submission failed with status code {StatusCode}", response.StatusCode);
-                    IsInProgress = false;
-                    SubmitFailedModal.Show(false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "TestLessonOrder Form submission failed due to unhandled inner exception: {0}", ex.Message);
-                SubmitFailedModal.Show(false);
-            }
+            Logger.LogInformation("TestLessonOrder Form submitted successfully");
+            await InfoMailSender.SendEmailAsync("moremath.haifa@gmail.com", "New Test Lesson Order", $"<p>You've got new order for test lesson.</p><p> Order Details:</p><p> {FormModel?.ToHtmlString()} <p>Order No.: {response.Value}</p>");
+            IsInProgress = false;
+            SubmitModal.Show(true);
+        }
+        else
+        {
+            Logger.LogError("TestLessonOrder Form submission failed with status code {StatusCode}", string.Join(", ", response.Errors.Select(er => er.Code)));
+            IsInProgress = false;
+            SubmitFailedModal.Show(false);
         }
     }
 
