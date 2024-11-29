@@ -1,9 +1,18 @@
-﻿using MoreMath.Core.Entities;
+﻿using MoreMath.Dto.Responses;
 
 namespace MoreMath.Application.Contracts.Services;
 
 public interface IArticleService
 {
-    Task AddAuthorToArticle(int articleId, int authorId);
-    Task RemoveAuthorFromArticle(int articleId, int authorId);
+    Task<IEnumerable<ArticlePageItem>> GetArticlesPagedAsync(
+        string? title,
+        string? categoryName,
+        string[]? tags,
+        bool hasAllTags,
+        int[]? authorsId,
+        bool hasAllAuthors,
+        string? orderBy,
+        bool descending,
+        int start,
+        int take);
 }

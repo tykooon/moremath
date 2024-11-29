@@ -1,4 +1,6 @@
-﻿namespace MoreMath.App.Common;
+﻿using Syncfusion.Blazor;
+
+namespace MoreMath.App.Common;
 
 public static class Constants
 {
@@ -19,6 +21,16 @@ public static class Constants
         public const string AlexTykoun = "about/team/alextykoun";
         public const string OlgaPindrik = "about/team/olgapindrik";
     }
-    
-    public static string BLOB_STORAGE { get; set; } = "https://stmoremathdev001.blob.core.windows.net/images";
+
+    public static readonly List<MediaBreakpoint> MediaBreakPoints = 
+        [   
+            new MediaBreakpoint() { Breakpoint = "Xs", MediaQuery = "(max-width: 320px)" },
+            new MediaBreakpoint() { Breakpoint = "Xss", MediaQuery = "(min-width: 375px) and  (max-width: 575)" },
+            new MediaBreakpoint() { Breakpoint = "Sm", MediaQuery = "(min-width: 576px) and  (max-width: 767)" },
+            new MediaBreakpoint() { Breakpoint = "Md", MediaQuery = "(min-width: 768px) and  (max-width: 1023px)" },
+            new MediaBreakpoint() { Breakpoint = "Lg", MediaQuery = "(min-width: 1024px) and (max-width: 1279px)" },
+            new MediaBreakpoint() { Breakpoint = "Xl", MediaQuery = "(min-width: 1280px)" }
+         ];
+
+public static string BLOB_STORAGE { get; set; } = "https://stmoremathdev001.blob.core.windows.net/images";
 }

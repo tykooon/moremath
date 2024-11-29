@@ -2,7 +2,7 @@
 @using MoreMath.Dto.Responses
 @using Syncfusion.Blazor
 
-<SfMediaQuery MediaBreakpoints="@mediaBreakPoint" @bind-ActiveBreakPoint="activeBreakpoint"></SfMediaQuery>
+<SfMediaQuery MediaBreakpoints="@Constants.MediaBreakPoints" @bind-ActiveBreakPoint="activeBreakpoint"></SfMediaQuery>
 
 <div class="team-slider" @ontouchstart="OnTouchStart" @ontouchend="OnTouchEnd" @ontouchmove="OnTouchMove">
     <div class="team-slider__slides"
@@ -23,7 +23,6 @@
     public List<AuthorDto> Slides { get; set; } = [];
 
     private string activeBreakpoint = "";
-    private List<MediaBreakpoint> mediaBreakPoint = new List<MediaBreakpoint>();
     private int slidesPerScreen => activeBreakpoint switch
     {
         "Md" or "Lg" or "Xl" => 2,
@@ -83,20 +82,5 @@
     public void Rewind()
     {
         currentIndex = 0;
-    }
-
-    protected override void OnInitialized()
-    {
-        mediaBreakPoint = new List<MediaBreakpoint>()
-        {
-            new MediaBreakpoint() { Breakpoint = "Xs", MediaQuery = "(max-width: 320px)" },
-            new MediaBreakpoint() { Breakpoint = "Xss", MediaQuery ="(min-width: 375px) and  (max-width: 575)" },
-            new MediaBreakpoint() { Breakpoint = "Sm", MediaQuery = "(min-width: 576px) and  (max-width: 767)" },
-            new MediaBreakpoint() { Breakpoint = "Md", MediaQuery = "(min-width: 768px) and  (max-width: 1023px)" },
-            new MediaBreakpoint() { Breakpoint = "Lg", MediaQuery = "(min-width: 1024px) and (max-width: 1279px)" },
-            new MediaBreakpoint() { Breakpoint = "Xl", MediaQuery = "(min-width: 1280px)" }
-        };
-
-        base.OnInitialized();
     }
 }

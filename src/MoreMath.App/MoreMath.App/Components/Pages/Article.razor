@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mm-article__body" style="@(_isFirstMathJaxInvoked ? "" : "display: none;" )"> 
+                <div class="mm-article__body"> 
                         @MathTextPreprocess(articleContent)
                 </div>
             }
@@ -58,8 +58,6 @@
 @code{
     [Parameter]
     public string? ArticleSlug { get; set; }
-
-    private bool _isFirstMathJaxInvoked = false;
 
     private ArticleDto? articleDto = null;
     private IEnumerable<AuthorDto> authors = [];
@@ -128,8 +126,6 @@
         if (!firstRender)
         {
             await JsRuntimeUnit.InvokeVoidAsync("MathJax.typesetPromise");
-            _isFirstMathJaxInvoked = true;
-            StateHasChanged();
         }
     }
 }

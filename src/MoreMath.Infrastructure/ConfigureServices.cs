@@ -12,13 +12,14 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastucture(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddDbContextFactory<AppDbContext>(opt => {
-        //    opt.UseMySql(
-        //        configuration.GetConnectionString("MainDb:Development:MariaDb"),
-        //        new MariaDbServerVersion(new Version(10, 6, 18))
-        //        //,o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
-        //        );
-        //});
+        services.AddDbContextFactory<AppDbContext>(opt =>
+        {
+            opt.UseMySql(
+                configuration.GetConnectionString("MainDb:Development:MariaDb"),
+                new MariaDbServerVersion(new Version(10, 6, 18))
+                //,o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+                );
+        });
 
         services.AddDbContext<AppDbContext>(opt => {
             opt.UseMySql(
@@ -30,6 +31,7 @@ public static class ConfigureServices
 
 
         services.AddScoped<IAuthorService, AuthorService>();
+        services.AddScoped<IArticleService, ArticleService>();
         services.AddScoped<ITagService, TagService>();
         services.AddScoped<IHebWordService, HebWordService>();
 

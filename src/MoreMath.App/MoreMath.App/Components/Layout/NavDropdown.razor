@@ -1,3 +1,8 @@
+@using Syncfusion.Blazor
+@rendermode InteractiveServer
+
+<SfMediaQuery MediaBreakpoints="@Constants.MediaBreakPoints" @bind-ActiveBreakPoint="activeBreakpoint"></SfMediaQuery>
+
 <li class="navbar__dropdown">
     <div class="navbar__dropdown__btn " @onclick=OnDropdownClicked>
         <NavLink href=@Prefix Match="NavLinkMatch.Prefix" >
@@ -22,12 +27,11 @@
     </div>
 </li>
 
-<MediaQuery Media="(min-width: 1024px)" @bind-Matches=isWideScreen/>
-
 @code{
     private string @visibilityClass => (!isWideScreen && isExpanded) ? "visible" : "";
     private bool isExpanded = false;
-    private bool isWideScreen;
+    private bool isWideScreen => activeBreakpoint == "Lg" || activeBreakpoint == "Xl";
+    private string? activeBreakpoint = "";
 
     private void OnDropdownClicked()
     {
@@ -55,7 +59,6 @@
     {
         isExpanded = false;
     }
-
 
     public record NavDropdownItem(string ItemLink, string ItemText, RenderFragment ItemIcon);
 }

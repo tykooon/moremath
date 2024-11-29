@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
+@inject ILogger<NavMenu> logger
 
 <nav class="navbar">
     <button class="navbar__btn" @onclick="OpenSidebar"></button>
@@ -89,6 +90,7 @@
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        logger.LogInformation($"Location changed to {currentUrl}");
         StateHasChanged();
     }
 

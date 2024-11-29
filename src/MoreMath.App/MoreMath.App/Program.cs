@@ -1,6 +1,5 @@
 using MoreMath.App.Components;
 using MoreMath.App.Extensions;
-using BlazorPro.BlazorSize;
 using Syncfusion.Blazor;
 using MoreMath.App.Services.Localization;
 using System.Globalization;
@@ -24,7 +23,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddScoped<MoreMath.App.Components.Pages.MathHebrewTableS.CustomHebWordAdaptor>();
 builder.Services.AddScoped<MoreMath.App.Components.Pages.Search.CustomArticlesAdaptor>();
 
-builder.Services.AddMediaQueryService();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddScoped<AuthorCacheService>();
 builder.Services.AddSingleton(typeof(ISyncfusionStringLocalizer), typeof(SyncfusionLocalizer));

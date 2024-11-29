@@ -20,16 +20,15 @@
     <ProjectReference Include="..\..\MoreMath.Shared\MoreMath.Shared.csproj" />
     <ProjectReference Include="..\MoreMath.App.Client\MoreMath.App.Client.csproj" />
     <PackageReference Include="Azure.Identity" Version="1.13.1" />
-    <PackageReference Include="BlazorPro.BlazorSize" Version="8.0.0" />
     <PackageReference Include="DartSassBuilder" Version="1.1.0" />
     <PackageReference Include="MailKit" Version="4.8.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -51,6 +50,14 @@
     <SassFile Include="wwwroot/scss/styles.scss" />
     <SassFile Include="Components/**/*.scss" />
     <!--<SassFile Include="Styles/**/*.scss" Exclude="Styles/unused/**" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Components\Pages\MathHebrewTableQ.razor.bak" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Components\Pages\MathHebrewTableQ.razor.bak" />
   </ItemGroup>
 
   <ItemGroup>

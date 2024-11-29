@@ -1,7 +1,8 @@
-﻿@using MoreMath.Application.UseCases.Articles.Queries
+﻿@using MoreMath.Application.Contracts.Services
+@using MoreMath.Application.UseCases.Articles.Queries
 @using MoreMath.Dto.Responses
 
-@inject IMediator Mediator
+@inject IArticleService ArticleService
 
 <div class="article-rack@(IsSidebar? " fluid-rack" : "")">
         @foreach (var art in _articles)
@@ -31,16 +32,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var query = new GetArticlesPagedQuery()
-        {
-            Take = 6,
-            CategoryName = CategoryName,
-            Decsending = true,
-            OrderBy = "created",
-            TagList = TagNames?.ToArray(),
-            AuthorsId = AuthorsId
-        };
-        var response = await Mediator.Send(query);
-        _articles = response.IsSuccessfull ? response.Value! : [];
+        _articles = await ArticleService.GetArticlesPagedAsync(
+            title: null,
+            categoryName: CategoryName,
+            tags: TagNames?.ToArray(),
+            hasAllTags: true,
+            authorsId: AuthorsId,
+            hasAllAuthors: true,
+            orderBy: "created",
+            descending: true,
+            start: 0,
+            take: 6);
     }
 }
