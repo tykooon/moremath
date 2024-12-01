@@ -31,7 +31,7 @@
             <SfGrid TValue="ArticlePageItem" @ref=ArticlesGrid ID="ArticlesGrid"
                 AllowSorting="true" AllowFiltering="true" AllowPaging="true"
                 EnableAdaptiveUI="true" AllowTextWrap="true"
-                RowRenderingMode="RowDirection.Vertical">
+                RowRenderingMode="RowDirection.Vertical" AllowResizing="true">
                 
                 <SfDataManager AdaptorInstance="@typeof(CustomArticlesAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
                 <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
@@ -77,9 +77,7 @@
                                 @{
                                     var dateData = (context as ArticlePageItem)?.Created .ToString("dd-MMM-yy", new CultureInfo("ru-Ru")).Split("-");
                                     @if(dateData?.Length == 3){
-                                        <span>@(dateData[0])</span><br />
-                                        <span>@(dateData[1])</span><br />
-                                        <span>@(dateData[2])</span>
+                                        <span>@(dateData[0])</span><span>@(dateData[1])</span><span>@(dateData[2])</span>
                                     }
                                 }
                             </div>

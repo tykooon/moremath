@@ -7,13 +7,8 @@
 @inject IHttpClientFactory HttpClientFactory 
 @inject ILogger<Article> Logger
 @inject NavigationManager NavigationManager
-@inject IJSRuntime JsRuntimeUnit
 
 <PageTitle>@_fullName</PageTitle>
-
-<HeadContent>
-    <MathJaxScripts />
-</HeadContent>
 
 <div class="mm-content">
     <div class="author-page">
@@ -43,7 +38,7 @@
             </div>
             <div class="author-page__body">
                 <p>
-                    @TextPreprocess(authorDto.ShortBio)
+                    @authorDto.ShortBio?.ToMarkupWithProcessing()
                 </p>
             </div>
 
@@ -84,12 +79,11 @@
 
             <div>
                 <h2>Статьи автора:</h2>
-                <ArticleRack @ref=_rack AuthorsId="@(_id)"/>
+                <ArticleRack AuthorsId="@(_id)"/>
             </div>
         }
     </div>
 </div>
-
 
 <SectionContent SectionName="main-sidebar">
     <section class="main-sidebar">
@@ -108,8 +102,6 @@
     public string? AuthorSlug { get; set; }
 
     private int[] _id = [];
-    private ArticleRack _rack = default!;
-
     private AuthorDto? authorDto = null;
     private IEnumerable<ArticleDto> articles = [];
 
@@ -141,24 +133,6 @@
                 articles = (await BackendClient.GetFromJsonAsync<IEnumerable<ArticleDto>>($"api/authors/{authorDto.Id}/articles")) ?? [];
                 StateHasChanged();
             } 
-        }
-    }
-
-    private MarkupString TextPreprocess(string text)
-    {
-        text = text.Replace(" --", "&nbsp;&ndash;");
-        text = text.Replace(" ---", "&nbsp;&mdash;");
-        text = text.Replace("\\\\", "</p><p>");
-        text = text.Replace("\\-", "&shy;");
-        return new MarkupString(text);
-
-    }
-
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            await JsRuntimeUnit.InvokeVoidAsync("MathJax.typesetPromise");
         }
     }
 }

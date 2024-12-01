@@ -31,12 +31,12 @@
     </div>
 
 <SfGrid TValue="HebWordPageItem" @ref=HebWordGrid ID="Grid"
-        AllowSorting="true" AllowFiltering="true" AllowPaging="true"
+        AllowSorting="true" AllowFiltering="true" AllowPaging="true" 
         EnableAdaptiveUI="true" AllowTextWrap="true">
     @* RowRenderingMode="RowDirection.Vertical" *@
-    <SfDataManager AdaptorInstance="@typeof(CustomHebWordAdaptor)" Adaptor="Adaptors.CustomAdaptor"></SfDataManager>
-    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
-    <GridPageSettings PageSize="6"></GridPageSettings>
+    <SfDataManager AdaptorInstance="@typeof(CustomHebWordAdaptor)"  Adaptor="Adaptors.CustomAdaptor" ></SfDataManager>
+    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"  ></GridFilterSettings>
+    <GridPageSettings @ref=pageSettings PageSize="6" ></GridPageSettings>
     <SfToolbar>
         <ToolbarItems>
             <ToolbarItem Type="ItemType.Input" Align="ItemAlign.Right">
@@ -61,13 +61,13 @@
         </ToolbarItems>
     </SfToolbar>
     <GridColumns>
-        <GridColumn Field=@nameof(HebWordPageItem.Translation) HeaderText="Перевод" Width="150" AllowFiltering="true"></GridColumn>
-            <GridColumn Field=@nameof(HebWordPageItem.Shoresh) HeaderText="Корень" TextAlign="@TextAlign.Center" Width="60" AllowFiltering="true">
+        <GridColumn Field=@nameof(HebWordPageItem.Translation) HeaderText="Перевод" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(HebWordPageItem.Shoresh) HeaderText="Корень" TextAlign="@TextAlign.Center" Width="60">
             <Template>
                 <Heb>@((context as HebWordPageItem)?.Shoresh)</Heb>
             </Template>
         </GridColumn>
-            <GridColumn Field=@nameof(HebWordPageItem.NoNiqqud) HeaderText="Слово" IsPrimaryKey="true" TextAlign="@TextAlign.Right" Width="90" AllowFiltering="true">
+            <GridColumn Field=@nameof(HebWordPageItem.NoNiqqud) HeaderText="Слово" IsPrimaryKey="true" TextAlign="@TextAlign.Right" Width="90">
             <Template>
                 <Heb>@((context as HebWordPageItem)?.NoNiqqud)</Heb>
             </Template>
@@ -81,6 +81,7 @@
     // public List<string> ToolbarItems = new List<string>() { "Search" };
     // public string[] InitSearch = new string[] { "Translation", "Shoresh", "NoNiqqud" };
 
+    GridPageSettings pageSettings = default!;
     SfGrid<HebWordPageItem> HebWordGrid = default!;
     SfMultiSelect<string[], string> MultiTag = default!;
     public static IServiceScopeFactory StaticScopeFactory = default!;
@@ -144,12 +145,12 @@
             {
                 var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
                 var response = await mediator.Send(hebWordRequest);
-                
+
                 if (response?.IsSuccessfull ?? false)
                 {
                     var data = response.Value!;
                     if(data.Any())
-                    {
+                    { 
                         int count = data.First().Total;
                         return dataManagerRequest.RequiresCounts
                             ? new DataResult() { Result = data, Count = count } 
@@ -158,8 +159,9 @@
                 }
 
                 var noData = new List<HebWordPageItem>();
+                int doubleCheckCount =  hebWordRequest.Start != 0 ? 1 : 0;
                 return dataManagerRequest.RequiresCounts
-                    ? new DataResult() { Result = noData, Count = 0 }
+                    ? new DataResult() { Result = noData, Count = doubleCheckCount }
                     : (object) noData;
             }
         }
