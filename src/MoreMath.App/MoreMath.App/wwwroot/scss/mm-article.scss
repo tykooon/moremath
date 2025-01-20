@@ -142,11 +142,26 @@
     &__date {
         margin-inline: auto;
         text-align-last: center;
+
         span {
             font-size: 0.875rem !important;
         }
     }
+
+    &__link {
+        text-decoration: none;
+
+        &:visited {
+            color: $mmc-base-dark;
+        }
+    }
 }
 
+.mm-definition {
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 4px double #333;
+    font-style: italic;
+}
 
 /*#endregion mm-article */

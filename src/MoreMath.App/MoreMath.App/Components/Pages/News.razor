@@ -1,10 +1,30 @@
 ﻿@page "/about/news"
+@using MoreMath.Application.Contracts.Services
+@using MoreMath.Dto.Responses
 @layout ColumnLayout
+
+@inject IArticleService ArticleService
 
 
 <PageTitle>Новости проекта</PageTitle>
 
-<UnderConstruction />
+<div class="container">
+    <div class="mm-content">
+        <h1>Новости проекта </h1>
+
+        @if (_articles == null)
+        {
+            <WaitingSpinner Text="Content is loading ..."/>
+        }
+        else
+        {
+            foreach(var article in _articles)
+            {
+                <NewsCard ArticleDto="article"></NewsCard>
+            }
+        }
+    </div>
+</div>
 
 <SectionContent SectionName="main-sidebar">
     <section class="main-sidebar">
@@ -13,7 +33,27 @@
         </div>
         <div class="read-also">
             <h3>Читайте также:</h3>
-            <ArticleRack CategoryName="Новости" IsSidebar />
+            <ArticleRack Limit="3" IsSidebar />
         </div>
     </section>
 </SectionContent>
+
+
+@code {
+    private IEnumerable<ArticlePageItem>? _articles = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _articles = await ArticleService.GetArticlesPagedAsync(
+            title: null,
+            categoryName: "Новости",
+            tags: [],
+            hasAllTags: false,
+            authorsId: [],
+            hasAllAuthors: false,
+            orderBy: "created",
+            descending: true,
+            start: 0,
+            take: 6);
+    }
+}

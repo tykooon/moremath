@@ -2,7 +2,7 @@
 
 @if(Author != null)
 {
-    <Syncfusion.Blazor.Popups.SfTooltip Content="@_fullName">
+    <Syncfusion.Blazor.Popups.SfTooltip Content="@_fullName" >
     <a class="author-chip" href="about/@Author.SlugName">
         <img src="@_authorAvaUrl" alt="@Author.SlugName" />
         @if (!IsMinified)

@@ -1,5 +1,120 @@
 ﻿@page "/about/contacts"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity.UI.Services
+
+@inject ILogger<TestLesson> Logger
+@inject IEmailSender InfoMailSender
+@inject NavigationManager NavigationManager
 
 <PageTitle>Наши Контакты</PageTitle>
 
-<UnderConstruction />
+<div class="author-page__contacts">
+    <h1>Наши Контакты</h1>
+    <ul>
+        <li>
+            <a href="tel:+9725503882">
+                <MdIcon Name="phone" />
+                <span>(+972) 55-7703-882</span>
+            </a>
+        </li>
+        <li>
+            <a href=@("mailto:alextykoun@gmail.com")>
+                <MdIcon Name="email-fast" />
+                <span>alextykoun@gmail.com</span>
+            </a>
+        </li>
+        <li>
+            <a href="t.me/moremath_tg">
+                <MdIcon Name="send-variant-outline" />
+                <span>t.me/moremath_tg</span>
+            </a>
+        </li>
+            <li>
+                <a href="https://wa.me/972557703882">
+                    <MdIcon Name="whatsapp" />
+                    <span>WhatsApp</span>
+                </a>
+            </li>
+    </ul>
+
+    <div class="mm-center-block mm-center-text mm-fullwidth">
+        <h2>
+            Отправьте нам сообщение:
+        </h2>
+        <EditForm Model="Message" autocomplete="off" method="post" OnValidSubmit="SendMessage" FormName="message" class="mm-form mm-contact">
+            <fieldset>
+                <DataAnnotationsValidator />
+                <div class="mm-form__contact">
+                     <InputTextArea @bind-Value="Message.Text" autocomplete="off" placeholder="" id="login-email" class="mm-form__contact__textarea" />
+                     <input type="password" autocomplete="new-password" name="fuck-the-edge" style="display:none">
+                    <ValidationMessage For="() => Message.Text" class="validation-message validation-message__contact" />
+                </div>
+                <div class="mm-form__row">
+                    <div class="mm-form__field">
+                        <InputText @bind-Value="Message.Name" autocomplete="off" placeholder="" id="login-email" class="mm-form__field__input" />
+                        <input type="password" autocomplete="new-password" name="fuck-the-edge" style="display:none">
+                        <label for="login-email" class="mm-form__field__label">Ваше имя</label>
+                        <ValidationMessage For="() => Message.Name" class="validation-message" />
+                    </div>
+                </div>
+                <div class="mm-form__row">
+                    <div class="mm-form__field">
+                        <InputText placeholder="" autocomplete="off" id="login-password" @bind-Value="Message.Email" class="mm-form__field__input" />
+                        <label for="login-password" class="mm-form__field__label">E-mail</label>
+                        <ValidationMessage For="() => Message.Email" class="validation-message" />
+                    </div>
+                </div>
+            <div class="mm-form__row">
+                    <button type="submit" class="account-btn @(IsInProgress ? "pending-btn" : "")">Отправить</button>
+            </div>
+        </fieldset>
+        </EditForm>
+
+    </div>
+
+</div>
+
+<SubmitModal @ref="SubmitModal" Title="Сообщение отправлено" OnClose="@(()=>NavigationManager.NavigateTo("/"))">
+    <p class="modal__message">
+        Спасибо за обратную связь! 
+    </p>
+</SubmitModal>
+
+@code{
+
+    [SupplyParameterFromForm]
+    private MessageModel Message { get; set; } = new();
+
+    private SubmitModal SubmitModal { get; set; } = null!;
+
+    private bool FormSubmitted { get; set; } = false;
+    private bool FormSubmitFailed { get; set; } = false;
+    private bool IsDisabledForm => FormSubmitted || FormSubmitFailed;
+    private bool IsInProgress = false;
+
+    protected override void OnInitialized()
+    {
+        Message ??= new();
+    }
+
+    private async Task SendMessage()
+    {
+        IsInProgress = true;
+        await InfoMailSender.SendEmailAsync("moremath.haifa@gmail.com", "Message from Contacts Page", $"<p>You've got new message from {Message.Name} with email: {Message.Email}. </p><p> Message Text:</p><p> {Message.Text} </p>");
+        IsInProgress = false;
+        SubmitModal.Show(true);
+    }
+
+    private class MessageModel
+    {
+        [Required(ErrorMessage ="Представьтесь, пожалуйста")]
+        public string Name { get; set; } = string.Empty;
+
+        [DataType(DataType.EmailAddress, ErrorMessage = "Неверный формат электронного ящика")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Напишите что-нибудь перед отправлением")]
+        [DataType(DataType.MultilineText)]
+        public string Text { get; set; } = string.Empty;
+    }
+}

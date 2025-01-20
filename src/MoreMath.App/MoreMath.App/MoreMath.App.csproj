@@ -76,6 +76,9 @@
     <Content Update="Components\Cards\AllArticlesCard.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+    <Content Update="Components\Cards\ArticleCard.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
     <Content Update="Components\ContentBlocks\AuthorLink.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

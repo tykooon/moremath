@@ -6,7 +6,7 @@
     <p class="mm-hebrew-card__spelling @MaskHebContent" @onclick="Unhide">
         <Heb>@HebWord.Niqqud</Heb>
         <br/>
-        (<WordWithStress Word=@HebWord.Spelling Stress=@HebWord.StressLetter/>)
+        <WordWithStress Word=@HebWord.Spelling Stress=@HebWord.StressLetter/>
     </p>
     <p class="mm-hebrew-card__extraform @MaskHebContent" @onclick="Unhide">
         @HebTextProcess(HebWord.ExtraForm)

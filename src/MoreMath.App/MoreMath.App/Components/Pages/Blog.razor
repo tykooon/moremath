@@ -1,5 +1,19 @@
 ﻿@page "/articles/blog"
+@layout ColumnLayout
 
 <PageTitle>Заметки на полях</PageTitle>
 
 <UnderConstruction />
+
+
+<SectionContent SectionName="main-sidebar">
+    <section class="main-sidebar">
+        <div class="info-pad">
+            <TestLessonCall />
+        </div>
+        <div class="read-also">
+            <h3>Читайте также:</h3>
+            <ArticleRack CategoryName="Блог" IsSidebar />
+        </div>
+    </section>
+</SectionContent>

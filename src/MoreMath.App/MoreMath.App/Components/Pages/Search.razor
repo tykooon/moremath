@@ -88,10 +88,12 @@
                             <div class="search-article__cell">
                             @{
                                 var art = context as ArticlePageItem;
-                                <span class="search-article__title">@(art?.Title)</span>
-                                <p class="search-article__abstract">
-                                @(art?.Abstract)
-                                </p>
+                                <a href=@($"/articles/{art?.Slug}") class="search-article__link">
+                                    <span class="search-article__title">@(art?.Title)</span><br />
+                                    <span class="search-article__abstract">
+                                    @(art?.Abstract)
+                                    </span>
+                                </a>
                             }
                             </div>
                         </Template>

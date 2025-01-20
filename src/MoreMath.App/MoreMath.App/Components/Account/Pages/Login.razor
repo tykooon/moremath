@@ -6,69 +6,96 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.UI.Services
 @using MoreMath.App.Data
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DataForm
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-
 <PageTitle>Log in</PageTitle>
 
-<h1>Log in</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <StatusMessage Message="@errorMessage" />
-            <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
+<div class="container">
+@*         <SfDataForm
+            ID="login-form" formname="loginform"
+                    Model="@Input"
+                    ColumnCount=6
+                    ColumnSpacing="10px"
+                    ButtonsAlignment="FormButtonsAlignment.Center"
+                    OnValidSubmit="LoginUser" AutoComplete="off" >
+            <FormValidator>
                 <DataAnnotationsValidator />
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <ValidationSummary class="text-danger" role="alert" />
-                <div class="form-floating mb-3">
-                    <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label for="email" class="form-label">Email</label>
-                    <ValidationMessage For="() => Input.Email" class="text-danger" />
-                </div>
-                <div class="form-floating mb-3">
-                    <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label for="password" class="form-label">Password</label>
-                    <ValidationMessage For="() => Input.Password" class="text-danger" />
-                </div>
-                <div class="checkbox mb-3">
-                    <label class="form-label">
-                        <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input" />
-                        Remember me
-                    </label>
-                </div>
-                <div>
-                    <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a href="Account/ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a href="Account/ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-            </EditForm>
-        </section>
+            </FormValidator>
+            <FormItems>
+                <FormItem Field="@nameof(Input.Email)" ColumnSpan="4"/>
+                <FormItem Field="@nameof(Input.Password)" ColumnSpan="4"/>
+                <FormItem Field="@nameof(Input.RememberMe)" ColumnSpan="4"/>
+            </FormItems>
+            <FormButtons>
+                <SfButton typeof="submit" >Войти</SfButton>
+            </FormButtons>
+        </SfDataForm>
+ *@
+
+    <StatusMessage Message="@errorMessage" />
+    <div class="mm-center-text">
+        <h2 style="margin:20px;">
+            Войдите при помощи почтового ящика и пароля
+        </h2>
+        <hr />
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
-    </div>
+    <EditForm Model="Input" autocomplete="off" method="post" OnValidSubmit="LoginUser" FormName="login" class="mm-form mm-acc-form">
+        <DataAnnotationsValidator />
+        <div class="mm-form__row">
+            <div class="mm-form__field">
+                <InputText @bind-Value="Input.Email" autocomplete="off" placeholder="" id="login-email" class="mm-form__field__input" />
+                <input type="password" autocomplete="new-password" name="fuck-the-edge" style="display:none">
+                <label for="login-email" class="mm-form__field__label">E-mail</label>
+                <ValidationMessage For="() => Input.Email" class="validation-message" />
+            </div>
+        </div>
+        <div class="mm-form__row">
+            <div class="mm-form__field">
+                <InputText type="password" placeholder="" autocomplete="off" id="login-password" @bind-Value="Input.Password" class="mm-form__field__input" />
+                <label for="login-password" class="mm-form__field__label">Пароль</label>
+                <ValidationMessage For="() => Input.Password" class="validation-message" />
+            </div>
+        </div>
+        <div class="mm-form__row">
+            <div class="mm-form__field">
+                <InputCheckbox @bind-Value="Input.RememberMe" class="mm-form__field__checkbox" />
+                <span class="mm-form__field__checkboxtext">Remember me</span>
+            </div>
+        </div>
+        <div class="mm-form__row">
+            <button type="submit" class="account-btn">Войти</button>
+        </div>
+        <div class="mm-account-links">
+            <p>
+                <a href="Account/ForgotPassword">Забыли пароль?</a>
+            </p>
+            <p>
+                <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Регистрация нового пользователя</a>
+            </p>
+            <p>
+                <a href="Account/ResendEmailConfirmation">Повторить отправку запроса на подтверждение почты</a>
+            </p>
+        </div>
+    </EditForm>
+@*     <div class="mm-center-text">
+        <h2>
+            Либо мспользуйте внешний сервис для входа
+        </h2>
+        <hr />
+        <ExternalLoginPicker />
+    </div> *@
 </div>
 
 @code {
     private string? errorMessage;
+
+    private ElementReference InputElement;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -78,6 +105,20 @@
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
+
+    private bool FormSubmitted { get; set; } = false;
+    private bool FormSubmitFailed { get; set; } = false;
+    private bool IsDisabledForm => FormSubmitted || FormSubmitFailed;
+    private bool IsInProgress = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            await InputElement.FocusAsync();
+        }
+    }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -130,12 +171,14 @@
 
     private sealed class InputModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Почтовый адрес является обязательным полем")]
+        [EmailAddress(ErrorMessage="Неверный формат почтового адреса")]
+        [Display(Name = "E-mail")]
         public string Email { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Пароль не может быть пустым полем")]
         [DataType(DataType.Password)]
+        [Display(Name = "Пароль")]
         public string Password { get; set; } = "";
 
         [Display(Name = "Remember me?")]

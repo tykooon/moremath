@@ -19,6 +19,9 @@
     private IEnumerable<ArticlePageItem> _articles = [];
 
     [Parameter]
+    public int Limit { get; set; } = 6;
+
+    [Parameter]
     public string? CategoryName { get; set; }
 
     [Parameter]
@@ -42,6 +45,6 @@
             orderBy: "created",
             descending: true,
             start: 0,
-            take: 6);
+            take: Limit);
     }
 }

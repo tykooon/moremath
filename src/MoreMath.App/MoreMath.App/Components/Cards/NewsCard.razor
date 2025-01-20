@@ -1,0 +1,30 @@
+﻿@using MoreMath.Application.UseCases.Articles.Queries
+@using MoreMath.Dto.Responses
+@using MoreMath.Dto.Dtos
+@using System.Globalization
+
+@inject NavigationManager NavManager
+
+<div class="news-card" @onclick="@(() => NavManager.NavigateTo("/articles/"+ArticleDto?.Slug, forceLoad: true))">
+    <div class="news-card__image">
+        <img src="@(Constants.BLOB_STORAGE+"/articles/banners/"+ArticleDto?.ImageUri)" alt="banner" />
+    </div>
+    <div class="news-card__body">
+        <div class="news-card__title">
+            <h3>@ArticleDto?.Title</h3>
+        </div>
+        <div class="news-card__abstract">
+            <p>@ArticleDto?.Abstract</p>
+        </div>
+        <div class="news-card__footer">
+            <span>
+                @(ArticleDto?.Created.ToString("dd MMMM yyyy", new CultureInfo("ru-Ru")))
+            </span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ArticlePageItem ArticleDto { get; set; } = default!;
+}
